@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bpxo7grmoyxhi"]
+[gd_scene load_steps=7 format=3 uid="uid://bpxo7grmoyxhi"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_12k2h"]
 albedo_color = Color(0.43409, 0.751255, 1, 1)
@@ -18,6 +18,9 @@ albedo_color = Color(1, 0.12, 0.12, 1)
 material = SubResource("StandardMaterial3D_mnhh6")
 size = Vector3(4, 0.1, 4)
 
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_bqwcg"]
+data = PackedVector3Array(-2, 0.05, 2, 2, 0.05, 2, -2, -0.05, 2, 2, 0.05, 2, 2, -0.05, 2, -2, -0.05, 2, 2, 0.05, -2, -2, 0.05, -2, 2, -0.05, -2, -2, 0.05, -2, -2, -0.05, -2, 2, -0.05, -2, 2, 0.05, 2, 2, 0.05, -2, 2, -0.05, 2, 2, 0.05, -2, 2, -0.05, -2, 2, -0.05, 2, -2, 0.05, -2, -2, 0.05, 2, -2, -0.05, -2, -2, 0.05, 2, -2, -0.05, 2, -2, -0.05, -2, 2, 0.05, 2, -2, 0.05, 2, 2, 0.05, -2, -2, 0.05, 2, -2, 0.05, -2, 2, 0.05, -2, -2, -0.05, 2, 2, -0.05, 2, -2, -0.05, -2, 2, -0.05, 2, 2, -0.05, -2, -2, -0.05, -2)
+
 [node name="SpaceLibrary" type="Node3D"]
 
 [node name="FreeSpace" type="MeshInstance3D" parent="."]
@@ -30,3 +33,8 @@ shape = SubResource("ConcavePolygonShape3D_tqi2a")
 
 [node name="SmallShipBase" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_x2bw0")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="SmallShipBase"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SmallShipBase/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_bqwcg")
