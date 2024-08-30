@@ -11,6 +11,11 @@ config_version=5
 [application]
 
 config/name="Netcentric"
-run/main_scene="res://main.tscn"
+run/main_scene="res://base_level.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=2304
+window/size/viewport_height=1296
