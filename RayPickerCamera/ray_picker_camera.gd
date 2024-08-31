@@ -29,10 +29,11 @@ func _process(delta: float) -> void:
 		
 		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
 		var collider = ray_cast_3d.get_collider()
-		print(collider)
 		if collider.is_in_group("boat"):
 			if Input.is_action_just_pressed("click"):
 				var temp_cell = grid_map.local_to_map(collider.get_child(0).global_position) 
+				var boat_rotation = collider.get_parent().global_rotation
+				print(boat_rotation)
 				for i in range(collider.get_parent().units):
 					grid_map.set_cell_item(temp_cell, 0)
 					temp_cell.z += 1
