@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://node.gd" id="1_l3btm"]
 
-[node name="Node" type="Node"]
+[node name="ClientConnection" type="Node"]
 script = ExtResource("1_l3btm")
 
 [node name="Button" type="Button" parent="."]
