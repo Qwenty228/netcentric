@@ -5,7 +5,6 @@ extends Node3D
 
 @onready var current_boat_type:PackedScene = boat_1:
 	set(boat_type):
-		print("set boat type to ", boat_type)
 		current_boat_type = boat_type
 
 var rotation_angle:float = 0.0
@@ -27,7 +26,6 @@ func build_boat(boat_position: Vector3) -> Node3D:
 		new_boat.global_position = boat_position
 		
 		new_boat.global_rotation.y = rotation_angle
-		print(new_boat.global_rotation)
 		return new_boat
 	return null
 

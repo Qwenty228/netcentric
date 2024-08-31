@@ -43,6 +43,13 @@ func _process(delta: float) -> void:
 						grid_map.set_cell_item(cell, 0)
 						boat_manager.delete_boat(tile_position)
 					
+				#remove highlighted cell when hovering over fixed cells
+				if grid_map.get_cell_item(cell) == 2:
+					if grid_map.get_cell_item(previous_cell) == 1:
+						if previous_boat!= null:
+							previous_boat.queue_free()
+							grid_map.set_cell_item(previous_cell, 0)
+				
 				#delete unfixed boat
 				if grid_map.get_cell_item(cell) != 2:
 					if grid_map.map_to_local(cell) != grid_map.map_to_local(previous_cell):
