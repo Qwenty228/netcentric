@@ -79,5 +79,7 @@ offset_top = 200.0
 offset_right = 637.0
 offset_bottom = 379.0
 text = "\"1\" - switch to boat 1
-\"4\" - switch to boat 4"
+\"4\" - switch to boat 4
+
+\"r\" - rotate"
 label_settings = SubResource("LabelSettings_4yaae")
