@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
-[ext_resource type="MeshLibrary" uid="uid://cgtlk5k5gfwsv" path="res://MeshLibaries/SpaceLibrary.tres" id="1_wa83a"]
 [ext_resource type="Texture2D" uid="uid://csqphpoynjubs" path="res://kenney_prototype-textures/Vector/texture_08.svg" id="2_apdau"]
 [ext_resource type="Script" path="res://boat_manager.gd" id="2_h3xsi"]
+[ext_resource type="PackedScene" uid="uid://brk2p6bvxe20r" path="res://grid_map.tscn" id="3_1ohpt"]
 [ext_resource type="PackedScene" uid="uid://c2yxhd1w7tb60" path="res://Boats/small_boat.tscn" id="3_pvxw5"]
 [ext_resource type="PackedScene" uid="uid://dekylbw61q2f4" path="res://Boats/boat_4.tscn" id="4_bc6bj"]
 
@@ -54,13 +54,16 @@ use_collision = true
 size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
-[node name="GridMap" type="GridMap" parent="."]
-mesh_library = ExtResource("1_wa83a")
-cell_size = Vector3(4, 4, 4)
-cell_center_y = false
-data = {
-"cells": PackedInt32Array(65532, 65532, 0, 65532, 65533, 0, 65533, 65533, 0, 65533, 65534, 0, 65534, 65534, 0, 65534, 65535, 0, 65535, 65535, 0, 65534, 65533, 0, 65533, 65532, 0, 65532, 65534, 0, 65532, 65535, 0, 65532, 0, 0, 65532, 1, 0, 65532, 2, 0, 65532, 3, 0, 65533, 65535, 0, 65533, 0, 0, 65533, 1, 0, 65533, 2, 0, 65533, 3, 0, 65534, 65532, 0, 65534, 0, 0, 65534, 1, 0, 65534, 2, 0, 65534, 3, 0, 65535, 65532, 0, 65535, 65533, 0, 65535, 65534, 0, 65535, 0, 0, 65535, 1, 0, 65535, 2, 0, 65535, 3, 0, 0, 65532, 0, 0, 65533, 0, 0, 65534, 0, 0, 65535, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 1, 65532, 0, 1, 65533, 0, 1, 65534, 0, 1, 65535, 0, 1, 0, 0, 1, 1, 0, 1, 2, 0, 1, 3, 0, 2, 65532, 0, 2, 65533, 0, 2, 65534, 0, 2, 65535, 0, 2, 0, 0, 2, 1, 0, 2, 2, 0, 2, 3, 0, 3, 65532, 0, 3, 65533, 0, 3, 65534, 0, 3, 65535, 0, 3, 0, 0, 3, 1, 0, 3, 2, 0, 3, 3, 0)
-}
+[node name="GridMap" parent="." instance=ExtResource("3_1ohpt")]
+
+[node name="Ground2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.962034, 56.0203)
+use_collision = true
+size = Vector3(32, 2, 32)
+material = SubResource("StandardMaterial3D_mgmue")
+
+[node name="OpponentGridMap" parent="." instance=ExtResource("3_1ohpt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 56.0203)
 
 [node name="BoatManager" type="Node3D" parent="."]
 script = ExtResource("2_h3xsi")
@@ -69,7 +72,7 @@ boat_4 = ExtResource("4_bc6bj")
 
 [node name="RayPickerCamera" parent="." node_paths=PackedStringArray("grid_map", "boat_manager") instance=ExtResource("1_o0cxu")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 25, 0.02)
-grid_map = NodePath("../GridMap")
+grid_map = NodePath("")
 boat_manager = NodePath("../BoatManager")
 
 [node name="MenuScreen" type="Control" parent="."]
