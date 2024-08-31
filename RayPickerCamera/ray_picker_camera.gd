@@ -9,7 +9,7 @@ var build_mode: bool
 var previous_cell: Vector3i
 var previous_boat: Node3D
 
-func _on_ready(delta:float) -> void:
+func _ready() -> void:
 	build_mode = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
