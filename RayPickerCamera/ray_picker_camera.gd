@@ -26,9 +26,10 @@ func _process(delta: float) -> void:
 	ray_cast_3d.target_position = project_local_ray_normal(mouse_position) * 500
 	ray_cast_3d.force_raycast_update()
 	if ray_cast_3d.is_colliding():
-		
 		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
 		var collider = ray_cast_3d.get_collider()
+		
+		#if clicking on a fixed boat 
 		if collider.is_in_group("boat"):
 			if Input.is_action_just_pressed("click"):
 				var temp_cell = grid_map.local_to_map(collider.get_child(0).global_position) 
