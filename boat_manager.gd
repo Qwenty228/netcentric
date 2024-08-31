@@ -34,6 +34,7 @@ func delete_boat(boat_position: Vector3) -> void:
 			
 func rotate_boat(boat_position: Vector3) -> Node3D:
 	rotation_angle -= PI/2
+	print(rotation_angle)
 	var current_boat_position = current_boat.global_position
 	current_boat.queue_free()
 	return build_boat(current_boat_position)
