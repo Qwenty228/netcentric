@@ -63,5 +63,13 @@ func _process(delta: float) -> void:
 					previous_cell = cell
 					previous_boat = boat_manager.build_boat(tile_position)
 				
+				#boat rotation
+				if Input.is_action_just_pressed("rotate"):
+					previous_boat = boat_manager.rotate_boat(tile_position)		
+				
+				#boat type
+				if Input.is_action_just_pressed("boat1") || Input.is_action_just_pressed("boat4"):	
+					boat_manager.delete_boat(tile_position)
+					previous_boat = boat_manager.build_boat(tile_position)
 	else:
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
