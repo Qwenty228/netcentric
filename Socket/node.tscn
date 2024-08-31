@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://jobsgrb5cnuj"]
+
+[ext_resource type="Script" path="res://node.gd" id="1_l3btm"]
+
+[node name="Node" type="Node"]
+script = ExtResource("1_l3btm")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 783.0
+offset_top = 273.0
+offset_right = 1376.0
+offset_bottom = 421.0
+text = "ping "
+
+[node name="LineEdit" type="LineEdit" parent="."]
+offset_left = 792.0
+offset_top = 80.0
+offset_right = 1385.0
+offset_bottom = 205.0
+theme_override_font_sizes/font_size = 41
+text = "init"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 806.0
+offset_top = 14.0
+offset_right = 1158.0
+offset_bottom = 58.0
+theme_override_font_sizes/font_size = 30
+text = "Client: "
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 812.0
+offset_top = 214.0
+offset_right = 1164.0
+offset_bottom = 258.0
+theme_override_font_sizes/font_size = 30
+text = "Data"
+
+[node name="Label3" type="Label" parent="."]
+offset_left = 806.0
+offset_top = 432.0
+offset_right = 1158.0
+offset_bottom = 476.0
+theme_override_font_sizes/font_size = 30
+text = "current state"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="text_changed" from="LineEdit" to="." method="_on_line_edit_text_changed"]
