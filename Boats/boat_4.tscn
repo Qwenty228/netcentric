@@ -1,7 +1,18 @@
-[gd_scene format=3 uid="uid://dekylbw61q2f4"]
+[gd_scene load_steps=3 format=3 uid="uid://dekylbw61q2f4"]
 
-[node name="BoatFour" type="Node3D"]
+[ext_resource type="Script" path="res://Boats/boat_4.gd" id="1_ssf2t"]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
+[sub_resource type="GDScript" id="GDScript_4ofea"]
+script/source = "extends CSGBox3D
+"
+
+[node name="BoatFour" type="Node3D" groups=["boat"]]
+script = ExtResource("1_ssf2t")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." groups=["boat"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
 size = Vector3(2, 1, 12)
+script = SubResource("GDScript_4ofea")
+
+[node name="head" type="Marker3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.60928)

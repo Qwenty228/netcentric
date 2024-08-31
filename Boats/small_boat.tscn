@@ -1,6 +1,9 @@
-[gd_scene format=3 uid="uid://c2yxhd1w7tb60"]
+[gd_scene load_steps=2 format=3 uid="uid://c2yxhd1w7tb60"]
 
-[node name="SmallBoat" type="Node3D"]
+[ext_resource type="Script" path="res://Boats/small_boat.gd" id="1_qwx7j"]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
+[node name="SmallBoat" type="Node3D" groups=["boat"]]
+script = ExtResource("1_qwx7j")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." groups=["boat"]]
 size = Vector3(1.5, 1, 3)
