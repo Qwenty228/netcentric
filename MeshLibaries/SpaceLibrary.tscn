@@ -34,7 +34,6 @@ data = PackedVector3Array(-2, 0.05, 2, 2, 0.05, 2, -2, -0.05, 2, 2, 0.05, 2, 2, 
 [node name="SpaceLibrary" type="Node3D"]
 
 [node name="FreeSpace" type="MeshInstance3D" parent="."]
-visible = false
 mesh = SubResource("BoxMesh_20c58")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="FreeSpace"]
@@ -43,6 +42,7 @@ mesh = SubResource("BoxMesh_20c58")
 shape = SubResource("ConcavePolygonShape3D_tqi2a")
 
 [node name="SelectionBase" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("BoxMesh_x2bw0")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="SelectionBase"]
@@ -51,6 +51,7 @@ mesh = SubResource("BoxMesh_x2bw0")
 shape = SubResource("ConcavePolygonShape3D_u34r5")
 
 [node name="FixedBase" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("BoxMesh_d4wq6")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="FixedBase"]
