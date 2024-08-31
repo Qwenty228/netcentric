@@ -16,6 +16,12 @@ func _on_ready(delta:float) -> void:
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("build"):
 		build_mode = !build_mode
+		#get rid of temporary boats if out of build mode
+		if !build_mode:
+			if grid_map.get_cell_item(previous_cell) != 2:
+				if previous_boat!= null:
+					previous_boat.queue_free()
+					grid_map.set_cell_item(previous_cell, 0)
 	var mouse_position: Vector2 = get_viewport().get_mouse_position()
 	ray_cast_3d.target_position = project_local_ray_normal(mouse_position) * 500
 	ray_cast_3d.force_raycast_update()
