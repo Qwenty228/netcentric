@@ -205,6 +205,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ControlsContainer" type="CenterContainer" parent="MenuScreen"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -243,6 +244,43 @@ Attack mode:
 click to attack"
 label_settings = SubResource("LabelSettings_4yaae")
 
+[node name="EndScreen" type="CenterContainer" parent="MenuScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MenuScreen/EndScreen"]
+custom_minimum_size = Vector2(1100, 1100)
+layout_mode = 2
+color = Color(0, 0, 0, 0.596078)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuScreen/EndScreen"]
+layout_mode = 2
+
+[node name="WinLabel" type="Label" parent="MenuScreen/EndScreen/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "You win!"
+label_settings = SubResource("LabelSettings_ltwcd")
+
+[node name="ReplayButton" type="Button" parent="MenuScreen/EndScreen/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Play again"
+
+[node name="MenuButton" type="Button" parent="MenuScreen/EndScreen/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Main Menu"
+
+[node name="QuitButton" type="Button" parent="MenuScreen/EndScreen/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Quit"
+
 [node name="HelperLabel" type="Label" parent="MenuScreen"]
 layout_mode = 0
 offset_right = 987.0
@@ -268,3 +306,8 @@ label_settings = SubResource("LabelSettings_alx3a")
 libraries = {
 "": SubResource("AnimationLibrary_mdmkk")
 }
+
+[connection signal="opp_hit" from="PlayerBoard/GridMap" to="." method="_on_opp_hit"]
+[connection signal="player_hit" from="PlayerBoard/GridMap" to="." method="_on_player_hit"]
+[connection signal="opp_hit" from="OppBoard/OppMap" to="." method="_on_opp_hit"]
+[connection signal="pressed" from="MenuScreen/EndScreen/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

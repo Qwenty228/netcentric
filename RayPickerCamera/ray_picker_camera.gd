@@ -1,4 +1,5 @@
 extends Camera3D
+signal attacked
 
 @export var grid_map: GridMap
 @onready var ray_cast_3d: RayCast3D = $RayCast3D
@@ -34,10 +35,7 @@ func _process(delta: float) -> void:
 			#attack enemy
 			if attack_mode:
 				if Input.is_action_just_pressed("click"):
-					if grid_map.is_hit(cell):
-						print("hit")
-					else: 
-						print("miss")
+					grid_map.attack(cell)
 			
 			# place ships
 			if build_mode:

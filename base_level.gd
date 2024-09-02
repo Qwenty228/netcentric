@@ -5,11 +5,24 @@ extends Node3D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var ray_picker_camera: Camera3D = $RayPickerCamera
 @onready var mode_label: Label = $MenuScreen/ModeLabel
+@onready var win_label: Label = %WinLabel
+@onready var end_screen: CenterContainer = $MenuScreen/EndScreen
 
 var player_board := true
+var player_ships := 4:
+	set(ships):
+			player_ships -= ships
+			if player_ships == 0:
+				end_game(false)
+var opp_ships := 4:
+	set(ships):
+			opp_ships -= ships
+			if opp_ships == 0:
+				end_game(true)
 
 func _ready() -> void:
 	menu_screen.get_child(0).visible = false
+	end_screen.visible = false
 	ray_picker_camera.grid_map = player_map
 	
 func _process(delta: float) -> void:
@@ -47,5 +60,20 @@ func _process(delta: float) -> void:
 			ray_picker_camera.toggle_build()
 			player_board = !player_board
 			ray_picker_camera.grid_map = player_map
-			
-			
+
+func end_game(player_win:bool) -> void:
+	end_screen.visible = true
+	if player_win:
+		win_label.text = "You win!"
+	else:
+		win_label.text = "git gud"
+
+
+func _on_opp_hit() -> void:
+	opp_ships = 1
+
+func _on_player_hit() -> void:
+	player_ships = 1
+	
+func _on_quit_button_pressed() -> void:
+	get_tree().quit()

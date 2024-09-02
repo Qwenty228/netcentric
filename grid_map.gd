@@ -1,9 +1,14 @@
 extends GridMap
+signal player_hit
+signal opp_hit
 
 @export var is_player: bool
 
-func is_hit(attack_position:Vector3i) -> bool:
+func attack(attack_position:Vector3i) -> void:
 	var pos = local_to_map(attack_position)
 	if get_cell_item(attack_position) == 2:
-		return true
-	return false
+		set_cell_item(attack_position, 3)
+		if is_player:
+			player_hit.emit()
+		else:
+			opp_hit.emit()
