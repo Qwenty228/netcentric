@@ -8,13 +8,16 @@ extends Camera3D
 var build_mode: bool
 var previous_cell: Vector3i
 var previous_boat: Node3D
+var previous_pos: Vector3
 
 func _ready() -> void:
 	build_mode = false
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("build"):
+		build_mode = !build_mode
 		toggle_build()
 	
 	var mouse_position: Vector2 = get_viewport().get_mouse_position()
@@ -23,10 +26,8 @@ func _process(delta: float) -> void:
 	if ray_cast_3d.is_colliding():
 		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
 		var collider = ray_cast_3d.get_collider()
-				
 		if collider is GridMap:
 			if build_mode:
-				print(collider)
 				var collision_point = ray_cast_3d.get_collision_point()
 				var cell = grid_map.local_to_map(collision_point) 
 				var tile_position = grid_map.map_to_local(cell)
@@ -110,7 +111,7 @@ func _process(delta: float) -> void:
 					previous_cell = cell
 					previous_boat = boat_manager.build_boat(tile_position)
 					
-					#check if will illegal
+					#check if illegal position
 					var boat_rotation = previous_boat.boat_rotation
 					var temp_cell = cell
 					var broken = false
@@ -131,12 +132,13 @@ func _process(delta: float) -> void:
 						previous_boat = null
 					else:
 						grid_map.set_cell_item(cell, 1)
+						
 	else:
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 func toggle_build() -> void:
-	build_mode = !build_mode
 	if !build_mode:
+		
 		if grid_map.get_cell_item(previous_cell) != 2:
 			if previous_boat!= null:
 				previous_boat.queue_free()

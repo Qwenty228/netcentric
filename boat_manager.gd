@@ -27,11 +27,10 @@ func _process(delta:float) -> void:
 		rotation_angle = PI/2
 
 func build_boat(boat_position: Vector3) -> Node3D:
-	
 	if current_boat_type != null:
 		var new_boat = current_boat_type.instantiate()
 		add_child(new_boat)
-		new_boat.global_position = boat_position
+		new_boat.set_global_position(boat_position)
 		new_boat.global_rotation.y = rotation_angle
 		
 		current_boat = new_boat
