@@ -1,25 +1,25 @@
 extends Camera3D
 
 @export var grid_map: GridMap
-@export var boat_manager: Node3D
-
 @onready var ray_cast_3d: RayCast3D = $RayCast3D
 
+var boat_manager: Node3D
 var build_mode: bool
+var attack_mode: bool
 var previous_cell: Vector3i
 var previous_boat: Node3D
 var previous_pos: Vector3
 
 func _ready() -> void:
 	build_mode = false
+	attack_mode = false
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("build"):
-		build_mode = !build_mode
-		toggle_build()
-	
+	#switch boat manager
+	boat_manager = grid_map.get_parent().get_child(-1)
+
 	var mouse_position: Vector2 = get_viewport().get_mouse_position()
 	ray_cast_3d.target_position = project_local_ray_normal(mouse_position) * 500
 	ray_cast_3d.force_raycast_update()
@@ -27,11 +27,20 @@ func _process(delta: float) -> void:
 		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
 		var collider = ray_cast_3d.get_collider()
 		if collider is GridMap:
-			if build_mode:
-				var collision_point = ray_cast_3d.get_collision_point()
-				var cell = grid_map.local_to_map(collision_point) 
-				var tile_position = grid_map.map_to_local(cell)
+			var collision_point = ray_cast_3d.get_collision_point()
+			var cell = grid_map.local_to_map(collision_point) 
+			var tile_position = grid_map.map_to_local(cell)
 				
+			#attack enemy
+			if attack_mode:
+				if Input.is_action_just_pressed("click"):
+					if grid_map.is_hit(cell):
+						print("hit")
+					else: 
+						print("miss")
+			
+			# place ships
+			if build_mode:
 				#boat rotation
 				if Input.is_action_just_pressed("rotate"):
 					if previous_boat != null:

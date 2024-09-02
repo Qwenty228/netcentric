@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2y3k1dtgksps"]
+
+[ext_resource type="Script" path="res://boat_manager.gd" id="1_120tb"]
+[ext_resource type="PackedScene" uid="uid://c2yxhd1w7tb60" path="res://Boats/small_boat.tscn" id="2_8on1q"]
+[ext_resource type="PackedScene" uid="uid://dekylbw61q2f4" path="res://Boats/boat_4.tscn" id="3_dfjgg"]
+
+[node name="BoatManager" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35.2)
+script = ExtResource("1_120tb")
+boat_1 = ExtResource("2_8on1q")
+boat_4 = ExtResource("3_dfjgg")
