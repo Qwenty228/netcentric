@@ -1,4 +1,5 @@
 extends Node3D
+signal ship_sunk
 
 @export var boat_1: PackedScene 
 @export var boat_4: PackedScene
@@ -50,3 +51,18 @@ func find_boat(boat_position: Vector3) -> Node3D:
 			if tile_position == boat_position:
 				return child
 	return null
+
+func hit(boat_position: Vector3) -> void:
+	var boat = find_boat(boat_position)
+	#tag hit
+	for i in range(boat.tiles_position):
+		if boat.tile_position[i] == boat_position:
+			boat.hit[i] = true
+	#check if sunk
+	var sunk = true
+	for hit in boat.hits:
+		if !hit:
+			sunk = false
+			break
+	if sunk:
+		sunk.emit()

@@ -77,3 +77,9 @@ func _on_player_hit() -> void:
 	
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
+
+func _on_ship_sunk(is_player) -> void:
+	if is_player:
+		player_ships = 1
+	else:
+		opp_ships = 1
