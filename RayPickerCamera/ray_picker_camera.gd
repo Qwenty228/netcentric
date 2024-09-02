@@ -15,13 +15,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("build"):
-		build_mode = !build_mode
-		#get rid of temporary boats if out of build mode
-		if !build_mode:
-			if grid_map.get_cell_item(previous_cell) != 2:
-				if previous_boat!= null:
-					previous_boat.queue_free()
-					grid_map.set_cell_item(previous_cell, 0)
+		toggle_build()
 	
 	var mouse_position: Vector2 = get_viewport().get_mouse_position()
 	ray_cast_3d.target_position = project_local_ray_normal(mouse_position) * 500
@@ -32,6 +26,7 @@ func _process(delta: float) -> void:
 				
 		if collider is GridMap:
 			if build_mode:
+				print(collider)
 				var collision_point = ray_cast_3d.get_collision_point()
 				var cell = grid_map.local_to_map(collision_point) 
 				var tile_position = grid_map.map_to_local(cell)
@@ -138,3 +133,11 @@ func _process(delta: float) -> void:
 						grid_map.set_cell_item(cell, 1)
 	else:
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+
+func toggle_build() -> void:
+	build_mode = !build_mode
+	if !build_mode:
+		if grid_map.get_cell_item(previous_cell) != 2:
+			if previous_boat!= null:
+				previous_boat.queue_free()
+				grid_map.set_cell_item(previous_cell, 0)

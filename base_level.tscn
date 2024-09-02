@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://lhxvech2dovd"]
+[gd_scene load_steps=20 format=3 uid="uid://lhxvech2dovd"]
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
@@ -38,6 +38,86 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_h15kj"]
 font_size = 64
 
+[sub_resource type="Animation" id="Animation_ehr2a"]
+resource_name = "opp_board"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RayPickerCamera:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 25, 0.02), Vector3(0, 25, -55)]
+}
+
+[sub_resource type="Animation" id="Animation_apf86"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RayPickerCamera:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 25, 0.02)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RayPickerCamera:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.5708, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kaejt"]
+resource_name = "player_board"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RayPickerCamera:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 25, -55), Vector3(0, 25, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_swi78"]
+resource_name = "test"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RayPickerCamera:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-1.5708, 0, 0), Vector3(-1.5708, 3.14159, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mdmkk"]
+_data = {
+"RESET": SubResource("Animation_apf86"),
+"opp_board": SubResource("Animation_ehr2a"),
+"player_board": SubResource("Animation_kaejt"),
+"test": SubResource("Animation_swi78")
+}
+
 [node name="BaseLevel" type="Node3D"]
 script = ExtResource("1_i2ccr")
 
@@ -48,21 +128,26 @@ environment = SubResource("Environment_kuyfa")
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Ground" type="CSGBox3D" parent="."]
+[node name="PlayerBoard" type="Node3D" parent="."]
+
+[node name="Ground" type="CSGBox3D" parent="PlayerBoard"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.962034, 0)
 use_collision = true
 size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
-[node name="GridMap" parent="." instance=ExtResource("3_1ohpt")]
+[node name="GridMap" parent="PlayerBoard" instance=ExtResource("3_1ohpt")]
 
-[node name="Ground2" type="CSGBox3D" parent="."]
+[node name="OppBoard" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -110.933)
+
+[node name="Ground2" type="CSGBox3D" parent="OppBoard"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.962034, 56.0203)
 use_collision = true
 size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
-[node name="OpponentGridMap" parent="." instance=ExtResource("3_1ohpt")]
+[node name="OpponentGridMap" parent="OppBoard" instance=ExtResource("3_1ohpt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 56.0203)
 
 [node name="BoatManager" type="Node3D" parent="."]
@@ -72,7 +157,7 @@ boat_4 = ExtResource("4_bc6bj")
 
 [node name="RayPickerCamera" parent="." node_paths=PackedStringArray("grid_map", "boat_manager") instance=ExtResource("1_o0cxu")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 25, 0.02)
-grid_map = NodePath("")
+grid_map = NodePath("../PlayerBoard/GridMap")
 boat_manager = NodePath("../BoatManager")
 
 [node name="MenuScreen" type="Control" parent="."]
@@ -131,3 +216,8 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "Press Esc for menu and controls"
 label_settings = SubResource("LabelSettings_h15kj")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_mdmkk")
+}
