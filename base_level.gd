@@ -8,12 +8,13 @@ extends Node3D
 @onready var win_label: Label = %WinLabel
 @onready var end_screen: CenterContainer = $MenuScreen/EndScreen
 @onready var start_button: Button = $MenuScreen/StartButton
+@onready var boats_label: Label = $MenuScreen/BoatsLabel
 
 
 var player_board := true
-var player_ships := 4:
+var player_ships := 0:
 	set(ships):
-			player_ships -= ships
+			player_ships += ships
 			if player_ships == 0:
 				end_game(false)
 var opp_ships := 4:
@@ -44,6 +45,8 @@ func _ready() -> void:
 	ray_picker_camera.grid_map = player_map
 	build_mode = true
 	attack_mode = false
+	boats_label.text = "Boats: 0"
+	
 	
 func _process(delta: float) -> void:
 	#switch modes 	
@@ -85,21 +88,27 @@ func end_game(player_win:bool) -> void:
 		win_label.text = "git gud"
 
 func _on_opp_hit() -> void:
-	opp_ships = 1
+	opp_ships = -1
 
 func _on_player_hit() -> void:
-	player_ships = 1
+	player_ships = -1
 	
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
 func _on_ship_sunk(is_player) -> void:
 	if is_player:
-		player_ships = 1
+		player_ships = -1
+		boats_label.text = "Boats: " + str(player_ships)
 	else:
-		opp_ships = 1
+		opp_ships = -1
 
 func _on_start_button_pressed() -> void:
 	build_mode = false
 	switch_to_opp()
 	start_button.queue_free()
+
+func _on_boat_manager_new_boat() -> void:
+	print("ehllo")
+	player_ships = 1
+	boats_label.text = "Boats: " + str(player_ships) 

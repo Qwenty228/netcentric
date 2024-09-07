@@ -1,6 +1,7 @@
 extends Node3D
 signal ship_sunk
 signal all_sunk
+signal new_boat
 
 @export var boat_1: PackedScene 
 @export var boat_4: PackedScene
@@ -22,7 +23,9 @@ var current_boat: Node3D
 
 var boats:= 0:
 	set(boat):
-		boats -= boat
+		boats += boat
+		if boat > 0:
+			new_boat.emit()
 		if boats == 0:
 			all_sunk.emit()
 		else:
@@ -62,8 +65,11 @@ func is_available(type: PackedScene) -> bool:
 func fix_boat(boat: Node3D) -> void:
 	if boat.units == 4:
 		max_b4 -= 1
+		
+		boats = 1
 	if boat.units == 1:
 		max_b1 -= 1
+		boats = 1
 
 func delete_boat(boat_position: Vector3) -> void:
 	for child in get_children():
@@ -87,4 +93,4 @@ func hit(boat_position: Vector3) -> void:
 	#check if sunk
 	if boat.hit.all():
 		boat.queue_free()
-		boats = 1
+		boats = -1

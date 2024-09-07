@@ -1,7 +1,7 @@
 extends GridMap
 signal player_hit
 signal opp_hit
-signal sunk(is_player)
+
 
 @export var is_player: bool
 
@@ -16,4 +16,5 @@ func attack(attack_position:Vector3i) -> void:
 
 
 func _on_ship_sunk() -> void:
-	sunk.emit(is_player)
+	#play animation
+	pass

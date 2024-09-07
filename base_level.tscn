@@ -176,7 +176,6 @@ material = SubResource("StandardMaterial3D_mgmue")
 is_player = true
 
 [node name="BoatManager" parent="PlayerBoard" instance=ExtResource("4_dxq0f")]
-max_b1 = 2
 
 [node name="OppBoard" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 55)
@@ -337,10 +336,10 @@ libraries = {
 
 [connection signal="opp_hit" from="PlayerBoard/GridMap" to="." method="_on_opp_hit"]
 [connection signal="player_hit" from="PlayerBoard/GridMap" to="." method="_on_player_hit"]
-[connection signal="sunk" from="PlayerBoard/GridMap" to="." method="_on_ship_sunk"]
+[connection signal="new_boat" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="PlayerBoard/BoatManager" to="PlayerBoard/GridMap" method="_on_ship_sunk"]
 [connection signal="opp_hit" from="OppBoard/OppMap" to="." method="_on_opp_hit"]
-[connection signal="sunk" from="OppBoard/OppMap" to="." method="_on_ship_sunk"]
+[connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
 [connection signal="pressed" from="MenuScreen/EndScreen/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="MenuScreen/StartButton" to="." method="_on_start_button_pressed"]
