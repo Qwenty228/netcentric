@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://lhxvech2dovd"]
+[gd_scene load_steps=20 format=3 uid="uid://lhxvech2dovd"]
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
@@ -22,6 +22,9 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mgmue"]
 albedo_color = Color(3.65794e-06, 0.630794, 0.971043, 1)
 albedo_texture = ExtResource("2_apdau")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qe5as"]
+albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ltwcd"]
 font_size = 90
@@ -173,6 +176,7 @@ size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
 [node name="GridMap" parent="PlayerBoard" instance=ExtResource("3_1ohpt")]
+visible = false
 is_player = true
 
 [node name="BoatManager" parent="PlayerBoard" instance=ExtResource("4_dxq0f")]
@@ -183,9 +187,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 55)
 [node name="Ground" type="CSGBox3D" parent="OppBoard"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.962034, 0)
 size = Vector3(32, 2, 32)
-material = SubResource("StandardMaterial3D_mgmue")
+material = SubResource("StandardMaterial3D_qe5as")
 
 [node name="OppMap" parent="OppBoard" instance=ExtResource("3_1ohpt")]
+visible = false
 data = {
 "cells": PackedInt32Array(65532, 65532, 2, 65532, 65533, 0, 65533, 65533, 0, 65533, 65534, 0, 65534, 65534, 0, 65534, 65535, 0, 65535, 65535, 0, 65534, 65533, 0, 65533, 65532, 0, 65532, 65534, 0, 65532, 65535, 0, 65532, 0, 0, 65532, 1, 0, 65532, 2, 0, 65532, 3, 2, 65533, 65535, 0, 65533, 0, 0, 65533, 1, 0, 65533, 2, 0, 65533, 3, 0, 65534, 65532, 0, 65534, 0, 0, 65534, 1, 0, 65534, 2, 0, 65534, 3, 0, 65535, 65532, 0, 65535, 65533, 0, 65535, 65534, 0, 65535, 0, 0, 65535, 1, 0, 65535, 2, 0, 65535, 3, 0, 0, 65532, 0, 0, 65533, 0, 0, 65534, 0, 0, 65535, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 1, 65532, 0, 1, 65533, 0, 1, 65534, 0, 1, 65535, 0, 1, 0, 0, 1, 1, 0, 1, 2, 0, 1, 3, 0, 2, 65532, 0, 2, 65533, 0, 2, 65534, 0, 2, 65535, 0, 2, 0, 0, 2, 1, 0, 2, 2, 0, 2, 3, 0, 3, 65532, 2, 3, 65533, 0, 3, 65534, 0, 3, 65535, 0, 3, 0, 0, 3, 1, 0, 3, 2, 0, 3, 3, 2)
 }
