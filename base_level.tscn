@@ -39,33 +39,6 @@ font_size = 64
 [sub_resource type="LabelSettings" id="LabelSettings_alx3a"]
 font_size = 32
 
-[sub_resource type="Animation" id="Animation_ehr2a"]
-resource_name = "opp_board"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OppBoard:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 48), Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("PlayerBoard:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, -48)]
-}
-
 [sub_resource type="Animation" id="Animation_apf86"]
 length = 0.001
 tracks/0/type = "value"
@@ -91,6 +64,33 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ehr2a"]
+resource_name = "opp_board"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OppBoard:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 48), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerBoard:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -48)]
 }
 
 [sub_resource type="Animation" id="Animation_kaejt"]
@@ -176,6 +176,7 @@ material = SubResource("StandardMaterial3D_mgmue")
 is_player = true
 
 [node name="BoatManager" parent="PlayerBoard" instance=ExtResource("4_dxq0f")]
+max_b1 = 2
 
 [node name="OppBoard" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 55)
@@ -314,6 +315,21 @@ grow_vertical = 0
 text = "Boats remaining"
 label_settings = SubResource("LabelSettings_alx3a")
 
+[node name="StartButton" type="Button" parent="MenuScreen"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -109.5
+offset_top = -63.0
+offset_right = 109.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "Start game"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_mdmkk")
@@ -327,3 +343,4 @@ libraries = {
 [connection signal="sunk" from="OppBoard/OppMap" to="." method="_on_ship_sunk"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
 [connection signal="pressed" from="MenuScreen/EndScreen/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="MenuScreen/StartButton" to="." method="_on_start_button_pressed"]
