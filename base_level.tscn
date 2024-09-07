@@ -314,6 +314,21 @@ grow_vertical = 0
 text = "Boats remaining"
 label_settings = SubResource("LabelSettings_alx3a")
 
+[node name="StartButton" type="Button" parent="MenuScreen"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -109.5
+offset_top = -63.0
+offset_right = 109.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "Start game"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_mdmkk")
@@ -321,9 +336,10 @@ libraries = {
 
 [connection signal="opp_hit" from="PlayerBoard/GridMap" to="." method="_on_opp_hit"]
 [connection signal="player_hit" from="PlayerBoard/GridMap" to="." method="_on_player_hit"]
-[connection signal="sunk" from="PlayerBoard/GridMap" to="." method="_on_ship_sunk"]
+[connection signal="new_boat" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="PlayerBoard/BoatManager" to="PlayerBoard/GridMap" method="_on_ship_sunk"]
 [connection signal="opp_hit" from="OppBoard/OppMap" to="." method="_on_opp_hit"]
-[connection signal="sunk" from="OppBoard/OppMap" to="." method="_on_ship_sunk"]
+[connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
 [connection signal="pressed" from="MenuScreen/EndScreen/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="MenuScreen/StartButton" to="." method="_on_start_button_pressed"]

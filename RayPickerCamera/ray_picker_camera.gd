@@ -14,7 +14,6 @@ var previous_pos: Vector3
 func _ready() -> void:
 	build_mode = false
 	attack_mode = false
-	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -44,9 +43,8 @@ func _process(delta: float) -> void:
 					if previous_boat != null:
 						previous_boat.queue_free()
 						previous_boat = boat_manager.build_boat(tile_position)
-					
-					#check if illegal
-					if previous_boat!=null:
+						
+						#check if illegal
 						var boat_rotation = previous_boat.boat_rotation
 						var temp_cell = cell
 						var broken = false
@@ -76,28 +74,30 @@ func _process(delta: float) -> void:
 				
 				#fix boat in place or delete
 				if Input.is_action_just_pressed("click"):
-					if grid_map.get_cell_item(cell) != 2:
-						grid_map.set_cell_item(cell, 2)
-						var temp_cell = cell
-						var boat_rotation = previous_boat.boat_rotation
-						for i in range(previous_boat.units):
-							grid_map.set_cell_item(temp_cell, 2)
-							previous_boat.tiles_position.append(grid_map.map_to_local(temp_cell))
-							if abs(boat_rotation) == 0: 
-								temp_cell.z += 1
-							elif round(abs(boat_rotation)) == 3:
-								temp_cell.z -= 1
-							elif abs(boat_rotation) == PI/2:
-								temp_cell.x -= 1
-							elif abs(boat_rotation) == 3*PI/2:
-								temp_cell.x += 1
-						previous_boat = null
-					elif grid_map.get_cell_item(cell) == 2:
-						var boat = boat_manager.find_boat(grid_map.map_to_local(cell))
-						for position in boat.tiles_position:
-							grid_map.set_cell_item(grid_map.local_to_map(position), 0)
-						if boat != null:
-							boat.queue_free()
+					if previous_boat != null:
+						if grid_map.get_cell_item(cell) != 2:
+							grid_map.set_cell_item(cell, 2)
+							var temp_cell = cell
+							var boat_rotation = previous_boat.boat_rotation
+							for i in range(previous_boat.units):
+								grid_map.set_cell_item(temp_cell, 2)
+								previous_boat.tiles_position.append(grid_map.map_to_local(temp_cell))
+								if abs(boat_rotation) == 0: 
+									temp_cell.z += 1
+								elif round(abs(boat_rotation)) == 3:
+									temp_cell.z -= 1
+								elif abs(boat_rotation) == PI/2:
+									temp_cell.x -= 1
+								elif abs(boat_rotation) == 3*PI/2:
+									temp_cell.x += 1
+							boat_manager.fix_boat(previous_boat)
+							previous_boat = null
+						elif grid_map.get_cell_item(cell) == 2:
+							var boat = boat_manager.find_boat(grid_map.map_to_local(cell))
+							for position in boat.tiles_position:
+								grid_map.set_cell_item(grid_map.local_to_map(position), 0)
+							if boat != null:
+								boat.queue_free()
 					
 				#remove highlighted cell when hovering over fixed cells
 				if grid_map.get_cell_item(cell) == 2:
@@ -119,26 +119,27 @@ func _process(delta: float) -> void:
 					previous_boat = boat_manager.build_boat(tile_position)
 					
 					#check if illegal position
-					var boat_rotation = previous_boat.boat_rotation
-					var temp_cell = cell
-					var broken = false
-					for i in range(previous_boat.units):
-						if grid_map.get_cell_item(temp_cell) != 0 && i >0:
-							broken = true
-							break
-						if abs(boat_rotation) == 0: 
-							temp_cell.z += 1
-						elif round(abs(boat_rotation)) == 3:
-							temp_cell.z -= 1
-						elif abs(boat_rotation) == PI/2:
-							temp_cell.x -= 1
-						elif abs(boat_rotation) == 3*PI/2:
-							temp_cell.x += 1 
-					if broken:
-						previous_boat.queue_free()
-						previous_boat = null
-					else:
-						grid_map.set_cell_item(cell, 1)
+					if previous_boat != null:
+						var boat_rotation = previous_boat.boat_rotation
+						var temp_cell = cell
+						var broken = false
+						for i in range(previous_boat.units):
+							if grid_map.get_cell_item(temp_cell) != 0 && i >0:
+								broken = true
+								break
+							if abs(boat_rotation) == 0: 
+								temp_cell.z += 1
+							elif round(abs(boat_rotation)) == 3:
+								temp_cell.z -= 1
+							elif abs(boat_rotation) == PI/2:
+								temp_cell.x -= 1
+							elif abs(boat_rotation) == 3*PI/2:
+								temp_cell.x += 1 
+						if broken:
+							previous_boat.queue_free()
+							previous_boat = null
+						else:
+							grid_map.set_cell_item(cell, 1)
 						
 	else:
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)

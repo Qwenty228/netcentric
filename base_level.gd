@@ -7,11 +7,14 @@ extends Node3D
 @onready var mode_label: Label = $MenuScreen/ModeLabel
 @onready var win_label: Label = %WinLabel
 @onready var end_screen: CenterContainer = $MenuScreen/EndScreen
+@onready var start_button: Button = $MenuScreen/StartButton
+@onready var boats_label: Label = $MenuScreen/BoatsLabel
+
 
 var player_board := true
-var player_ships := 4:
+var player_ships := 0:
 	set(ships):
-			player_ships -= ships
+			player_ships += ships
 			if player_ships == 0:
 				end_game(false)
 var opp_ships := 4:
@@ -19,47 +22,63 @@ var opp_ships := 4:
 			opp_ships -= ships
 			if opp_ships == 0:
 				end_game(true)
+				
+var build_mode := true:
+	set(mode):
+		build_mode = mode
+		ray_picker_camera.build_mode = !ray_picker_camera.build_mode
+		ray_picker_camera.toggle_build()
+		mode_label.text = "Build mode"
+
+var attack_mode := false:
+	set(mode):
+		if !ray_picker_camera.grid_map.is_player:
+			attack_mode = mode
+			ray_picker_camera.attack_mode = !ray_picker_camera.attack_mode
+			ray_picker_camera.build_mode = false
+			ray_picker_camera.toggle_build()
+			mode_label.text = "Attack mode"
 
 func _ready() -> void:
 	menu_screen.get_child(0).visible = false
 	end_screen.visible = false
 	ray_picker_camera.grid_map = player_map
+	build_mode = true
+	attack_mode = false
+	boats_label.text = "Boats: 0"
+	
 	
 func _process(delta: float) -> void:
-	#switch modes
-	if !ray_picker_camera.build_mode and !ray_picker_camera.attack_mode:
-		mode_label.text = "View mode"
-		
+	#switch modes 	
 	if Input.is_action_just_pressed("build"):
-		ray_picker_camera.build_mode = !ray_picker_camera.build_mode
-		ray_picker_camera.toggle_build()
-		mode_label.text = "Build mode"
+		build_mode = !build_mode
 		
 	if Input.is_action_just_pressed("attack"):
-		if !ray_picker_camera.grid_map.is_player:
-			ray_picker_camera.attack_mode = !ray_picker_camera.attack_mode
-			ray_picker_camera.build_mode = false
-			ray_picker_camera.toggle_build()
-			mode_label.text = "Attack mode"
+		attack_mode = !attack_mode
 		
 	if Input.is_action_just_pressed("menu"):
 		menu_screen.get_child(0).visible = !menu_screen.get_child(0).visible
 		
 	if Input.is_action_just_pressed("switch_board"):
 		if player_board:
-			animation_player.play("opp_board")
-			ray_picker_camera.build_mode = false
-			ray_picker_camera.toggle_build()
-			player_board = !player_board
-			ray_picker_camera.grid_map = opponent_grid_map
-			
+			switch_to_opp()
 		else:
-			animation_player.play("player_board")
-			ray_picker_camera.build_mode = false
-			ray_picker_camera.attack_mode = true
-			ray_picker_camera.toggle_build()
-			player_board = !player_board
-			ray_picker_camera.grid_map = player_map
+			switch_to_player()
+
+func switch_to_opp() -> void:
+	animation_player.play("opp_board")
+	build_mode = false
+	ray_picker_camera.toggle_build()
+	player_board = !player_board
+	ray_picker_camera.grid_map = opponent_grid_map
+
+func switch_to_player() -> void:
+	animation_player.play("player_board")
+	build_mode = false
+	attack_mode = true
+	ray_picker_camera.toggle_build()
+	player_board = !player_board
+	ray_picker_camera.grid_map = player_map
 
 func end_game(player_win:bool) -> void:
 	end_screen.visible = true
@@ -68,18 +87,28 @@ func end_game(player_win:bool) -> void:
 	else:
 		win_label.text = "git gud"
 
-
 func _on_opp_hit() -> void:
-	opp_ships = 1
+	opp_ships = -1
 
 func _on_player_hit() -> void:
-	player_ships = 1
+	player_ships = -1
 	
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
 func _on_ship_sunk(is_player) -> void:
 	if is_player:
-		player_ships = 1
+		player_ships = -1
+		boats_label.text = "Boats: " + str(player_ships)
 	else:
-		opp_ships = 1
+		opp_ships = -1
+
+func _on_start_button_pressed() -> void:
+	build_mode = false
+	switch_to_opp()
+	start_button.queue_free()
+
+func _on_boat_manager_new_boat() -> void:
+	print("ehllo")
+	player_ships = 1
+	boats_label.text = "Boats: " + str(player_ships) 
