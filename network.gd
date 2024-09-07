@@ -1,28 +1,17 @@
 extends Node
 
-func gridToCoord(position):
-	# int 0 - 63
-	# return (14, 0, 14) - (-14, 0, -14)
-	var x = 14 - 4 * (position % 8)
-	var z = 14 - 4 * int(position / 8)
-	return [x, 0, z]
-	
-func coordToGrid(x:int, z: int):
-	# Reverse the calculations from gridToCoord
-	var p = int((14 - x) / 4) + 8 * int((14 - z) / 4) #warning-ignore:integer_division
-	return p
-	
-@export var host = "127.0.0.1"
-@export var port = 55555
-var game_round = 0
-
-
 signal update_game(player, round)
 signal game_start
 signal process_attack(array)
 
+@export var host = "127.0.0.1"
+@export var port = 55555
+var game_round = 0
 var client = StreamPeerTCP.new()
 var client_id = null
+var player_name: String
+
+
 
 func _ready():
 	client.connect_to_host(host, port)
@@ -64,3 +53,15 @@ func fetch() -> Dictionary:
 func send(data):
 	if client.get_status() == client.STATUS_CONNECTED:
 		client.put_utf8_string(JSON.stringify(data))
+		
+func gridToCoord(position):
+	# int 0 - 63
+	# return (14, 0, 14) - (-14, 0, -14)
+	var x = 14 - 4 * (position % 8)
+	var z = 14 - 4 * int(position / 8)
+	return [x, 0, z]
+	
+func coordToGrid(x:int, z: int):
+	# Reverse the calculations from gridToCoord
+	var p = int((14 - x) / 4) + 8 * int((14 - z) / 4) #warning-ignore:integer_division
+	return p
