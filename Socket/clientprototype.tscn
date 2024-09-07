@@ -1,16 +1,16 @@
 [gd_scene load_steps=2 format=3 uid="uid://jobsgrb5cnuj"]
 
-[ext_resource type="Script" path="res://node.gd" id="1_l3btm"]
+[ext_resource type="Script" path="res://Socket/clientprototype.gd" id="1_y5b0t"]
 
 [node name="ClientConnection" type="Node"]
-script = ExtResource("1_l3btm")
+script = ExtResource("1_y5b0t")
 
 [node name="Button" type="Button" parent="."]
 offset_left = 783.0
 offset_top = 273.0
 offset_right = 1376.0
 offset_bottom = 421.0
-text = "ping "
+text = "Attack"
 
 [node name="LineEdit" type="LineEdit" parent="."]
 offset_left = 792.0
@@ -26,7 +26,7 @@ offset_top = 14.0
 offset_right = 1158.0
 offset_bottom = 58.0
 theme_override_font_sizes/font_size = 30
-text = "Client: "
+text = "Round"
 
 [node name="Label2" type="Label" parent="."]
 offset_left = 812.0

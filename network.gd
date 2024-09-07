@@ -1,76 +1,66 @@
 extends Node
-#
-#
-#@export var host = "127.0.0.1"
-#@export var port = 55555
-#@export var state = []
-#
 
 func gridToCoord(position):
 	# int 0 - 63
 	# return (14, 0, 14) - (-14, 0, -14)
 	var x = 14 - 4 * (position % 8)
-	var z = 14 - 4 * (position / 8)
+	var z = 14 - 4 * int(position / 8)
 	return [x, 0, z]
 	
 func coordToGrid(x:int, z: int):
 	# Reverse the calculations from gridToCoord
-	var p = int((14 - x) / 4) + 8 * int((14 - z) / 4)
+	var p = int((14 - x) / 4) + 8 * int((14 - z) / 4) #warning-ignore:integer_division
 	return p
 	
+@export var host = "127.0.0.1"
+@export var port = 55555
+var game_round = 0
 
-#var client = StreamPeerTCP.new()
-#var init_state = 0
-#var connect_timeout = false
-#var client_name = "alice"
-#
-#
-#
-#func _ready():
-	##client.set_no_delay(true)
-	#client.connect_to_host(host, port)
-	#await connect_to_host()
-	#print("setup finish")
-	#init_state = 1
-	#
-#func _connection_fail():
-	##print("failed")
-	#connect_timeout = true
-	#
-#func connect_to_host():
-	#var timer = Timer.new()
-	#add_child(timer)
-	#timer.set_wait_time(3.0)  # Set the timer to 3 seconds
-	#timer.set_one_shot(true)  # Make sure the timer only runs once
-	#timer.connect("timeout", _connection_fail)
-	## Start the timer
-	#timer.start()
-	#while client.get_status() != client.STATUS_CONNECTED:
-		#print(fetch())
-		#if connect_timeout:
-			#return "fail"
-		#await get_tree().create_timer(0.2).timeout
-	#
-	#send({"header": "init", "body": ["0","1","2","3","8","16","24","32","33","34","35","36","63","62","61","60"], "client": client_name})
-#
-#func _process(_delta: float) -> void:
-	#if init_state == 0: 
-		#return
-	#var reply = fetch()
-	#if not reply.is_empty():
-		#print(reply["header"])
-	#
-#func fetch() -> Dictionary:
-	#if client.get_available_bytes() > 0:
-		#client.poll()
-		#var result_string = client.get_utf8_string(client.get_available_bytes()).strip_edges()
-		##print("res", result_string)
-		#var result = JSON.parse_string(result_string)
-		#if result != null:
-			#return result
-	#return {}
-	#
-#func send(data):
-	#if client.get_status() == client.STATUS_CONNECTED:
-		##client.put_data(line_data.to_ascii_buffer())
-		#client.put_utf8_string(JSON.stringify(data))
+
+signal update_game(player, round)
+signal game_start
+signal process_attack(array)
+
+var client = StreamPeerTCP.new()
+var client_name = "alice"
+var client_id = null
+
+func _ready():
+	client.connect_to_host(host, port)
+	print("setup finish")
+
+func _process(_delta: float) -> void:
+	var reply = fetch()
+	if not reply.is_empty():
+		if reply["header"] == "connection":
+			if client_id == null:
+				client_id = reply["client"]
+				send({"header": "init", "body": ["0","1","2","3","8","16","24","32","33","34","35","36","63","62","61","60"], "client": client_name})
+			if reply["body"] == true:
+				print("both players connected")
+				game_start.emit()
+		elif reply["header"] == "game":
+			if typeof(reply["body"]) == 3: # is keyword does not work for some reason, data type is not int but float?
+				game_round = int(reply["body"])
+				update_game.emit(client_id, game_round)
+			else:
+				process_attack.emit(reply)
+				# after enemy attack update 
+				Network.send({"header": "game", "body": "round"})
+	
+		print(reply)
+	
+func fetch() -> Dictionary:
+	if client.get_available_bytes() > 0:
+		client.poll()
+		var result_string = client.get_utf8_string(client.get_available_bytes()).strip_edges()
+		#print("res", result_string)
+		var result = JSON.parse_string(result_string)
+		if result != null:
+			return result
+	return {}
+	
+func send(data):
+	if client.get_status() == client.STATUS_CONNECTED:
+		#client.put_data(line_data.to_ascii_buffer())
+		client.put_utf8_string(JSON.stringify(data))
