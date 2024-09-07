@@ -1,12 +1,24 @@
-#extends Node
+extends Node
 #
 #
 #@export var host = "127.0.0.1"
 #@export var port = 55555
 #@export var state = []
 #
-#
-#
+
+func gridToCoord(position):
+	# int 0 - 63
+	# return (14, 0, 14) - (-14, 0, -14)
+	var x = 14 - 4 * (position % 8)
+	var z = 14 - 4 * (position / 8)
+	return [x, 0, z]
+	
+func coordToGrid(x:int, z: int):
+	# Reverse the calculations from gridToCoord
+	var p = int((14 - x) / 4) + 8 * int((14 - z) / 4)
+	return p
+	
+
 #var client = StreamPeerTCP.new()
 #var init_state = 0
 #var connect_timeout = false
