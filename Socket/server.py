@@ -1,103 +1,127 @@
-import socket
 import json
-from _thread import start_new_thread
+from threading import Thread
+from typing import Iterable
+import socket
+import random
+
+CLIENT_IDENTIFIERS = random.choice(("AB", "BA"))
+
+class LogicHandler:
+    """
+    I cannot find the repository for some reason so I am going to write a shittier version of it
+    It probably doesnt even work the same way but ehh
+    ***IT WORKS ON MY MACHINE***"""
+    gamestate = {}
+    def __init__(self, client: 'ClientHandler') -> None:
+        self.client = client
+        LogicHandler.gamestate[client] = {"ships": [], "rendering_screen": ["0"]*64}
 
 
-clients = "AB"
-clients_conn = []
-i = 0
+    def game_start(self, ships: Iterable[int]) -> None:
+        LogicHandler.gamestate[self.client]["ships"] = ships
 
-A_ships = []
-B_ships = []
-
-A_hit_state = [0]*64
-B_hit_state = [0]*64
-
-
-
-def handle_client(conn):
-    global i
-    conn.sendall((json.dumps({"status": "connected", "client": clients[i]})).encode('utf-8') )
-    c_name = clients[i]
-    reply = {}
-    j = 0
-    print("Client connected: ", c_name)
-    i = (i+1) % 2
-    while True:
-        print("iteration:", j)
-        try:
-            data = conn.recv(2048).decode('utf-8')
-            if not data:
-                print(c_name, "disconnected")
-                clients_conn.remove(conn)
-                break
-
-            print("Received:",  fr'{data}')
-            try:
-                data = json.loads(data)
-            except json.JSONDecodeError:
-                continue
-            
-            if data.get('type') == "init":
-                reply = handle_start_game(data)
-            elif data.get('type') == "game":
-                reply = handle_game_loop(data, conn)
+    def process_attack(self, attack_positions: list[int]) -> dict:
+        gamestate = LogicHandler.gamestate[self.client]["rendering_screen"]
+        other_client = next(client for client in LogicHandler.gamestate if client != self.client)
+        other_player_ships = LogicHandler.gamestate[other_client]["ships"]
+        for pos in attack_positions:
+            if pos in other_player_ships:
+                gamestate[pos] = "1"
             else:
-                reply = {'type': 'error', 'message': 'invalid request'}
+                gamestate[pos] = "-1"
+        return {"header": "game", "body": gamestate}
+
+
+
             
-            conn.sendall(json.dumps(reply).encode('utf-8'))
-        except socket.error as e:
-            print(e)
-            break
-        j += 1
-
-def handle_start_game(data: dict) -> dict:
-    global A_ships, B_ships
-    print(data)
-    if data["client"] == "A":
-        A_ships = data["ships"]
-    else:
-        B_ships = data["ships"]
-    return {'type': 'reply'}
-
-def handle_game_loop(data: dict, conn) -> dict:
-    global A_ships, B_ships
-    target = data['pos']
-
-    state = B_hit_state if data["client"] == "A" else A_hit_state
-     # attacked state of A if B is attacking and vice versa
-
-    for other in clients_conn:
-        if conn != other:
-            other.sendall(json.dumps({"type": "update", "state":state}).encode('utf-8'))  # send state to other client to update their board
-
-    return {'type': 'reply', "state": state} # send state to client to update that hit or miss
-
-    
-
-
-
-def start_server(host='127.0.0.1', port=65432):
-    global clients_conn
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((host, port))
-    server_socket.listen(1)
-    server_socket.settimeout(0.5) # timeout listener every 0.5 seconds, allows for keyboard interrupt
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  
-
-    print(f"Server listening on {host}:{port}...")
-
-    while True:
-        try:
-            conn, addr = server_socket.accept()
-            clients_conn.append(conn)
-        except socket.timeout:
-            continue
-
-        print(f"Connected by {addr}")
-        start_new_thread(handle_client, (conn, ))
+class ClientHandler(Thread):
+    """
+    ClientHandler class to handle multiple clients
+    """
+    all_clients: list['ClientHandler'] = []
+    game_round = 1
+    def __init__(self, conn: socket.socket) -> None:
+        super().__init__(daemon=True)
+        ClientHandler.all_clients.append(self)
+        self.client_id = CLIENT_IDENTIFIERS[len(ClientHandler.all_clients) % 2 - 1]
+        self.name = f"Client-{self.client_id}"
+        self.conn = conn
         
+        self.logic_handler = LogicHandler(self)
+ 
+    def run(self):
+        # established connection
+        for client in ClientHandler.all_clients:
+            client.conn.sendall(json.dumps({"header": "connection", "body": len(ClientHandler.all_clients) == 2,  "client": self.client_id}).encode("utf-8"))
+
+        while True:
+            try:
+                data = self.conn.recv(2048).decode("utf-8")
+                if not data:
+                    break
+
+                print(self.name, "Received:",  fr'{data}')
+                try:
+                    data = json.loads(data)
+                except json.JSONDecodeError:
+                    continue
+
+                reply = {}
+                if (data["header"] == "init"):        # if client is initializing
+                    self.logic_handler.game_start(list(map(int, data["body"])))
+                    if (username := data.get("client")):
+                        self.name = f"Client: {username}"
+
+
+                elif (data["header"] == "game"):      # gmae loop
+                    if data.get('body') == "round":               # start of both round, both clients ask for current round
+                        reply = {"header": "game", "body": ClientHandler.game_round}
+                    else:
+                        # get attack position
+                        target_pos = list(map(int, data["body"]))
+                        reply = self.logic_handler.process_attack(target_pos)
+                        # reply to client with rendering screen (hit or miss list of game state)
+                        for client in ClientHandler.all_clients:
+                            if client.conn != self.conn:
+                                client.conn.sendall(json.dumps(reply).encode("utf-8"))
+                        
+                        ClientHandler.game_round += 1                         # increment round, current round ended
+
+                print(reply)
+                self.conn.sendall(json.dumps(reply).encode("utf-8"))
+
+            except socket.error as e:
+                print(e)
+                break
+        print(f"Connection with {self.name} closed")
+        self.conn.close()
+        ClientHandler.all_clients.remove(self)
+
+            
+class Server:
+    """
+    Server class to handle multiple clients
+    """
+    MAX_CLIENTS = 2
+
+    # localhost address is 127.0.0.1, <string localhost is fine for python socket>
+    def __init__(self, port: int, host="127.0.0.1") -> None:
+        self.socket = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)  # TCP socket
+        self.socket.bind((host, port))
+        self.socket.listen(Server.MAX_CLIENTS)
+        self.socket.settimeout(1)       # allow for timeout
+
+    def start(self):
+        while True:
+            try:
+                conn, addr = self.socket.accept()
+                ClientHandler(conn).start()
+                print("Connected to: ", addr)
+            except socket.timeout:
+                continue
 
 
 if __name__ == "__main__":
-    start_server()
+    server = Server(55555)
+    server.start()
