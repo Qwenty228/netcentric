@@ -75,6 +75,7 @@ func _process(delta: float) -> void:
 				#fix boat in place or delete
 				if Input.is_action_just_pressed("click"):
 					if previous_boat != null:
+						print(tile_position)
 						if grid_map.get_cell_item(cell) != 2:
 							grid_map.set_cell_item(cell, 2)
 							var temp_cell = cell

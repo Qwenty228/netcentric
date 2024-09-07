@@ -1,5 +1,9 @@
 extends Node3D
 @onready var menu_screen: Control = $MenuScreen
+
+@onready var player_board: Node3D = $PlayerBoard
+@onready var opp_board: Node3D = $OppBoard
+
 @onready var player_map: GridMap = $PlayerBoard/GridMap
 @onready var opponent_grid_map: GridMap = $OppBoard/OppMap
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -10,8 +14,10 @@ extends Node3D
 @onready var start_button: Button = $MenuScreen/StartButton
 @onready var boats_label: Label = $MenuScreen/BoatsLabel
 
+@onready var player_boat_manager = player_board.get_child(-1)
+@onready var opp_boat_manager = opp_board.get_child(-1)
 
-var player_board := true
+var is_player_board := true
 var player_ships := 0:
 	set(ships):
 			player_ships += ships
@@ -21,22 +27,19 @@ var opp_ships := 4:
 	set(ships):
 			opp_ships -= ships
 			if opp_ships == 0:
-				end_game(true)
-				
+				end_game(true)		
 var build_mode := true:
 	set(mode):
 		build_mode = mode
 		ray_picker_camera.build_mode = !ray_picker_camera.build_mode
 		ray_picker_camera.toggle_build()
 		mode_label.text = "Build mode"
-
 var attack_mode := false:
 	set(mode):
-		if !ray_picker_camera.grid_map.is_player:
-			attack_mode = mode
-			ray_picker_camera.attack_mode = !ray_picker_camera.attack_mode
-			ray_picker_camera.build_mode = false
-			ray_picker_camera.toggle_build()
+		attack_mode = mode
+		ray_picker_camera.attack_mode = !ray_picker_camera.attack_mode
+		ray_picker_camera.build_mode = false
+		if attack_mode:
 			mode_label.text = "Attack mode"
 
 func _ready() -> void:
@@ -44,9 +47,7 @@ func _ready() -> void:
 	end_screen.visible = false
 	ray_picker_camera.grid_map = player_map
 	build_mode = true
-	attack_mode = false
 	boats_label.text = "Boats: 0"
-	
 	
 func _process(delta: float) -> void:
 	#switch modes 	
@@ -60,7 +61,7 @@ func _process(delta: float) -> void:
 		menu_screen.get_child(0).visible = !menu_screen.get_child(0).visible
 		
 	if Input.is_action_just_pressed("switch_board"):
-		if player_board:
+		if is_player_board:
 			switch_to_opp()
 		else:
 			switch_to_player()
@@ -69,7 +70,7 @@ func switch_to_opp() -> void:
 	animation_player.play("opp_board")
 	build_mode = false
 	ray_picker_camera.toggle_build()
-	player_board = !player_board
+	is_player_board = !is_player_board
 	ray_picker_camera.grid_map = opponent_grid_map
 
 func switch_to_player() -> void:
@@ -77,7 +78,7 @@ func switch_to_player() -> void:
 	build_mode = false
 	attack_mode = true
 	ray_picker_camera.toggle_build()
-	player_board = !player_board
+	is_player_board = !is_player_board
 	ray_picker_camera.grid_map = player_map
 
 func end_game(player_win:bool) -> void:
@@ -106,9 +107,9 @@ func _on_ship_sunk(is_player) -> void:
 func _on_start_button_pressed() -> void:
 	build_mode = false
 	switch_to_opp()
+	attack_mode = true
 	start_button.queue_free()
 
 func _on_boat_manager_new_boat() -> void:
-	print("ehllo")
 	player_ships = 1
 	boats_label.text = "Boats: " + str(player_ships) 
