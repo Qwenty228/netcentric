@@ -22,7 +22,6 @@ signal game_start
 signal process_attack(array)
 
 var client = StreamPeerTCP.new()
-var client_name = "alice"
 var client_id = null
 
 func _ready():
@@ -35,26 +34,28 @@ func _process(_delta: float) -> void:
 		if reply["header"] == "connection":
 			if client_id == null:
 				client_id = reply["client"]
-				send({"header": "init", "body": ["0","1","2","3","8","16","24","32","33","34","35","36","63","62","61","60"], "client": client_name})
+				# simulate player boat setup
+				
 			if reply["body"] == true:
 				print("both players connected")
+				# once both players join, game can start
 				game_start.emit()
 		elif reply["header"] == "game":
 			if typeof(reply["body"]) == 3: # is keyword does not work for some reason, data type is not int but float?
 				game_round = int(reply["body"])
 				update_game.emit(client_id, game_round)
 			else:
-				process_attack.emit(reply)
-				# after enemy attack update 
+				process_attack.emit(reply["body"])
+				# after our attack or enemy attack update 
 				Network.send({"header": "game", "body": "round"})
-	
-		print(reply)
+				
+			
+		#print(reply)
 	
 func fetch() -> Dictionary:
 	if client.get_available_bytes() > 0:
 		client.poll()
 		var result_string = client.get_utf8_string(client.get_available_bytes()).strip_edges()
-		#print("res", result_string)
 		var result = JSON.parse_string(result_string)
 		if result != null:
 			return result
@@ -62,5 +63,4 @@ func fetch() -> Dictionary:
 	
 func send(data):
 	if client.get_status() == client.STATUS_CONNECTED:
-		#client.put_data(line_data.to_ascii_buffer())
 		client.put_utf8_string(JSON.stringify(data))
