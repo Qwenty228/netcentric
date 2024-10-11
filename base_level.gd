@@ -1,9 +1,8 @@
 extends Node3D
-@onready var menu_screen: Control = $MenuScreen
 
+@onready var menu_screen: Control = $MenuScreen
 @onready var player_board: Node3D = $PlayerBoard
 @onready var opp_board: Node3D = $OppBoard
-
 @onready var player_map: GridMap = $PlayerBoard/GridMap
 @onready var opponent_grid_map: GridMap = $OppBoard/OppMap
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -11,11 +10,16 @@ extends Node3D
 @onready var mode_label: Label = $MenuScreen/ModeLabel
 @onready var win_label: Label = %WinLabel
 @onready var end_screen: CenterContainer = $MenuScreen/EndScreen
-@onready var start_button: Button = $MenuScreen/StartButton
+@onready var start_button: Button = $MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/StartButton
 @onready var boats_label: Label = $MenuScreen/BoatsLabel
-
+@onready var boat_1_label: Label = %Boat1Label
+@onready var boat_4_label: Label = %Boat4Label
 @onready var player_boat_manager = player_board.get_child(-1)
 @onready var opp_boat_manager = opp_board.get_child(-1)
+@onready var build_ui_container: MarginContainer = $MenuScreen/BuildUIContainer
+@onready var current_player_label: Label = %CurrentPlayerLabel
+
+var player_name = Network.player_name
 
 var is_player_board := true
 var player_ships := 0:
@@ -48,6 +52,8 @@ func _ready() -> void:
 	ray_picker_camera.grid_map = player_map
 	build_mode = true
 	boats_label.text = "Boats: 0"
+	current_player_label.text = player_name + "'s turn"
+	
 	
 func _process(delta: float) -> void:
 	#switch modes 	
@@ -109,7 +115,23 @@ func _on_start_button_pressed() -> void:
 	switch_to_opp()
 	attack_mode = true
 	start_button.queue_free()
+	build_ui_container.visible = false
 
 func _on_boat_manager_new_boat() -> void:
 	player_ships = 1
 	boats_label.text = "Boats: " + str(player_ships) 
+
+
+func _on_boat_1_btn_pressed() -> void:
+	player_boat_manager.set_boat_1()
+
+
+func _on_boat_4_btn_pressed() -> void:
+	player_boat_manager.set_boat_4()
+
+# update values in building UI
+func _on_boat_manager_new_boat_1(value: int) -> void:
+	boat_1_label.text = "Boat 1 remaining: " + str(value)
+
+func _on_boat_manager_new_boat_4(value: int) -> void:
+	boat_4_label.text = "Boat 4 remaining: " + str(value)
