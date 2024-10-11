@@ -1,7 +1,6 @@
 extends Node
 
 var turn
-var client_name = "Shiori Novella"
 var boat = ["0","1","2","3","8","16","24","32","33","34","35","36","63","62","61","60"]
 
 func _ready():
@@ -12,7 +11,7 @@ func _ready():
 	# assume player set boat at lightspeed: 1 seconds
 	await get_tree().create_timer(1).timeout
 	# player set boats
-	Network.send({"header": "init", "body": boat, "client": client_name})
+	Network.send({"header": "init", "body": boat, "client": Network.player_name})
 	print_ships(boat, [])
 	print_my_attack([])
 	

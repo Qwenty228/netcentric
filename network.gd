@@ -57,6 +57,7 @@ func send(data):
 	if client.get_status() == client.STATUS_CONNECTED:
 		client.put_utf8_string(JSON.stringify(data))
 		
+#!!!!!!!
 func gridToCoord(position):
 	# int 0 - 63
 	# return (14, 0, 14) - (-14, 0, -14)
