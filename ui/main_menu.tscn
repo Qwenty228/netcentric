@@ -1,4 +1,9 @@
-[gd_scene format=3 uid="uid://dhjctrsjga335"]
+[gd_scene load_steps=3 format=3 uid="uid://dhjctrsjga335"]
+
+[ext_resource type="Script" path="res://ui/main_menu.gd" id="1_1chu5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_a0de4"]
+font_size = 24
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -7,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_1chu5")
 
 [node name="Background(should be texture rect)" type="ColorRect" parent="."]
 layout_mode = 1
@@ -63,3 +69,13 @@ custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Play"
+
+[node name="WarningLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Please enter your name"
+label_settings = SubResource("LabelSettings_a0de4")
+
+[connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="text_submitted" from="MarginContainer/HBoxContainer/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

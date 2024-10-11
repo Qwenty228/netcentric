@@ -2,6 +2,8 @@ extends Node3D
 signal ship_sunk
 signal all_sunk
 signal new_boat
+signal new_boat_1(value)
+signal new_boat_4(value)
 
 @export var boat_1: PackedScene 
 @export var boat_4: PackedScene
@@ -41,6 +43,12 @@ func _process(delta:float) -> void:
 	if Input.is_action_just_pressed("rotate"):
 		rotation_angle = PI/2
 
+func set_boat_1() -> void:
+	current_boat_type = boat_1
+	
+func set_boat_4() -> void:
+	current_boat_type = boat_4
+
 func build_boat(boat_position: Vector3) -> Node3D:
 	if current_boat_type != null:
 		if is_available(current_boat_type):
@@ -65,11 +73,12 @@ func is_available(type: PackedScene) -> bool:
 func fix_boat(boat: Node3D) -> void:
 	if boat.units == 4:
 		max_b4 -= 1
-		
 		boats = 1
+		new_boat_4.emit(max_b4)
 	if boat.units == 1:
 		max_b1 -= 1
 		boats = 1
+		new_boat_1.emit(max_b1)
 
 func delete_boat(boat_position: Vector3) -> void:
 	for child in get_children():

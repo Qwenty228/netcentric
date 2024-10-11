@@ -10,6 +10,7 @@ var attack_mode: bool
 var previous_cell: Vector3i
 var previous_boat: Node3D
 var previous_pos: Vector3
+var previous_highlight: Node3D
 
 func _ready() -> void:
 	build_mode = false
@@ -118,6 +119,7 @@ func _process(delta: float) -> void:
 				if grid_map.get_cell_item(cell) == 0:
 					previous_cell = cell
 					previous_boat = boat_manager.build_boat(tile_position)
+					#previous_highlight = boat_manager.build_boat(tile_position)
 					
 					#check if illegal position
 					if previous_boat != null:

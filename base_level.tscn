@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://lhxvech2dovd"]
+[gd_scene load_steps=22 format=3 uid="uid://lhxvech2dovd"]
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
@@ -37,10 +37,16 @@ outline_size = 5
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_h15kj"]
-font_size = 64
+font_size = 32
 
 [sub_resource type="LabelSettings" id="LabelSettings_alx3a"]
 font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_hi6pb"]
+font_size = 40
+
+[sub_resource type="LabelSettings" id="LabelSettings_kpao8"]
+font_size = 25
 
 [sub_resource type="Animation" id="Animation_apf86"]
 length = 0.001
@@ -198,7 +204,7 @@ data = {
 [node name="BoatManager" parent="OppBoard" instance=ExtResource("4_dxq0f")]
 
 [node name="RayPickerCamera" parent="." node_paths=PackedStringArray("grid_map") instance=ExtResource("1_o0cxu")]
-transform = Transform3D(-1, -1.50996e-07, -6.60024e-15, 0, -4.37114e-08, 1, -1.50996e-07, 1, 4.37114e-08, 0, 25, 0.02)
+transform = Transform3D(-1, -1.50996e-07, -6.60024e-15, 0, -4.37114e-08, 1, -1.50996e-07, 1, 4.37114e-08, -7.5, 25, 0.02)
 grid_map = NodePath("../PlayerBoard/GridMap")
 
 [node name="MenuScreen" type="Control" parent="."]
@@ -209,35 +215,32 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ControlsContainer" type="CenterContainer" parent="MenuScreen"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ColorRect" type="ColorRect" parent="MenuScreen/ControlsContainer"]
-custom_minimum_size = Vector2(1100, 1100)
+[node name="TabContainer" type="TabContainer" parent="MenuScreen"]
+custom_minimum_size = Vector2(1000, 1000)
 layout_mode = 2
-color = Color(0, 0, 0, 0.596078)
+offset_left = 250.0
+offset_top = 148.0
+offset_right = 1250.0
+offset_bottom = 1148.0
+theme_override_font_sizes/font_size = 30
+tab_alignment = 1
+current_tab = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuScreen/ControlsContainer"]
+[node name="Controls" type="MarginContainer" parent="MenuScreen/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+metadata/_tab_index = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MenuScreen/TabContainer/Controls"]
+layout_direction = 1
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="MenuScreen/ControlsContainer/VBoxContainer"]
+[node name="Label3" type="Label" parent="MenuScreen/TabContainer/Controls/VBoxContainer2"]
 layout_mode = 2
 text = "Controls"
 label_settings = SubResource("LabelSettings_ltwcd")
 
-[node name="Label" type="Label" parent="MenuScreen/ControlsContainer/VBoxContainer"]
-layout_mode = 2
-text = "Press \"b\" to toggle build mode
-Press \"e\" to toggle attack mode"
-label_settings = SubResource("LabelSettings_4yaae")
-
-[node name="Label2" type="Label" parent="MenuScreen/ControlsContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="MenuScreen/TabContainer/Controls/VBoxContainer2"]
 layout_mode = 2
 text = "\"1\" - switch to boat 1
 \"4\" - switch to boat 4
@@ -248,6 +251,20 @@ Click again to remove
 Attack mode: 
 click to attack"
 label_settings = SubResource("LabelSettings_4yaae")
+
+[node name="Main Menu" type="CenterContainer" parent="MenuScreen/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Label" type="Label" parent="MenuScreen/TabContainer/Main Menu"]
+layout_mode = 2
+text = "Return to main menu"
+
+[node name="Main Menu" type="Button" parent="MenuScreen/TabContainer/Main Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Main menu"
 
 [node name="EndScreen" type="CenterContainer" parent="MenuScreen"]
 visible = false
@@ -319,18 +336,65 @@ grow_vertical = 0
 text = "Boats remaining"
 label_settings = SubResource("LabelSettings_alx3a")
 
-[node name="StartButton" type="Button" parent="MenuScreen"]
+[node name="BuildUIContainer" type="MarginContainer" parent="MenuScreen"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -109.5
-offset_top = -63.0
-offset_right = 109.5
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
+theme_override_constants/margin_left = 1600
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 50
+
+[node name="ColorRect" type="ColorRect" parent="MenuScreen/BuildUIContainer"]
+layout_mode = 2
+color = Color(0, 0, 0, 0.368627)
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuScreen/BuildUIContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuScreen/BuildUIContainer/MarginContainer"]
+layout_mode = 2
+size_flags_stretch_ratio = 20.0
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select boat type"
+label_settings = SubResource("LabelSettings_hi6pb")
+
+[node name="Boat1Btn" type="Button" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Boat 1"
+
+[node name="Boat1Label" type="Label" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Boat 1 remaining: 4"
+label_settings = SubResource("LabelSettings_kpao8")
+
+[node name="Boat4Btn" type="Button" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Boat 4"
+
+[node name="Boat4Label" type="Label" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Boat 4 remaining: 4"
+label_settings = SubResource("LabelSettings_kpao8")
+
+[node name="HSeparator" type="HSeparator" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Start game"
 
@@ -342,9 +406,13 @@ libraries = {
 [connection signal="opp_hit" from="PlayerBoard/GridMap" to="." method="_on_opp_hit"]
 [connection signal="player_hit" from="PlayerBoard/GridMap" to="." method="_on_player_hit"]
 [connection signal="new_boat" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
+[connection signal="new_boat_1" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat_1"]
+[connection signal="new_boat_4" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat_4"]
 [connection signal="ship_sunk" from="PlayerBoard/BoatManager" to="PlayerBoard/GridMap" method="_on_ship_sunk"]
 [connection signal="opp_hit" from="OppBoard/OppMap" to="." method="_on_opp_hit"]
 [connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
 [connection signal="pressed" from="MenuScreen/EndScreen/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
-[connection signal="pressed" from="MenuScreen/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat1Btn" to="." method="_on_boat_1_btn_pressed"]
+[connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat4Btn" to="." method="_on_boat_4_btn_pressed"]
+[connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]

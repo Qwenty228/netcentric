@@ -9,7 +9,10 @@ signal process_attack(array)
 var game_round = 0
 var client = StreamPeerTCP.new()
 var client_id = null
-var player_name: String
+var player_name: String:
+	set(new_name):
+		player_name = new_name
+		print(player_name)
 
 
 
