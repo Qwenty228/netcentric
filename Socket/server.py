@@ -123,5 +123,5 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server(55555)
+    server = Server(10000)
     server.start()

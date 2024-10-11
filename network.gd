@@ -5,7 +5,7 @@ signal game_start
 signal process_attack(array)
 
 @export var host = "127.0.0.1"
-@export var port = 55555
+@export var port = 10000
 var game_round = 0
 var client = StreamPeerTCP.new()
 var client_id = null
