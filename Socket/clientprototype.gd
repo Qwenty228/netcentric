@@ -1,5 +1,5 @@
 extends Node
-
+@onready var client_name = Network.player_name
 var turn
 var boat = ["0","1","2","3","8","16","24","32","33","34","35","36","63","62","61","60"]
 
@@ -7,17 +7,25 @@ func _ready():
 	Network.update_game.connect(update_game_info)
 	Network.game_start.connect(start)
 	Network.process_attack.connect(show_state)
+	#
+	## assume player set boat at lightspeed: 1 seconds
+	#await get_tree().create_timer(1).timeout
+	## player set boats
+	#Network.send({"header": "init", "body": boat, "client": client_name})
+	#print_ships(boat, [])
+	#print_my_attack([])
 	
+func start_connection(player_boat_pos):
 	# assume player set boat at lightspeed: 1 seconds
 	await get_tree().create_timer(1).timeout
 	# player set boats
-	Network.send({"header": "init", "body": boat, "client": Network.player_name})
+	Network.send({"header": "init", "body": player_boat_pos, "client": client_name})
 	print_ships(boat, [])
 	print_my_attack([])
 	
 func start():
 	print("start")
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(3).timeout
 	print("process finished")
 	
 	Network.send({"header": "game", "body": "round"})

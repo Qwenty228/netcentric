@@ -1,8 +1,9 @@
-[gd_scene load_steps=23 format=3 uid="uid://lhxvech2dovd"]
+[gd_scene load_steps=24 format=3 uid="uid://lhxvech2dovd"]
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
 [ext_resource type="Texture2D" uid="uid://csqphpoynjubs" path="res://kenney_prototype-textures/Vector/texture_08.svg" id="2_apdau"]
+[ext_resource type="PackedScene" uid="uid://jobsgrb5cnuj" path="res://Socket/clientprototype.tscn" id="2_rivqq"]
 [ext_resource type="PackedScene" uid="uid://brk2p6bvxe20r" path="res://grid_map.tscn" id="3_1ohpt"]
 [ext_resource type="PackedScene" uid="uid://b2y3k1dtgksps" path="res://Boats/boat_manager.tscn" id="4_dxq0f"]
 [ext_resource type="Texture2D" uid="uid://dfqq67x3tsgkg" path="res://kenney_prototype-textures/PNG/Dark/texture_08.png" id="5_6bn6y"]
@@ -167,6 +168,23 @@ _data = {
 
 [node name="BaseLevel" type="Node3D"]
 script = ExtResource("1_i2ccr")
+
+[node name="ClientConnection" parent="." instance=ExtResource("2_rivqq")]
+
+[node name="Button" parent="ClientConnection" index="0"]
+visible = false
+
+[node name="LineEdit" parent="ClientConnection" index="1"]
+visible = false
+
+[node name="Label" parent="ClientConnection" index="2"]
+visible = false
+
+[node name="Label2" parent="ClientConnection" index="3"]
+visible = false
+
+[node name="Label3" parent="ClientConnection" index="4"]
+visible = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_kuyfa")
@@ -426,3 +444,5 @@ libraries = {
 [connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat1Btn" to="." method="_on_boat_1_btn_pressed"]
 [connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat4Btn" to="." method="_on_boat_4_btn_pressed"]
 [connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+
+[editable path="ClientConnection"]

@@ -12,7 +12,6 @@ var client_id = null
 var player_name: String:
 	set(new_name):
 		player_name = new_name
-		print(player_name)
 
 
 

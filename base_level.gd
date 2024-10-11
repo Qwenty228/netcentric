@@ -18,6 +18,7 @@ extends Node3D
 @onready var opp_boat_manager = opp_board.get_child(-1)
 @onready var build_ui_container: MarginContainer = $MenuScreen/BuildUIContainer
 @onready var current_player_label: Label = %CurrentPlayerLabel
+@onready var client_connection: Node = $ClientConnection
 
 var player_name = Network.player_name
 
@@ -52,8 +53,7 @@ func _ready() -> void:
 	ray_picker_camera.grid_map = player_map
 	build_mode = true
 	boats_label.text = "Boats: 0"
-	current_player_label.text = player_name + "'s turn"
-	
+	current_player_label.text = player_name + "'s turn"	
 	
 func _process(delta: float) -> void:
 	#switch modes 	
@@ -116,6 +116,12 @@ func _on_start_button_pressed() -> void:
 	attack_mode = true
 	start_button.queue_free()
 	build_ui_container.visible = false
+	var player_boats = player_boat_manager.get_children()
+	var player_boats_pos = []
+	for boat in player_boats:
+		player_boats_pos.append(Network.coordToGrid(boat.global_position.x,boat.global_position.z))
+	
+	client_connection.start_connection(player_boats_pos)
 
 func _on_boat_manager_new_boat() -> void:
 	player_ships = 1
