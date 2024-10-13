@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://brk2p6bvxe20r" path="res://grid_map.tscn" id="3_1ohpt"]
 [ext_resource type="PackedScene" uid="uid://b2y3k1dtgksps" path="res://Boats/boat_manager.tscn" id="4_dxq0f"]
 [ext_resource type="Texture2D" uid="uid://dfqq67x3tsgkg" path="res://kenney_prototype-textures/PNG/Dark/texture_08.png" id="5_6bn6y"]
-[ext_resource type="PackedScene" path="res://Boats/boat_4_illegal.tscn" id="6_4sbse"]
+[ext_resource type="PackedScene" uid="uid://cyaopl06io6hw" path="res://Boats/boat_4_illegal.tscn" id="6_4sbse"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hx2ue"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
