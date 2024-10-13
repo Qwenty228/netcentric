@@ -32,14 +32,17 @@ func start():
 	
 func update_game_info(client_id, game_round):
 	#print("round: ", game_round)
-	$Label.text = "Round: " + str(game_round)
+	#$Label.text = "Round: " + str(game_round)
+	print("Round: " + str(game_round))
 	if (client_id == "A" and game_round % 2 == 1) or (client_id == "B" and game_round % 2 == 0):
-		$Label.text += "my turn"
-		$Button.disabled = false
+		#$Label.text += "my turn"
+		print(client_name + " my turn")
+		#$Button.disabled = false
 		turn = 1
 	else:
-		$Label.text += "waiting for opponent"
-		$Button.disabled = true
+		print(client_name + " waiting for opponent")
+		#$Label.text += "waiting for opponent"
+		#$Button.disabled = true
 		turn = 0
 
 func print_ships(ships: Array, attacked: Array) -> void:
