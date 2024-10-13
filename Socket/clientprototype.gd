@@ -1,8 +1,6 @@
 extends Node
 var client_name 
 var turn
-var boat = ["0","1","2","3","8","16","24","32","33","34","35","36","63","62","61","60"]
-
 
 func start_connection(player_boat_pos):
 	client_name = Network.player_name
@@ -36,11 +34,11 @@ func update_game_info(client_id, game_round):
 	print("Round: " + str(game_round))
 	if (client_id == "A" and game_round % 2 == 1) or (client_id == "B" and game_round % 2 == 0):
 		#$Label.text += "my turn"
-		print(client_name + " my turn")
+		print(client_name + " turn")
 		#$Button.disabled = false
 		turn = 1
 	else:
-		print(client_name + " waiting for opponent")
+		print(client_name + " waiting for " + Network.names[Network.opponent_id])
 		#$Label.text += "waiting for opponent"
 		#$Button.disabled = true
 		turn = 0
@@ -74,6 +72,7 @@ func print_ships(ships: Array, attacked: Array) -> void:
 	
 	label.text = "Your Boat:\n" + board_string  # Set the label's text
 
+
 func print_my_attack(attack: Array) -> void:
 	if attack.is_empty():
 		for i in range(64):
@@ -90,11 +89,13 @@ func print_my_attack(attack: Array) -> void:
 
 func show_state(rendering_screen):
 	if turn:
-		print("my turn")
-		print_my_attack(rendering_screen)
+		print(client_name + " turn")
+		#print_my_attack(rendering_screen)
+		print(rendering_screen)
 	else:
-		print("opponent turn")
-		print_ships(boat, rendering_screen)		
+		print(Network.names[Network.opponent_id] + " turn")
+		#print_ships(boat, rendering_screen)		
+		print(rendering_screen)
 		
 func _on_button_pressed() -> void:
 	var text = $LineEdit.text

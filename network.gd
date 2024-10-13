@@ -9,11 +9,12 @@ signal process_attack(array)
 var game_round = 0
 var client = StreamPeerTCP.new()
 var client_id = null
+var opponent_id = null
 var player_name: String:
 	set(new_name):
 		player_name = new_name
 var connection_open = false
-
+var names: Dictionary = {}
 
 func ready():
 	client.connect_to_host(host, port)
@@ -25,11 +26,14 @@ func _process(_delta: float) -> void:
 		return
 	var reply = fetch()
 	if not reply.is_empty():
-		print(reply)
+		#print(reply)
 		if reply["header"] == "connection":
 			if client_id == null:
 				client_id = reply["client"]
-				# simulate player boat setup
+				if client_id == "A":
+					opponent_id = "B"
+				else:
+					opponent_id = "A"
 				
 			if reply["body"] == true:
 				print("both players connected")
@@ -38,9 +42,15 @@ func _process(_delta: float) -> void:
 		elif reply["header"] == "game":
 			if typeof(reply["body"]) == 3: # is keyword does not work for some reason, data type is not int but float?
 				game_round = int(reply["body"])
+				names = reply["names"]
 				update_game.emit(client_id, game_round)
 			else:
-				process_attack.emit(reply["body"])
+				var radar = "radar"
+				if game_round % 2:
+					radar += opponent_id
+				else:
+					radar += client_id
+				process_attack.emit(reply["body"][radar])
 				# after our attack or enemy attack update 
 				Network.send({"header": "game", "body": "round"})
 				

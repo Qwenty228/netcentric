@@ -73,7 +73,7 @@ class ClientHandler(Thread):
                 if data["header"] == "init":  # Initialization phase
                     # Parse and store the ship configuration
                     self.ships = [int(ship) for ship in data["body"]]  # Convert ship positions to integers
-                    self.name = f"Client: {data['client']}"  # Set the client name
+                    self.name = data['client']  # Set the client name
 
                     # Check if both clients are ready to start the game
                     if len(ClientHandler.all_clients) == 2 and not ClientHandler.game_started:
@@ -92,14 +92,16 @@ class ClientHandler(Thread):
 
                 elif data["header"] == "game":  # Game phase
                     if data.get('body') == "round":  # Return current round
-                        reply = {"header": "game", "body": ClientHandler.game_round}
+                        r = ClientHandler.game_round
+                        names = {"A": ClientHandler.all_clients[0].name, "B": ClientHandler.all_clients[1].name} 
+                        reply = {"header": "game", "body": r, "names": names}
+
                     else:        
                             # Parse attack position from the client
                         target_pos = int(data["body"][0]) # Convert the string input from the client to an integer
                        
        
                         reply = ClientHandler.battle_ship_handler.process_attack(self.name, target_pos)
-                        print(reply)
                         # Check if the game is over
                         winner = ClientHandler.battle_ship_handler.check_winner()
                         if winner != None: 
