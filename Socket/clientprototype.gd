@@ -1,6 +1,5 @@
 extends Node
-@onready var client_name = Network.player_name
-
+var client_name 
 var turn
 var boat = ["0","1","2","3","8","16","24","32","33","34","35","36","63","62","61","60"]
 
@@ -18,7 +17,7 @@ func start_connection(player_boat_pos):
 		await(get_tree().create_timer(0.5).timeout)  # Wait another 0.5 seconds before checking again
 	print("Client ID set:", Network.client_id)
 	# player set boats
-	Network.send({"header": "init", "body": player_boat_pos, "client": client_name})
+	Network.send({"header": "init", "body": player_boat_pos, "client": Network.player_name})
 	print("sent boat")
 		
 	
