@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://co4b0qth4x7hw"]
+
+[ext_resource type="Script" path="res://Boats/small_boat.gd" id="1_5wpw0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dvcco"]
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="SmallBoat" type="Node3D" groups=["boat"]]
+script = ExtResource("1_5wpw0")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." groups=["boat"]]
+size = Vector3(3.5, 1, 3)
+material = SubResource("StandardMaterial3D_dvcco")
+
+[node name="Head" type="Marker3D" parent="CSGBox3D"]

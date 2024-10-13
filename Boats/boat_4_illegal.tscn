@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cyaopl06io6hw"]
+
+[ext_resource type="Script" path="res://Boats/boat_4.gd" id="1_q84sx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xd0dl"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_4ofea"]
+script/source = "extends CSGBox3D
+"
+
+[node name="BoatFour" type="Node3D" groups=["boat"]]
+script = ExtResource("1_q84sx")
+legal = false
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." groups=["boat"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+size = Vector3(3.5, 1, 15)
+material = SubResource("StandardMaterial3D_xd0dl")
+script = SubResource("GDScript_4ofea")
+
+[node name="head" type="Marker3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.60928)
