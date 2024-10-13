@@ -65,12 +65,9 @@ class ClientHandler(Thread):
                 if not data:
                     break
 
+                data = json.loads(data)
+                
                 print(self.name, "send:", data)
-                try:
-                    data = json.loads(data)
-                except json.JSONDecodeError:
-                    continue
-
                 reply = {}
 
                 if data["header"] == "init":  # Initialization phase
@@ -130,6 +127,12 @@ class ClientHandler(Thread):
             except socket.error as e:
                 print(e)
                 break
+            except UnicodeDecodeError as e:
+                print(e)
+                continue
+            except json.JSONDecodeError:
+                    continue
+
 
         print(f"Connection with {self.name} closed")
         self.conn.close()
