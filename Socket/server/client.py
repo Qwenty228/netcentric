@@ -19,7 +19,7 @@ def print_ships(ships: list[str], attacked: list) -> None:
     -------------------------
     """
     letter = {"0": " ", "-1": "M", "1": "X"}
-    board = [letter[i] for i in attacked]
+    board = [letter.get(i, " ") for i in attacked]
     for ship in ships:
         if board[int(ship)] == "X":
             continue
@@ -46,25 +46,30 @@ class Battleship:
         self.network = Network(
             {"header": "init", "body": self.ships, "client": self.name})
         self.player_index = 1 if self.network.client_id == "A" else 0
-        self.my_attack = []
+        self.radar_id = "radarA" if self.network.client_id == "A" else "radarB"
+        self.my_attack = ["0"] * 64
         self.opp_attack = ["0"] * 64
-
         print("My ships: ")
         print_ships(self.ships, self.opp_attack)
+        
+    def get_radar(self, idx: int):
+        return "radar" + "AB"[idx]
 
     def game(self):
         # get round from server
-        game_round = int(self.network.send(
+        game_round = (self.network.send(
             {"header": "game", "body": "round"})['body'])
+        print(game_round)
 
         print("Round:", game_round)
         if game_round % 2 == self.player_index:  # if round is odd, A plays, if round is even, B plays
             self.my_attack = self.network.send(
-                {"header": "game", "body": [input("Enter a position: ")]})['body']
+                {"header": "game", "body": [input("Enter a position: ")]})['body'][self.radar_id]
+            print(self.my_attack, [self.get_radar(self.player_index)])
         else:
             # wait for opponent to play
             print("Waiting for opponent to play")
-            self.opp_attack = json.loads(self.network.receive())['body']
+            self.opp_attack = json.loads(self.network.receive())['body'][self.get_radar((self.player_index) %2)]
 
         print(self.name, "attack:")
         print_my_attack(self.my_attack)
