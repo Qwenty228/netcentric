@@ -124,7 +124,7 @@ func _on_start_button_pressed() -> void:
 	var player_boats_pos = []
 	for boat in player_boats:
 		for tile in boat.tiles_position:
-			player_boats_pos.append(Network.coordToGrid(tile.x,tile.z))
+			player_boats_pos.append(str(Network.coordToGrid(tile.x,tile.z)))
 	
 	client_connection.start_connection(player_boats_pos)
 
