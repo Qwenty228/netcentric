@@ -30,20 +30,20 @@ albedo_texture = ExtResource("2_apdau")
 albedo_texture = ExtResource("5_6bn6y")
 
 [sub_resource type="LabelSettings" id="LabelSettings_ltwcd"]
-font_size = 90
+font_size = 40
 outline_size = 5
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_4yaae"]
-font_size = 64
+font_size = 35
 outline_size = 5
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_h15kj"]
-font_size = 32
+font_size = 15
 
 [sub_resource type="LabelSettings" id="LabelSettings_alx3a"]
-font_size = 32
+font_size = 20
 
 [sub_resource type="LabelSettings" id="LabelSettings_hi6pb"]
 font_size = 40
@@ -235,15 +235,20 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TabContainer" type="TabContainer" parent="MenuScreen"]
-custom_minimum_size = Vector2(1000, 1000)
-layout_mode = 2
-offset_left = 250.0
-offset_top = 148.0
-offset_right = 1250.0
-offset_bottom = 1148.0
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -288.0
+offset_right = 270.0
+offset_bottom = 288.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_font_sizes/font_size = 30
-tab_alignment = 1
-current_tab = 0
 
 [node name="Controls" type="MarginContainer" parent="MenuScreen/TabContainer"]
 layout_mode = 2
@@ -374,10 +379,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 1600
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_left = 775
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 11
+theme_override_constants/margin_bottom = 69
 
 [node name="ColorRect" type="ColorRect" parent="MenuScreen/BuildUIContainer"]
 layout_mode = 2
@@ -386,13 +391,13 @@ color = Color(0, 0, 0, 0.368627)
 [node name="MarginContainer" type="MarginContainer" parent="MenuScreen/BuildUIContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 30
+theme_override_constants/margin_top = 35
 theme_override_constants/margin_right = 30
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuScreen/BuildUIContainer/MarginContainer"]
 layout_mode = 2
 size_flags_stretch_ratio = 20.0
-theme_override_constants/separation = 20
+theme_override_constants/separation = 0
 
 [node name="Label" type="Label" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
