@@ -12,16 +12,20 @@ var client_id = null
 var player_name: String:
 	set(new_name):
 		player_name = new_name
+var connection_open = false
 
 
-
-func _ready():
+func ready():
 	client.connect_to_host(host, port)
+	connection_open = true
 	print("setup finish")
 
 func _process(_delta: float) -> void:
+	if !connection_open:
+		return
 	var reply = fetch()
 	if not reply.is_empty():
+		print(reply)
 		if reply["header"] == "connection":
 			if client_id == null:
 				client_id = reply["client"]

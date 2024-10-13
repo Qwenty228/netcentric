@@ -1,31 +1,31 @@
 extends Node
 @onready var client_name = Network.player_name
+
 var turn
 var boat = ["0","1","2","3","8","16","24","32","33","34","35","36","63","62","61","60"]
 
-func _ready():
+
+func start_connection(player_boat_pos):
+	Network.ready()
 	Network.update_game.connect(update_game_info)
 	Network.game_start.connect(start)
 	Network.process_attack.connect(show_state)
-	#
-	## assume player set boat at lightspeed: 1 seconds
-	#await get_tree().create_timer(1).timeout
-	## player set boats
-	#Network.send({"header": "init", "body": boat, "client": client_name})
-	#print_ships(boat, [])
-	#print_my_attack([])
+	print("connection establised")
 	
-func start_connection(player_boat_pos):
-	# assume player set boat at lightspeed: 1 seconds
-	await get_tree().create_timer(1).timeout
+	await(get_tree().create_timer(0.5).timeout)  # Wait 0.5 seconds
+	while Network.client_id == null:
+		print("Waiting for client ID...")
+		await(get_tree().create_timer(0.5).timeout)  # Wait another 0.5 seconds before checking again
+	print("Client ID set:", Network.client_id)
 	# player set boats
 	Network.send({"header": "init", "body": player_boat_pos, "client": client_name})
-	print_ships(boat, [])
-	print_my_attack([])
+	print("sent boat")
+		
+	
 	
 func start():
 	print("start")
-	await get_tree().create_timer(3).timeout
+	await get_tree().create_timer(1).timeout
 	print("process finished")
 	
 	Network.send({"header": "game", "body": "round"})

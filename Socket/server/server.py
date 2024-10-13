@@ -65,7 +65,7 @@ class ClientHandler(Thread):
                 if not data:
                     break
 
-                print(self.name, "Received:", data)
+                print(self.name, "send:", data)
                 try:
                     data = json.loads(data)
                 except json.JSONDecodeError:
@@ -96,7 +96,6 @@ class ClientHandler(Thread):
                 elif data["header"] == "game":  # Game phase
                     if data.get('body') == "round":  # Return current round
                         reply = {"header": "game", "body": ClientHandler.game_round}
-                    
                     else:        
                             # Parse attack position from the client
                         target_pos = int(data["body"][0]) # Convert the string input from the client to an integer
