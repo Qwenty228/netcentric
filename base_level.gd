@@ -19,9 +19,9 @@ extends Node3D
 @onready var build_ui_container: MarginContainer = $MenuScreen/BuildUIContainer
 @onready var current_player_label: Label = %CurrentPlayerLabel
 @onready var client_connection: Node = $ClientConnection
+@onready var client_UI = client_connection.get_children()
 
 var player_name = Network.player_name
-
 var is_player_board := true
 var player_ships := 0:
 	set(ships):
@@ -33,13 +33,13 @@ var opp_ships := 4:
 			opp_ships -= ships
 			if opp_ships == 0:
 				end_game(true)		
-var build_mode := true:
+@export var build_mode := true:
 	set(mode):
 		build_mode = mode
 		ray_picker_camera.build_mode = !ray_picker_camera.build_mode
 		ray_picker_camera.toggle_build()
 		mode_label.text = "Build mode"
-var attack_mode := false:
+@export var attack_mode := false:
 	set(mode):
 		attack_mode = mode
 		ray_picker_camera.attack_mode = !ray_picker_camera.attack_mode
@@ -71,6 +71,10 @@ func _process(delta: float) -> void:
 			switch_to_opp()
 		else:
 			switch_to_player()
+			
+	if Input.is_action_just_pressed("client_ui"):
+		for child in client_UI:
+			child.visible = true
 
 func switch_to_opp() -> void:
 	animation_player.play("opp_board")
@@ -119,7 +123,8 @@ func _on_start_button_pressed() -> void:
 	var player_boats = player_boat_manager.get_children()
 	var player_boats_pos = []
 	for boat in player_boats:
-		player_boats_pos.append(Network.coordToGrid(boat.global_position.x,boat.global_position.z))
+		for tile in boat.tiles_position:
+			player_boats_pos.append(Network.coordToGrid(tile.x,tile.z))
 	
 	client_connection.start_connection(player_boats_pos)
 

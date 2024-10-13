@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 				if Input.is_action_just_pressed("rotate"):
 					if previous_boat != null:
 						previous_boat.queue_free()
-						previous_boat = boat_manager.build_boat(tile_position)
+						previous_boat = boat_manager.build_boat(tile_position, true)
 						
 						#check if illegal
 						var boat_rotation = previous_boat.boat_rotation
@@ -71,12 +71,11 @@ func _process(delta: float) -> void:
 				if Input.is_action_just_pressed("boat1") || Input.is_action_just_pressed("boat4"):	
 					if previous_boat != null:
 						previous_boat.queue_free()
-						previous_boat = boat_manager.build_boat(tile_position)
+						previous_boat = boat_manager.build_boat(tile_position, true)
 				
 				#fix boat in place or delete
 				if Input.is_action_just_pressed("click"):
-					if previous_boat != null:
-						print(tile_position)
+					if previous_boat != null && previous_boat.legal:
 						if grid_map.get_cell_item(cell) != 2:
 							grid_map.set_cell_item(cell, 2)
 							var temp_cell = cell
@@ -118,9 +117,8 @@ func _process(delta: float) -> void:
 				#create new temporary boat
 				if grid_map.get_cell_item(cell) == 0:
 					previous_cell = cell
-					previous_boat = boat_manager.build_boat(tile_position)
-					#previous_highlight = boat_manager.build_boat(tile_position)
-					
+					previous_boat = boat_manager.build_boat(tile_position, true)
+				
 					#check if illegal position
 					if previous_boat != null:
 						var boat_rotation = previous_boat.boat_rotation
@@ -140,9 +138,8 @@ func _process(delta: float) -> void:
 								temp_cell.x += 1 
 						if broken:
 							previous_boat.queue_free()
-							previous_boat = null
-						else:
-							grid_map.set_cell_item(cell, 1)
+							previous_boat = boat_manager.build_boat(tile_position, false)
+						grid_map.set_cell_item(cell, 1)
 						
 	else:
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)

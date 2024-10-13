@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://lhxvech2dovd"]
+[gd_scene load_steps=25 format=3 uid="uid://lhxvech2dovd"]
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://brk2p6bvxe20r" path="res://grid_map.tscn" id="3_1ohpt"]
 [ext_resource type="PackedScene" uid="uid://b2y3k1dtgksps" path="res://Boats/boat_manager.tscn" id="4_dxq0f"]
 [ext_resource type="Texture2D" uid="uid://dfqq67x3tsgkg" path="res://kenney_prototype-textures/PNG/Dark/texture_08.png" id="5_6bn6y"]
+[ext_resource type="PackedScene" uid="uid://cyaopl06io6hw" path="res://Boats/boat_4_illegal.tscn" id="6_4sbse"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hx2ue"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -205,6 +206,7 @@ visible = false
 is_player = true
 
 [node name="BoatManager" parent="PlayerBoard" instance=ExtResource("4_dxq0f")]
+boat_4_illegal = ExtResource("6_4sbse")
 
 [node name="OppBoard" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 55)
@@ -218,6 +220,7 @@ material = SubResource("StandardMaterial3D_qe5as")
 visible = false
 
 [node name="BoatManager" parent="OppBoard" instance=ExtResource("4_dxq0f")]
+boat_4_illegal = ExtResource("6_4sbse")
 
 [node name="RayPickerCamera" parent="." node_paths=PackedStringArray("grid_map") instance=ExtResource("1_o0cxu")]
 transform = Transform3D(-1, -1.50996e-07, -6.60024e-15, 0, -4.37114e-08, 1, -1.50996e-07, 1, 4.37114e-08, -7.5, 25, 0.02)
