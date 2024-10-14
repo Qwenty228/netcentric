@@ -26,6 +26,7 @@ class BattleShipHandler:
             "radarA": [str(x) for x in self.battle_ship.radar_screens[self.battle_ship.players_info.player1_name].screen],
             "radarB": [str(x) for x in self.battle_ship.radar_screens[self.battle_ship.players_info.player2_name].screen],
         }
+        print(radar_screens)
         return {"header": "game", "body": radar_screens}
 
 

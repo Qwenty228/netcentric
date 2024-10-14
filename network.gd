@@ -46,10 +46,10 @@ func _process(_delta: float) -> void:
 				update_game.emit(client_id, game_round)
 			else:
 				var radar = "radar"
-				if game_round % 2:
-					radar += opponent_id
-				else:
+				if (client_id == "A" and game_round % 2 == 1) or (client_id == "B" and game_round % 2 == 0):
 					radar += client_id
+				else:
+					radar += opponent_id
 				process_attack.emit(reply["body"][radar])
 				# after our attack or enemy attack update 
 				Network.send({"header": "game", "body": "round"})

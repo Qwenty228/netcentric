@@ -6,42 +6,42 @@
 script = ExtResource("1_y5b0t")
 
 [node name="Button" type="Button" parent="."]
-offset_left = 789.0
-offset_top = 225.0
-offset_right = 1383.0
-offset_bottom = 356.0
+offset_left = 377.0
+offset_top = 192.0
+offset_right = 758.0
+offset_bottom = 278.0
 text = "Attack"
 
 [node name="LineEdit" type="LineEdit" parent="."]
-offset_left = 792.0
-offset_top = 80.0
-offset_right = 1385.0
-offset_bottom = 205.0
+offset_left = 382.0
+offset_top = 89.0
+offset_right = 762.0
+offset_bottom = 178.0
 theme_override_font_sizes/font_size = 41
 placeholder_text = "put in position"
 
 [node name="Label" type="Label" parent="."]
-offset_left = 806.0
-offset_top = 14.0
-offset_right = 1158.0
-offset_bottom = 58.0
+offset_left = 435.0
+offset_top = 32.0
+offset_right = 787.0
+offset_bottom = 76.0
 theme_override_font_sizes/font_size = 30
 text = "Round"
 
 [node name="Label2" type="Label" parent="."]
-offset_left = 347.0
-offset_top = 408.0
-offset_right = 991.0
-offset_bottom = 900.0
-theme_override_font_sizes/font_size = 30
+offset_left = 7.0
+offset_top = 293.0
+offset_right = 458.0
+offset_bottom = 634.0
+theme_override_font_sizes/font_size = 20
 text = "Your attack:"
 
 [node name="Label3" type="Label" parent="."]
-offset_left = 1304.0
-offset_top = 389.0
-offset_right = 1943.0
-offset_bottom = 962.0
-theme_override_font_sizes/font_size = 30
+offset_left = 624.0
+offset_top = 287.0
+offset_right = 1155.0
+offset_bottom = 649.0
+theme_override_font_sizes/font_size = 20
 text = "Your Boat:"
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
