@@ -10,7 +10,8 @@ extends Node3D
 @onready var mode_label: Label = $MenuScreen/ModeLabel
 @onready var win_label: Label = %WinLabel
 @onready var end_screen: CenterContainer = $MenuScreen/EndScreen
-@onready var start_button: Button = $MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/StartButton
+@onready var start_button: Button = %StartButton
+
 @onready var boats_label: Label = $MenuScreen/BoatsLabel
 @onready var boat_1_label: Label = %Boat1Label
 @onready var boat_4_label: Label = %Boat4Label
