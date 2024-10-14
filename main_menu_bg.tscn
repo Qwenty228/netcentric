@@ -1,0 +1,64 @@
+[gd_scene load_steps=12 format=3 uid="uid://cgrtbn4rmq83a"]
+
+[ext_resource type="PackedScene" uid="uid://dhjctrsjga335" path="res://ui/main_menu.tscn" id="1_68ms5"]
+[ext_resource type="Shader" path="res://MeshLibaries/Shader/water.gdshader" id="2_qshcw"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8h1g0"]
+sky_top_color = Color(0.1705, 0.228625, 0.31, 1)
+sky_horizon_color = Color(0.909804, 0.654902, 0.670588, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+sun_angle_max = 360.0
+
+[sub_resource type="Sky" id="Sky_jy2cx"]
+sky_material = SubResource("ProceduralSkyMaterial_8h1g0")
+
+[sub_resource type="Environment" id="Environment_5buh2"]
+background_mode = 2
+sky = SubResource("Sky_jy2cx")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_kqtmd"]
+size = Vector2(2000, 1000)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qv1xu"]
+frequency = 0.015
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hm1sm"]
+height = 1024
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_qv1xu")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_chevo"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ejwqo"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_chevo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7kqdg"]
+render_priority = 0
+shader = ExtResource("2_qshcw")
+shader_parameter/albedo = Color(0.256122, 0.777961, 0.734704, 1)
+shader_parameter/direction1 = Vector2(1, 0)
+shader_parameter/direction2 = Vector2(0, 1)
+shader_parameter/scroll_speed1 = 0.01
+shader_parameter/scroll_speed2 = 0.02
+shader_parameter/normalmap_tex = SubResource("NoiseTexture2D_hm1sm")
+shader_parameter/normalmap_tex2 = SubResource("NoiseTexture2D_ejwqo")
+
+[node name="MainMenuBG" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5buh2")
+
+[node name="MainMenu" parent="." instance=ExtResource("1_68ms5")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_kqtmd")
+surface_material_override/0 = SubResource("ShaderMaterial_7kqdg")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32.73, 515.788)

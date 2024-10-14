@@ -11,7 +11,7 @@ signal new_boat_4(value)
 @export var max_b1 = 4
 @export var max_b4 = 4
 
-@onready var current_boat_type:PackedScene = boat_1:
+@onready var current_boat_type:PackedScene = boat_4:
 	set(boat_type):
 		current_boat_type = boat_type
 

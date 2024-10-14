@@ -146,3 +146,11 @@ func _on_boat_manager_new_boat_1(value: int) -> void:
 
 func _on_boat_manager_new_boat_4(value: int) -> void:
 	boat_4_label.text = "Boat 4 remaining: " + str(value)
+
+func sink_player_ship(pos:Vector3i) -> void:
+	var cell = player_map.local_to_map(pos) 
+	player_map.set_cell_item(cell, 2)
+
+func sink_enemy_ship(pos:Vector3i) -> void:
+	var cell = opponent_grid_map.local_to_map(pos)
+	opponent_grid_map.set_cell_item(cell,2)

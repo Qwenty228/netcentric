@@ -1,0 +1,64 @@
+[gd_scene load_steps=11 format=3 uid="uid://bb3qwgk8bk21s"]
+
+[ext_resource type="Shader" path="res://MeshLibaries/Shader/water.gdshader" id="1_t3o8i"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7r5x3"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_7878i"]
+sky_material = SubResource("ProceduralSkyMaterial_7r5x3")
+
+[sub_resource type="Environment" id="Environment_vecxn"]
+background_mode = 2
+sky = SubResource("Sky_7878i")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_p07rm"]
+size = Vector2(10, 10)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qv1xu"]
+frequency = 0.015
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hm1sm"]
+height = 1024
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_qv1xu")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_chevo"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ejwqo"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_chevo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ditmx"]
+render_priority = 0
+shader = ExtResource("1_t3o8i")
+shader_parameter/albedo = Color(0.256122, 0.777961, 0.734704, 1)
+shader_parameter/direction1 = Vector2(1, 0)
+shader_parameter/direction2 = Vector2(0, 1)
+shader_parameter/scroll_speed1 = 0.03
+shader_parameter/scroll_speed2 = 0.02
+shader_parameter/normalmap_tex = SubResource("NoiseTexture2D_hm1sm")
+shader_parameter/normalmap_tex2 = SubResource("NoiseTexture2D_ejwqo")
+
+[node name="SpatialShader" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vecxn")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+visible = false
+shadow_enabled = true
+
+[node name="WaterEffect" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_p07rm")
+surface_material_override/0 = SubResource("ShaderMaterial_ditmx")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312083, 2.89819, -0.263529)

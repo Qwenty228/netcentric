@@ -1,6 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhjctrsjga335"]
+[gd_scene load_steps=5 format=3 uid="uid://dhjctrsjga335"]
 
 [ext_resource type="Script" path="res://ui/main_menu.gd" id="1_1chu5"]
+[ext_resource type="FontFile" uid="uid://b3ym7847ce73u" path="res://Assets/MateSC-Regular.ttf" id="2_u8ohg"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ds3rf"]
+font = ExtResource("2_u8ohg")
+font_size = 64
 
 [sub_resource type="LabelSettings" id="LabelSettings_a0de4"]
 font_size = 24
@@ -15,15 +20,6 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1chu5")
-
-[node name="Background(should be texture rect)" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.206914, 0.206914, 0.206914, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -47,7 +43,8 @@ layout_mode = 2
 [node name="GameTitle" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
-text = "<Game Title>"
+text = "Battleship 1650"
+label_settings = SubResource("LabelSettings_ds3rf")
 horizontal_alignment = 1
 vertical_alignment = 1
 

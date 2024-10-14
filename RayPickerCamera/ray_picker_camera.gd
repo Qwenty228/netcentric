@@ -19,7 +19,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	#switch boat manager
-	boat_manager = grid_map.get_parent().get_child(-1)
+	boat_manager = grid_map.get_parent().get_child(-2)
 
 	var mouse_position: Vector2 = get_viewport().get_mouse_position()
 	ray_cast_3d.target_position = project_local_ray_normal(mouse_position) * 500
@@ -36,6 +36,7 @@ func _process(delta: float) -> void:
 			if attack_mode:
 				if Input.is_action_just_pressed("click"):
 					grid_map.attack(cell)
+					attacked.emit()
 			
 			# place ships
 			if build_mode:

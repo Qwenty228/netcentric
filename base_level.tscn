@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://lhxvech2dovd"]
+[gd_scene load_steps=32 format=3 uid="uid://lhxvech2dovd"]
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
@@ -6,11 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://jobsgrb5cnuj" path="res://Socket/clientprototype.tscn" id="2_rivqq"]
 [ext_resource type="PackedScene" uid="uid://brk2p6bvxe20r" path="res://grid_map.tscn" id="3_1ohpt"]
 [ext_resource type="PackedScene" uid="uid://b2y3k1dtgksps" path="res://Boats/boat_manager.tscn" id="4_dxq0f"]
-[ext_resource type="Texture2D" uid="uid://dfqq67x3tsgkg" path="res://kenney_prototype-textures/PNG/Dark/texture_08.png" id="5_6bn6y"]
 [ext_resource type="PackedScene" uid="uid://cyaopl06io6hw" path="res://Boats/boat_4_illegal.tscn" id="6_4sbse"]
+[ext_resource type="Shader" path="res://MeshLibaries/Shader/water.gdshader" id="8_fgebb"]
+[ext_resource type="FontFile" uid="uid://el25lhmlqokw" path="res://Assets/PT_Serif/PTSerif-Regular.ttf" id="9_evmka"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hx2ue"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+sky_top_color = Color(0.1833, 0.269425, 0.39, 1)
+sky_horizon_color = Color(0.7, 0.584733, 0.434, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
 [sub_resource type="Sky" id="Sky_mfpqd"]
@@ -26,8 +28,40 @@ glow_enabled = true
 albedo_color = Color(3.65794e-06, 0.630794, 0.971043, 1)
 albedo_texture = ExtResource("2_apdau")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qe5as"]
-albedo_texture = ExtResource("5_6bn6y")
+[sub_resource type="PlaneMesh" id="PlaneMesh_rnipn"]
+size = Vector2(200, 200)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qv1xu"]
+frequency = 0.015
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hm1sm"]
+height = 1024
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_qv1xu")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_chevo"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ejwqo"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_chevo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7fpiu"]
+render_priority = 0
+shader = ExtResource("8_fgebb")
+shader_parameter/albedo = Color(0.256122, 0.777961, 0.734704, 1)
+shader_parameter/direction1 = Vector2(1, 0)
+shader_parameter/direction2 = Vector2(0, 1)
+shader_parameter/scroll_speed1 = 0.03
+shader_parameter/scroll_speed2 = 0.02
+shader_parameter/normalmap_tex = SubResource("NoiseTexture2D_hm1sm")
+shader_parameter/normalmap_tex2 = SubResource("NoiseTexture2D_ejwqo")
+
+[sub_resource type="Theme" id="Theme_qsq0q"]
+default_font = ExtResource("9_evmka")
+default_font_size = 32
 
 [sub_resource type="LabelSettings" id="LabelSettings_ltwcd"]
 font_size = 40
@@ -192,6 +226,7 @@ environment = SubResource("Environment_kuyfa")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+visible = false
 shadow_enabled = true
 
 [node name="PlayerBoard" type="Node3D" parent="."]
@@ -208,13 +243,18 @@ is_player = true
 [node name="BoatManager" parent="PlayerBoard" instance=ExtResource("4_dxq0f")]
 boat_4_illegal = ExtResource("6_4sbse")
 
+[node name="Sea" type="MeshInstance3D" parent="PlayerBoard"]
+mesh = SubResource("PlaneMesh_rnipn")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_7fpiu")
+
 [node name="OppBoard" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 55)
 
 [node name="Ground" type="CSGBox3D" parent="OppBoard"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.962034, 0)
 size = Vector3(32, 2, 32)
-material = SubResource("StandardMaterial3D_qe5as")
+material = SubResource("StandardMaterial3D_mgmue")
 
 [node name="OppMap" parent="OppBoard" instance=ExtResource("3_1ohpt")]
 visible = false
@@ -223,7 +263,7 @@ visible = false
 boat_4_illegal = ExtResource("6_4sbse")
 
 [node name="RayPickerCamera" parent="." node_paths=PackedStringArray("grid_map") instance=ExtResource("1_o0cxu")]
-transform = Transform3D(-1, -1.50996e-07, -6.60024e-15, 0, -4.37114e-08, 1, -1.50996e-07, 1, 4.37114e-08, -7.5, 25, 0.02)
+transform = Transform3D(-1, -1.50996e-07, -6.60024e-15, 0, -4.37114e-08, 1, -1.50996e-07, 1, 4.37114e-08, 0.44, 28.72, -1.71)
 grid_map = NodePath("../PlayerBoard/GridMap")
 
 [node name="MenuScreen" type="Control" parent="."]
@@ -233,6 +273,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_qsq0q")
 
 [node name="TabContainer" type="TabContainer" parent="MenuScreen"]
 custom_minimum_size = Vector2(500, 500)
@@ -373,7 +414,24 @@ grow_horizontal = 0
 theme_override_font_sizes/font_size = 25
 text = "Your turn"
 
+[node name="StartButton" type="Button" parent="MenuScreen"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -118.0
+offset_top = -94.0
+offset_right = 120.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "Start game"
+
 [node name="BuildUIContainer" type="MarginContainer" parent="MenuScreen"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -430,11 +488,6 @@ label_settings = SubResource("LabelSettings_kpao8")
 [node name="HSeparator" type="HSeparator" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Start game"
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_mdmkk")
@@ -450,8 +503,9 @@ libraries = {
 [connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
 [connection signal="pressed" from="MenuScreen/EndScreen/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="MenuScreen/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat1Btn" to="." method="_on_boat_1_btn_pressed"]
 [connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat4Btn" to="." method="_on_boat_4_btn_pressed"]
-[connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 
 [editable path="ClientConnection"]
+[editable path="RayPickerCamera"]
