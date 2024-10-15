@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://l72xp725usrw"]
+
+[ext_resource type="FontFile" uid="uid://el25lhmlqokw" path="res://Assets/PT_Serif/PTSerif-Regular.ttf" id="1_no4ej"]
+
+[resource]
+default_font = ExtResource("1_no4ej")

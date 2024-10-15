@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dhjctrsjga335"]
+[gd_scene load_steps=6 format=3 uid="uid://dhjctrsjga335"]
 
 [ext_resource type="Script" path="res://ui/main_menu.gd" id="1_1chu5"]
 [ext_resource type="FontFile" uid="uid://b3ym7847ce73u" path="res://Assets/MateSC-Regular.ttf" id="2_u8ohg"]
+[ext_resource type="Theme" uid="uid://l72xp725usrw" path="res://ui/small_theme.tres" id="3_bbfxc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ds3rf"]
 font = ExtResource("2_u8ohg")
@@ -20,6 +21,19 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1chu5")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.0
+offset_top = -26.0
+offset_right = 22.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.364706)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -60,12 +74,14 @@ alignment = 1
 
 [node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_bbfxc")
 theme_override_font_sizes/font_size = 30
 placeholder_text = "Name"
 
 [node name="PlayButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
+theme = ExtResource("3_bbfxc")
 theme_override_font_sizes/font_size = 24
 text = "Play"
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://lhxvech2dovd"]
+[gd_scene load_steps=33 format=3 uid="uid://lhxvech2dovd"]
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
@@ -9,10 +9,12 @@
 [ext_resource type="PackedScene" uid="uid://cyaopl06io6hw" path="res://Boats/boat_4_illegal.tscn" id="6_4sbse"]
 [ext_resource type="Shader" path="res://MeshLibaries/Shader/water.gdshader" id="8_fgebb"]
 [ext_resource type="FontFile" uid="uid://el25lhmlqokw" path="res://Assets/PT_Serif/PTSerif-Regular.ttf" id="9_evmka"]
+[ext_resource type="PackedScene" uid="uid://b5q3yeneaykla" path="res://ui/end_screen.tscn" id="10_cgviu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hx2ue"]
 sky_top_color = Color(0.1833, 0.269425, 0.39, 1)
-sky_horizon_color = Color(0.7, 0.584733, 0.434, 1)
+sky_horizon_color = Color(0.65, 0.466267, 0.3055, 1)
+sky_energy_multiplier = 2.0
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
 [sub_resource type="Sky" id="Sky_mfpqd"]
@@ -301,12 +303,12 @@ metadata/_tab_index = 0
 layout_direction = 1
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="MenuScreen/TabContainer/Controls/VBoxContainer2"]
+[node name="Controls" type="Label" parent="MenuScreen/TabContainer/Controls/VBoxContainer2"]
 layout_mode = 2
 text = "Controls"
 label_settings = SubResource("LabelSettings_ltwcd")
 
-[node name="Label2" type="Label" parent="MenuScreen/TabContainer/Controls/VBoxContainer2"]
+[node name="InstructLabel" type="Label" parent="MenuScreen/TabContainer/Controls/VBoxContainer2"]
 layout_mode = 2
 text = "\"1\" - switch to boat 1
 \"4\" - switch to boat 4
@@ -494,6 +496,9 @@ libraries = {
 "": SubResource("AnimationLibrary_mdmkk")
 }
 
+[node name="EndScreen" parent="." instance=ExtResource("10_cgviu")]
+
+[connection signal="new_round" from="ClientConnection" to="." method="_on_client_connection_new_round"]
 [connection signal="opp_hit" from="PlayerBoard/GridMap" to="." method="_on_opp_hit"]
 [connection signal="player_hit" from="PlayerBoard/GridMap" to="." method="_on_player_hit"]
 [connection signal="new_boat" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
@@ -503,6 +508,7 @@ libraries = {
 [connection signal="opp_hit" from="OppBoard/OppMap" to="." method="_on_opp_hit"]
 [connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
+[connection signal="attacked" from="RayPickerCamera" to="ClientConnection" method="_on_ray_picker_camera_attacked"]
 [connection signal="pressed" from="MenuScreen/EndScreen/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="MenuScreen/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat1Btn" to="." method="_on_boat_1_btn_pressed"]

@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dsc1ewgbpb6mi"]
+
+[ext_resource type="FontFile" uid="uid://b3ym7847ce73u" path="res://Assets/MateSC-Regular.ttf" id="1_ipxft"]
+
+[resource]
+default_font = ExtResource("1_ipxft")
+default_font_size = 84

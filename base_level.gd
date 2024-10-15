@@ -9,7 +9,6 @@ extends Node3D
 @onready var ray_picker_camera: Camera3D = $RayPickerCamera
 @onready var mode_label: Label = $MenuScreen/ModeLabel
 @onready var win_label: Label = %WinLabel
-@onready var end_screen: CenterContainer = $MenuScreen/EndScreen
 @onready var start_button: Button = %StartButton
 
 @onready var boats_label: Label = $MenuScreen/BoatsLabel
@@ -22,18 +21,21 @@ extends Node3D
 @onready var client_connection: Node = $ClientConnection
 @onready var client_UI = client_connection.get_children()
 
+@onready var end_screen: Control = $EndScreen
+
+
 var player_name = Network.player_name
 var is_player_board := true
 var player_ships := 0:
 	set(ships):
 			player_ships += ships
 			if player_ships == 0:
-				end_game(false)
+				end_screen.update_label(false)
 var opp_ships := 4:
 	set(ships):
 			opp_ships -= ships
 			if opp_ships == 0:
-				end_game(true)		
+				end_screen.update_label(true)
 @export var build_mode := true:
 	set(mode):
 		build_mode = mode
@@ -58,6 +60,11 @@ func _ready() -> void:
 	
 func _process(delta: float) -> void:
 	#switch modes 	
+	if client_connection.turn == 1:
+		attack_mode = true
+	elif client_connection.turn == 0:
+		attack_mode = false
+		
 	if Input.is_action_just_pressed("build"):
 		build_mode = !build_mode
 		
@@ -91,13 +98,6 @@ func switch_to_player() -> void:
 	ray_picker_camera.toggle_build()
 	is_player_board = !is_player_board
 	ray_picker_camera.grid_map = player_map
-
-func end_game(player_win:bool) -> void:
-	end_screen.visible = true
-	if player_win:
-		win_label.text = "You win!"
-	else:
-		win_label.text = "git gud"
 
 func _on_opp_hit() -> void:
 	opp_ships = -1
@@ -155,3 +155,6 @@ func sink_player_ship(pos:Vector3i) -> void:
 func sink_enemy_ship(pos:Vector3i) -> void:
 	var cell = opponent_grid_map.local_to_map(pos)
 	opponent_grid_map.set_cell_item(cell,2)
+
+func _on_client_connection_new_round() -> void:
+	current_player_label = client_connection.current_player_name

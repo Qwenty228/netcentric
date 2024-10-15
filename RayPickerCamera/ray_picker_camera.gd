@@ -36,7 +36,7 @@ func _process(delta: float) -> void:
 			if attack_mode:
 				if Input.is_action_just_pressed("click"):
 					grid_map.attack(cell)
-					attacked.emit()
+					attacked.emit(Network.coordToGrid(cell.x, cell.z))
 			
 			# place ships
 			if build_mode:
