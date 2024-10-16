@@ -82,3 +82,9 @@ func coordToGrid(x:int, z: int):
 	# Reverse the calculations from gridToCoord
 	var p = int((14 - x) / 4) + 8 * int((14 - z) / 4) #warning-ignore:integer_division
 	return p
+	
+func oppCoordToGrid(x:int, z: int):
+	# int 0 - 63
+	# return (3, 0, 3) - (-4, 0, -4)
+	var p = int((3 - x) / 4) + 8 * int((14 - z) / 4) #i gave up :P
+	return p

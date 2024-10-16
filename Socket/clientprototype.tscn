@@ -6,34 +6,33 @@
 script = ExtResource("1_y5b0t")
 
 [node name="Button" type="Button" parent="."]
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -297.0
-offset_top = -65.5
-offset_right = 297.0
-offset_bottom = 65.5
+offset_left = -135.0
+offset_top = 162.0
+offset_right = 138.0
+offset_bottom = 211.0
 grow_horizontal = 2
-grow_vertical = 2
 text = "Attack"
 
 [node name="LineEdit" type="LineEdit" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -292.0
-offset_top = 93.0
-offset_right = 301.0
-offset_bottom = 218.0
+offset_left = -290.0
+offset_top = 68.0
+offset_right = 303.0
+offset_bottom = 136.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 41
 placeholder_text = "put in position"
 
 [node name="Label" type="Label" parent="."]
-offset_right = 352.0
-offset_bottom = 44.0
+offset_left = 26.0
+offset_top = 17.0
+offset_right = 378.0
+offset_bottom = 61.0
 theme_override_font_sizes/font_size = 30
 text = "Round"
 
@@ -41,19 +40,19 @@ text = "Round"
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 4.0
-offset_top = 75.0
-offset_right = 648.0
-offset_bottom = 567.0
+offset_left = 10.0
+offset_top = -105.0
+offset_right = 584.0
+offset_bottom = 321.0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 30
 text = "Your attack:"
 
 [node name="Label3" type="Label" parent="."]
-offset_left = 519.0
-offset_top = 396.0
-offset_right = 1158.0
-offset_bottom = 969.0
+offset_left = 598.0
+offset_top = 230.0
+offset_right = 1151.0
+offset_bottom = 652.0
 theme_override_font_sizes/font_size = 30
 text = "Your Boat:"
 

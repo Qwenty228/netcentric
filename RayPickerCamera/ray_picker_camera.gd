@@ -2,9 +2,11 @@ extends Camera3D
 signal attacked
 
 @export var grid_map: GridMap
+@export var opp_map: GridMap
 @onready var ray_cast_3d: RayCast3D = $RayCast3D
 
 var boat_manager: Node3D
+var opp_boat_manager: Node3D
 var build_mode: bool
 var attack_mode: bool
 var previous_cell: Vector3i
@@ -12,15 +14,10 @@ var previous_boat: Node3D
 var previous_pos: Vector3
 var previous_highlight: Node3D
 
-func _ready() -> void:
-	build_mode = false
-	attack_mode = false
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	#switch boat manager
 	boat_manager = grid_map.get_parent().get_child(-2)
-
 	var mouse_position: Vector2 = get_viewport().get_mouse_position()
 	ray_cast_3d.target_position = project_local_ray_normal(mouse_position) * 500
 	ray_cast_3d.force_raycast_update()
@@ -34,9 +31,22 @@ func _process(delta: float) -> void:
 				
 			#attack enemy
 			if attack_mode:
+				#highlight
+				cell = opp_map.local_to_map(collision_point)  
+				if opp_map.get_cell_item(cell) == 0: #if current cell isn't highlighted
+					opp_map.set_cell_item(cell, 2)
+					print(cell)
+				if cell!= previous_cell:
+					if opp_map.get_cell_item(cell) != 3:
+						if previous_cell != null:
+							opp_map.set_cell_item(previous_cell, 0)
+				previous_cell = cell
 				if Input.is_action_just_pressed("click"):
-					grid_map.attack(cell)
-					attacked.emit(Network.coordToGrid(cell.x, cell.z))
+					opp_map.attack(cell)
+					var attacked_cell = Network.coordToGrid(cell.x, cell.z)
+					print(attacked_cell)
+					await(get_tree().create_timer(1).timeout)
+					Network.send({"header":"game", "body": [str(attacked_cell)]})
 			
 			# place ships
 			if build_mode:
@@ -117,6 +127,7 @@ func _process(delta: float) -> void:
 					
 				#create new temporary boat
 				if grid_map.get_cell_item(cell) == 0:
+					print(grid_map.map_to_local(cell))
 					previous_cell = cell
 					previous_boat = boat_manager.build_boat(tile_position, true)
 				
@@ -147,7 +158,6 @@ func _process(delta: float) -> void:
 
 func toggle_build() -> void:
 	if !build_mode:
-		
 		if grid_map.get_cell_item(previous_cell) != 2:
 			if previous_boat!= null:
 				previous_boat.queue_free()

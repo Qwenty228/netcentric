@@ -1,5 +1,4 @@
 extends Node
-signal new_round
 var client_name 
 var turn # if turn == 1, it is this client turn. if turn is 0 then it other client
 var boat # global variable this client boat placement
@@ -28,15 +27,15 @@ func start_connection(player_boat_pos):
 	$Button.disabled = true
 		
 	
-func _ready() -> void:
-	## simulate name and boat placement, for testing this file alone
-	var rng = RandomNumberGenerator.new()
-	Network.player_name = "test" + str(rng.randi())
-	await(get_tree().create_timer(rng.randf_range(0, 2)).timeout)
-	start_connection(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"])
-	#print(boat)
-	print_ships(boat, [])
-	print_my_attack([])
+#func _ready() -> void:
+	### simulate name and boat placement, for testing this file alone
+	#var rng = RandomNumberGenerator.new()
+	#Network.player_name = "test" + str(rng.randi())
+	#await(get_tree().create_timer(rng.randf_range(0, 2)).timeout)
+	#start_connection(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"])
+	##print(boat)
+	#print_ships(boat, [])
+	#print_my_attack([])
 	
 func start():
 	# indicate that both player has connected and will proceed to the game loop
@@ -73,7 +72,6 @@ func update_game_info(client_id, game_round):
 		$Label.text += "waiting for "+ Network.names[Network.opponent_id]
 		$Button.disabled = true
 		turn = 0
-	new_round.emit()
 
 func print_ships(ships: Array, attacked: Array) -> void:
 	# displaying ships
@@ -166,6 +164,3 @@ func _on_button_pressed() -> void:
 	var text = $LineEdit.text
 	if str(text).is_valid_int():
 		Network.send({"header":"game", "body": [text]})
-
-func _on_ray_picker_camera_attacked(coord) -> void:
-	Network.send({"header":"game", "body": [coord]})
