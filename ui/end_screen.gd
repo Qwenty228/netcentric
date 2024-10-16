@@ -1,8 +1,12 @@
 extends Control
 
 @export var label: Label
+@onready var player_score: Label = %PlayerScore
+@onready var opp_name_label: Label = %OppNameLabel
+@onready var opp_score: Label = %OppScore
 
 func update_label(player_win) -> void:
+	opp_name_label.text = Network.names[Network.opponent_id] + "'s score:"
 	if player_win:
 		label.text = "You win!"
 	else:

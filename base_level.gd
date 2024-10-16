@@ -22,23 +22,6 @@ extends Node3D
 @onready var round_label = %RoundLabel
 @onready var welcome_label = %WelcomeLabel
 @onready var timer = $Timer
-
-var client_name 
-var turn # if turn == 1, it is this client turn. if turn is 0 then it other client
-var boat # global variable this client boat placement
-var current_player_name
-var is_player_board := true
-var player_ships := 0:
-	set(ships):
-			player_ships += ships
-			if player_ships == 0:
-				end_screen.update_label(false)
-var opp_ships := 4:
-	set(ships):
-			opp_ships -= ships
-			if opp_ships == 0:
-				end_screen.update_label(true)
-				
 @export var build_mode := true:
 	set(mode):
 		build_mode = mode
@@ -53,6 +36,22 @@ var opp_ships := 4:
 		ray_picker_camera.toggle_build()
 		if attack_mode:
 			mode_label.text = "Attack mode"
+			
+var client_name 
+var turn # if turn == 1, it is this client turn. if turn is 0 then it other client
+var boat # global variable this client boat placement
+var current_player_name
+var is_player_board := true
+var player_ships := 0:
+	set(ships):
+			player_ships += ships
+			if player_ships == 0:
+				end_screen.update_label(false)
+var opp_ships := 4:
+	set(ships):
+			opp_ships += ships
+			if opp_ships == 0:
+				end_screen.update_label(true)
 
 func _ready() -> void:
 	welcome_label.text = "Welcome, " + Network.player_name
@@ -98,12 +97,6 @@ func switch_to_player() -> void:
 	is_player_board = !is_player_board
 	ray_picker_camera.grid_map = player_map
 
-func _on_opp_hit() -> void:
-	opp_ships = -1
-
-func _on_player_hit() -> void:
-	player_ships = -1
-	
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
@@ -216,3 +209,11 @@ func show_state(ships: Array, attacked: Array):
 func _on_timer_timeout():
 	#to be changed
 	Network.send({"header":"game", "body": ['0']})
+
+func end_game():
+	#if player wins
+	end_screen.update_label(true)
+	end_screen.player_score = 4 - opp_ships
+	end_screen.opp_score = 4 - player_ships
+	end_screen.visible = true
+	

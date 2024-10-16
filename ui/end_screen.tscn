@@ -30,6 +30,51 @@ layout_mode = 2
 theme = ExtResource("2_k27t0")
 text = "YOU DIED"
 
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScoresContainers" type="HBoxContainer" parent="CenterContainer/VBoxContainer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 140
+
+[node name="PlayerScoreContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/CenterContainer/ScoresContainers"]
+layout_mode = 2
+
+[node name="PlayerNameLabel" type="Label" parent="CenterContainer/VBoxContainer/CenterContainer/ScoresContainers/PlayerScoreContainer"]
+layout_mode = 2
+theme = ExtResource("3_y6td0")
+text = "Your score: 
+"
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/VBoxContainer/CenterContainer/ScoresContainers/PlayerScoreContainer"]
+layout_mode = 2
+
+[node name="PlayerScore" type="Label" parent="CenterContainer/VBoxContainer/CenterContainer/ScoresContainers/PlayerScoreContainer/CenterContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_y6td0")
+theme_override_font_sizes/font_size = 120
+text = "5"
+
+[node name="OppScoreContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/CenterContainer/ScoresContainers"]
+layout_mode = 2
+
+[node name="OppNameLabel" type="Label" parent="CenterContainer/VBoxContainer/CenterContainer/ScoresContainers/OppScoreContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_y6td0")
+text = "Opponent score:"
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/VBoxContainer/CenterContainer/ScoresContainers/OppScoreContainer"]
+layout_mode = 2
+
+[node name="OppScore" type="Label" parent="CenterContainer/VBoxContainer/CenterContainer/ScoresContainers/OppScoreContainer/CenterContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_y6td0")
+theme_override_font_sizes/font_size = 120
+text = "5"
+
 [node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_y6td0")
