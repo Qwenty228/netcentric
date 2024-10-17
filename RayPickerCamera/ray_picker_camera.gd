@@ -45,7 +45,7 @@ func _process(delta: float) -> void:
 					attack_mode = false
 					opp_map.attack(cell)
 					var attacked_cell = Network.oppCoordToGrid(cell.x, cell.z)
-					print(attacked_cell)
+					#print(attacked_cell)
 					await(get_tree().create_timer(1).timeout)
 					Network.send({"header":"game", "body": [str(attacked_cell)]})
 			

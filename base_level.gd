@@ -172,6 +172,7 @@ func update_game_info(client_id, game_round):
 		turn = 1
 		timer.start()
 	else:
+		timer.stop()
 		current_player_name = Network.names[Network.opponent_id]
 		switch_to_player()
 		attack_mode = false
@@ -207,8 +208,9 @@ func show_state(attacked: Array):
 
 func _on_timer_timeout():
 	#to be changed
-	#Network.send({"header":"game", "body": ['0']})
-	pass
+	if turn:
+		Network.send({"header":"game", "body": ['0']})
+	
 
 func end_game():
 	#if player wins
