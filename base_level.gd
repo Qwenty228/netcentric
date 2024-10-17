@@ -216,7 +216,7 @@ func _on_timer_timeout():
 func end_game(winner: String):
 	#if player wins
 	end_screen.update_label(true)
-	end_screen.player_score = 4 - opp_ships
-	end_screen.opp_score = 4 - player_ships
+	end_screen.player_score.text = str(4 - opp_ships)
+	end_screen.opp_score.text = str(4 - player_ships)
 	end_screen.visible = true
 	
