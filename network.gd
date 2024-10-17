@@ -71,12 +71,12 @@ func send(data):
 		client.put_utf8_string(JSON.stringify(data))
 		
 #!!!!!!!
-func gridToCoord(position):
+func gridToCoord(position: int) -> Vector3i:
 	# int 0 - 63
 	# return (14, 0, 14) - (-14, 0, -14)
-	var x = 14 - 4 * (position % 8)
-	var z = 14 - 4 * int(position / 8)
-	return [x, 0, z]
+	var x = 14 - 4 * (int(position) % 8)
+	var z = 14 - 4 * (int(position) / 8)
+	return Vector3i(x, 0, z)
 	
 func coordToGrid(x:int, z: int):
 	# Reverse the calculations from gridToCoord
@@ -86,5 +86,5 @@ func coordToGrid(x:int, z: int):
 func oppCoordToGrid(x:int, z: int):
 	# int 0 - 63
 	# return (3, 0, 3) - (-4, 0, -4)
-	var p = int((3 - x) / 4) + 8 * int((14 - z) / 4) #i gave up :P
+	var p = (3 - x) + 8* (3 - z)
 	return p

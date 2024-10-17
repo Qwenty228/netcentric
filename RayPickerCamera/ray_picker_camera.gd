@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 				cell = opp_map.local_to_map(collision_point)  
 				if opp_map.get_cell_item(cell) == 0: #if current cell isn't highlighted
 					opp_map.set_cell_item(cell, 2)
-					print(cell)
+					#print(cell)
 				if cell!= previous_cell:
 					if opp_map.get_cell_item(cell) != 3:
 						if previous_cell != null:
@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 				previous_cell = cell
 				if Input.is_action_just_pressed("click"):
 					opp_map.attack(cell)
-					var attacked_cell = Network.coordToGrid(cell.x, cell.z)
+					var attacked_cell = Network.oppCoordToGrid(cell.x, cell.z)
 					print(attacked_cell)
 					await(get_tree().create_timer(1).timeout)
 					Network.send({"header":"game", "body": [str(attacked_cell)]})
@@ -127,7 +127,7 @@ func _process(delta: float) -> void:
 					
 				#create new temporary boat
 				if grid_map.get_cell_item(cell) == 0:
-					print(grid_map.map_to_local(cell))
+					#print(grid_map.map_to_local(cell))
 					previous_cell = cell
 					previous_boat = boat_manager.build_boat(tile_position, true)
 				

@@ -61,8 +61,7 @@ func _ready() -> void:
 	build_mode = true
 	boats_label.text = "Boats: 0"
 	current_player_label.text = ""
-	Network.update_game.connect(update_game_info)
-	
+
 func _process(delta: float) -> void:
 	var format_string = "Time remaining: %d"
 	welcome_label.text = format_string % timer.time_left
@@ -180,7 +179,7 @@ func update_game_info(client_id, game_round):
 	current_player_label.text = current_player_name
 	
 # update state of boards
-func show_state(ships: Array, attacked: Array):
+func show_state(attacked: Array):
 	# receiving attack from server
 	var cell
 	if turn:
@@ -188,27 +187,28 @@ func show_state(ships: Array, attacked: Array):
 		# this client is attacking
 		# draw the 0, 1, -1 indicating where hit, where miss
 		#print(client_name + " turn")
-		for attack in attacked:
-			cell = opponent_grid_map.get_cell_item(Network.gridToCoord(attacked))
-			if attack == 1:
+		for pos in range(len(attacked)):
+			cell = opponent_grid_map.local_to_map(Network.gridToCoord(pos))
+			if attacked[pos] == '1':
 				opponent_grid_map.set_cell_item(cell, 4)
-			if attack == -1:
+			elif attacked[pos] == '-1':
 				opponent_grid_map.set_cell_item(cell, 5)
 	else:
 		# if it is not this client turns (being attacked)
 		# show clients being attacked
 		# draw 0, X, M. 0 indicating there is a boat, X means hit, M means miss.
-		for attack in attacked:
-			cell = player_map.get_cell_item(Network.gridToCoord(attacked))
-			if attack == 1:
+		for pos in range(len(attacked)):
+			cell = player_map.local_to_map(Network.gridToCoord(pos))
+			if attacked[pos] == '1':
 				player_map.set_cell_item(cell, 4)
-			if attack == -1:
+			elif attacked[pos] == '-1':
 				player_map.set_cell_item(cell, 5)
 
 
 func _on_timer_timeout():
 	#to be changed
-	Network.send({"header":"game", "body": ['0']})
+	#Network.send({"header":"game", "body": ['0']})
+	pass
 
 func end_game():
 	#if player wins
