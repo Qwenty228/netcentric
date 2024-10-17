@@ -66,7 +66,7 @@ class Battleship:
         print("Round:", game_round)
         if game_round % 2 == self.player_index:  # if round is odd, A plays, if round is even, B plays
             data = self.network.send(
-                {"header": "game", "body": [input("Enter a position: ")]})['body']
+                {"header": "game", "body": [input("Enter a position: ") or "0"]})['body']
     
             if isinstance(data, str):
                 self.ended = True
