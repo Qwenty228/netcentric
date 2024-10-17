@@ -3,6 +3,7 @@ extends Node
 signal update_game(player, round)
 signal game_start
 signal process_attack(array)
+signal game_over(winner)
 
 @export var host = "127.0.0.1"
 @export var port = 10000
@@ -53,17 +54,18 @@ func _process(_delta: float) -> void:
 				process_attack.emit(reply["body"][radar])
 				# after our attack or enemy attack update 
 				Network.send({"header": "game", "body": "round"})
-				
-			
-		#print(reply)
+		elif reply["header"] == "game_over":
+			game_over.emit(reply['body'])
+	
 	
 func fetch() -> Dictionary:
-	if client.get_available_bytes() > 0:
-		client.poll()
-		var result_string = client.get_utf8_string(client.get_available_bytes()).strip_edges()
-		var result = JSON.parse_string(result_string)
-		if result != null:
-			return result
+	if client.get_status() != client.STATUS_NONE:
+		if client.get_available_bytes() > 0:
+			client.poll()
+			var result_string = client.get_utf8_string(client.get_available_bytes()).strip_edges()
+			var result = JSON.parse_string(result_string)
+			if result != null:
+				return result
 	return {}
 	
 func send(data):

@@ -122,6 +122,7 @@ func _on_start_button_pressed() -> void:
 	Network.update_game.connect(update_game_info)
 	Network.game_start.connect(start)
 	Network.process_attack.connect(show_state)
+	Network.game_over.connect(end_game)
 	print("connection establised")
 	
 	# waiting for server to response with client id
@@ -212,7 +213,7 @@ func _on_timer_timeout():
 		Network.send({"header":"game", "body": ['0']})
 	
 
-func end_game():
+func end_game(winner: String):
 	#if player wins
 	end_screen.update_label(true)
 	end_screen.player_score = 4 - opp_ships

@@ -41,7 +41,7 @@ def print_my_attack(attack: list):
 class Battleship:
     def __init__(self) -> None:
         self.name = input("Enter username: ")
-        self.ships = [str(i) for i in random.sample(range(64), 16)]
+        self.ships = [str(i) for i in range(16)] # [str(i) for i in random.sample(range(64), 16)]
         # game state init to server
         self.network = Network(
             {"header": "init", "body": self.ships, "client": self.name})
@@ -51,6 +51,8 @@ class Battleship:
         self.opp_attack = ["0"] * 64
         print("My ships: ")
         print_ships(self.ships, self.opp_attack)
+
+        self.ended = False
         
     def get_radar(self, idx: int):
         return "radar" + "AB"[idx]
@@ -63,13 +65,23 @@ class Battleship:
 
         print("Round:", game_round)
         if game_round % 2 == self.player_index:  # if round is odd, A plays, if round is even, B plays
-            self.my_attack = self.network.send(
-                {"header": "game", "body": [input("Enter a position: ")]})['body'][self.radar_id]
-            print(self.my_attack, [self.get_radar(self.player_index)])
+            data = self.network.send(
+                {"header": "game", "body": [input("Enter a position: ")]})['body']
+    
+            if isinstance(data, str):
+                self.ended = True
+                print("winner:", data)
+                return
+            self.my_attack = data[self.radar_id]
         else:
             # wait for opponent to play
             print("Waiting for opponent to play")
-            self.opp_attack = json.loads(self.network.receive())['body'][self.get_radar((self.player_index) %2)]
+            data = json.loads(self.network.receive())['body']
+            if isinstance(data, str):
+                print("winner:", data)
+                self.ended = True
+                return
+            self.opp_attack = data[self.get_radar((self.player_index) %2)]
 
         print(self.name, "attack:")
         print_my_attack(self.my_attack)
@@ -79,7 +91,7 @@ class Battleship:
 
     def start(self):
         print("log in as", self.network.client_id)
-        while True:
+        while not self.ended:
             if self.network.ready:
                 self.game()
             else:
