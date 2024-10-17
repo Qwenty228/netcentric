@@ -42,6 +42,7 @@ func _process(delta: float) -> void:
 							opp_map.set_cell_item(previous_cell, 0)
 				previous_cell = cell
 				if Input.is_action_just_pressed("click"):
+					attack_mode = false
 					opp_map.attack(cell)
 					var attacked_cell = Network.oppCoordToGrid(cell.x, cell.z)
 					print(attacked_cell)
