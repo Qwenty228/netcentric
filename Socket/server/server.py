@@ -158,6 +158,7 @@ class Server:
     def __init__(self, port: int, host="127.0.0.1") -> None:
         self.socket = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)  # TCP socket
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind((host, port))
         self.socket.listen(Server.MAX_CLIENTS)
         self.socket.settimeout(1)  # allow for timeout
@@ -180,6 +181,7 @@ class Server:
 
 if __name__ == "__main__":
     host, port = socket.gethostbyname(socket.gethostname()), 10000
+    host = "127.0.0.1"
     print(f"Server running on {host}:{port}")
     server = Server(host=host, port=port)
     server.start()

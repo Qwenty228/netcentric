@@ -17,6 +17,7 @@ class Network:
         # AF_INET = IPv4, SOCK_STREAM = TCP
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.addr = self.server, self.port = get_addr()
+        print(f"Connecting to {self.addr}")
         data = self.connect(connection_message)
         self.client_id = data["client"]
         self.ready = data['body']
