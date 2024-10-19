@@ -210,7 +210,7 @@ func show_state(attacked: Array):
 func _on_timer_timeout():
 	#to be changed
 	if turn:
-		Network.send({"header":"game", "body": ['0']})
+		Network.send({"header":"game", "body": ['-1']})
 	
 
 func end_game(winner: String):

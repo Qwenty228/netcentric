@@ -26,13 +26,15 @@ class BattleShip:
 
 
     def attack(self, player_name: str, position: int):
+        if position == -1:
+            return
         # Validate the input using Pydantic
         params = AttackParamsModel(
             player_name=player_name,
             position=position,
             valid_player_names=[self.players_info.player1_name, self.players_info.player2_name]
         )
-        
+
         if params.position in self.opponent_ships[params.player_name].state:
             self.radar_screens[params.player_name].screen[params.position] = 1
         else:

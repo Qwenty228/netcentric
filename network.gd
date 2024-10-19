@@ -5,8 +5,25 @@ signal game_start
 signal process_attack(array)
 signal game_over(winner)
 
-@export var host = "127.0.0.1"
-@export var port = 10000
+func read_env():
+	var path = "res://Socket/server/.env"
+	if  FileAccess.file_exists(path):
+		var file = FileAccess.open(path, FileAccess.READ)
+		while not file.eof_reached():
+			var line = file.get_line().strip_edges()
+			if line.find('=') != -1:
+				var parts = line.split('=')
+				var key = parts[0].strip_edges()
+				var value = parts[1].strip_edges()
+				match key:
+					"IP":
+						host = value
+					"PORT":
+						port = int(value)
+		file.close()
+		
+var host = "127.0.0.1"
+var port = 10000
 var game_round = 0
 var client = StreamPeerTCP.new()
 var client_id = null
@@ -18,9 +35,11 @@ var connection_open = false
 var names: Dictionary = {}
 
 func ready():
-	client.connect_to_host(host, port)
+	read_env() # if env file exists, replace host and port.
+	print("Connecting to %s:%d" % [host, port])
+	if client.connect_to_host(host, port) != OK:
+		print("error connecting to host.")
 	connection_open = true
-	print("setup finish")
 
 func _process(_delta: float) -> void:
 	if !connection_open:

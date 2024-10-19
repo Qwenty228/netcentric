@@ -146,12 +146,6 @@ class ClientHandler(Thread):
         Ends the game by closing all client connections and resetting game state.
         """
         print("Game over. Closing connections...")
-        for client in ClientHandler.all_clients:
-            try:
-                client.conn.close()
-            except Exception as e:
-                print(f"Error closing connection: {e}")
-        ClientHandler.all_clients.clear()  # Clear the list of connected clients
         ClientHandler.game_started = False  # Reset game state
 
 
@@ -185,7 +179,9 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server(10000)
+    host, port = socket.gethostbyname(socket.gethostname()), 10000
+    print(f"Server running on {host}:{port}")
+    server = Server(host=host, port=port)
     server.start()
 
               
