@@ -1,4 +1,6 @@
-[gd_scene load_steps=19 format=3 uid="uid://bpxo7grmoyxhi"]
+[gd_scene load_steps=18 format=3 uid="uid://bpxo7grmoyxhi"]
+
+[ext_resource type="PackedScene" uid="uid://cjfxvxew80vgy" path="res://Assets/sunk_wreck.glb" id="1_fbsbm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_12k2h"]
 albedo_color = Color(0.43409, 0.751255, 1, 1)
@@ -40,13 +42,6 @@ size = Vector3(4, 0.1, 4)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_lnxsb"]
 data = PackedVector3Array(-2, 0.05, 2, 2, 0.05, 2, -2, -0.05, 2, 2, 0.05, 2, 2, -0.05, 2, -2, -0.05, 2, 2, 0.05, -2, -2, 0.05, -2, 2, -0.05, -2, -2, 0.05, -2, -2, -0.05, -2, 2, -0.05, -2, 2, 0.05, 2, 2, 0.05, -2, 2, -0.05, 2, 2, 0.05, -2, 2, -0.05, -2, 2, -0.05, 2, -2, 0.05, -2, -2, 0.05, 2, -2, -0.05, -2, -2, 0.05, 2, -2, -0.05, 2, -2, -0.05, -2, 2, 0.05, 2, -2, 0.05, 2, 2, 0.05, -2, -2, 0.05, 2, -2, 0.05, -2, 2, 0.05, -2, -2, -0.05, 2, 2, -0.05, 2, -2, -0.05, -2, 2, -0.05, 2, 2, -0.05, -2, -2, -0.05, -2)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vnym3"]
-albedo_color = Color(1, 0, 0, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_fm55w"]
-material = SubResource("StandardMaterial3D_vnym3")
-size = Vector3(4, 4, 4)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_r61qs"]
 data = PackedVector3Array(-2, 2, 2, 2, 2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, -2, 2, 2, 2, -2, -2, 2, -2, 2, -2, -2, -2, 2, -2, -2, -2, -2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, 2, 2, 2, -2, 2, -2, -2, 2, -2, 2, -2, 2, -2, -2, 2, 2, -2, -2, -2, -2, 2, 2, -2, -2, 2, -2, -2, -2, 2, 2, 2, -2, 2, 2, 2, 2, -2, -2, 2, 2, -2, 2, -2, 2, 2, -2, -2, -2, 2, 2, -2, 2, -2, -2, -2, 2, -2, 2, 2, -2, -2, -2, -2, -2)
@@ -100,8 +95,9 @@ mesh = SubResource("BoxMesh_o0afg")
 shape = SubResource("ConcavePolygonShape3D_lnxsb")
 
 [node name="SunkBase" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-mesh = SubResource("BoxMesh_fm55w")
+
+[node name="sunk_wreck" parent="SunkBase" instance=ExtResource("1_fbsbm")]
+transform = Transform3D(0.826285, 0, -0.563252, 0, 1, 0, 0.563252, 0, 0.826285, 0.276169, 0, -0.16321)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="SunkBase"]
 
@@ -110,6 +106,7 @@ shape = SubResource("ConcavePolygonShape3D_r61qs")
 
 [node name="MissBase" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+visible = false
 mesh = SubResource("BoxMesh_ye5g4")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="MissBase"]

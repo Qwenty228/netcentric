@@ -21,3 +21,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.60928)
 
 [node name="galleon" parent="." instance=ExtResource("2_5y5iw")]
 transform = Transform3D(-3.71547e-08, 0, -0.85, 0, 0.85, 0, 0.85, 0, -3.71547e-08, 0, 0, 6)
+
+[node name="Empty" parent="galleon" index="0"]
+visible = false
+
+[node name="Empty_001" parent="galleon" index="1"]
+visible = false
+
+[node name="Plane" parent="galleon" index="2"]
+visible = false
+
+[node name="Ship_001" parent="galleon" index="3"]
+visible = false
+
+[node name="Sail_005" parent="galleon" index="4"]
+visible = false
+
+[node name="Sail_006" parent="galleon" index="5"]
+visible = false
+
+[node name="Sail_007" parent="galleon" index="6"]
+visible = false
+
+[node name="Sail_008" parent="galleon" index="7"]
+visible = false
+
+[node name="Sail_009" parent="galleon" index="8"]
+visible = false
+
+[node name="Plane_001" parent="galleon" index="9"]
+visible = false
+
+[editable path="galleon"]
