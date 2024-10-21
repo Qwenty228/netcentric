@@ -62,8 +62,6 @@ func build_boat(boat_position: Vector3, is_legal) -> Node3D:
 			add_child(new_boat)
 			new_boat.set_global_position(boat_position)
 			new_boat.global_rotation.y = rotation_angle
-			for i in new_boat.units:
-				new_boat.hits.append(false) 
 			current_boat = new_boat
 			new_boat.boat_rotation = rotation_angle
 			return new_boat

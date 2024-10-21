@@ -2,8 +2,11 @@ extends GridMap
 signal player_hit
 signal opp_hit
 
-
 @export var is_player: bool
+@export var explosion: PackedScene
+@export var water_sprout: PackedScene
+@export var debris: PackedScene
+var FX = []
 
 func attack(attack_position:Vector3i) -> void:
 	print("Attack!")
@@ -16,7 +19,33 @@ func attack(attack_position:Vector3i) -> void:
 		else:
 			opp_hit.emit()
 
-
-func _on_ship_sunk() -> void:
-	#play animation
-	pass
+func hit(pos:Vector3) -> bool:
+	var already_hit = false
+	for fx in FX:
+		if fx.global_position == pos:
+			already_hit = true
+	if !already_hit:
+		var ex = explosion.instantiate()
+		var deb = debris.instantiate()
+		add_child(ex)
+		ex.global_position = pos
+		ex.explode()
+		FX.append(ex)
+		add_child(deb)
+		deb.global_position = pos
+		return true	
+	return false
+	
+func miss(pos:Vector3) -> bool:
+	var already_hit = false
+	for fx in FX:
+		if fx.global_position == pos:
+			already_hit = true
+	if !already_hit:
+		var water = explosion.instantiate()
+		add_child(water)
+		water.global_position = pos
+		water.explode()
+		FX.append(water)
+		return true
+	return false

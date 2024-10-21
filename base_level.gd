@@ -42,16 +42,8 @@ var turn # if turn == 1, it is this client turn. if turn is 0 then it other clie
 var boat # global variable this client boat placement
 var current_player_name
 var is_player_board := true
-var player_ships := 0:
-	set(ships):
-			player_ships += ships
-			if player_ships == 0:
-				end_screen.update_label(false)
-var opp_ships := 4:
-	set(ships):
-			opp_ships += ships
-			if opp_ships == 0:
-				end_screen.update_label(true)
+var player_score
+var opp_score
 
 func _ready() -> void:
 	welcome_label.text = "Welcome, " + Network.player_name
@@ -61,6 +53,8 @@ func _ready() -> void:
 	build_mode = true
 	boats_label.text = "Boats: 0"
 	current_player_label.text = ""
+	player_score = 0
+	opp_score = 0
 
 func _process(delta: float) -> void:
 	var format_string = "Time remaining: %d"
@@ -99,13 +93,6 @@ func switch_to_player() -> void:
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
-func _on_ship_sunk(is_player) -> void:
-	if is_player:
-		player_ships = -1
-		boats_label.text = "Boats: " + str(player_ships)
-	else:
-		opp_ships = -1
-
 func _on_start_button_pressed() -> void:
 	welcome_label.text = "Time remaining: " + str(timer.time_left)
 	build_mode = false
@@ -143,10 +130,6 @@ func start():
 	print("process finished")
 	# telling server that this client is ready to play
 	Network.send({"header": "game", "body": "round"})
-
-func _on_boat_manager_new_boat() -> void:
-	player_ships = 1
-	boats_label.text = "Boats: " + str(player_ships) 
 
 # update values in building UI
 
@@ -190,21 +173,35 @@ func show_state(attacked: Array):
 		# draw the 0, 1, -1 indicating where hit, where miss
 		#print(client_name + " turn")
 		for pos in range(len(attacked)):
-			cell = opponent_grid_map.local_to_map(Network.gridToCoord(pos))
+			var coord = Network.gridToCoord(pos)
+			cell = opponent_grid_map.local_to_map(coord)
 			if attacked[pos] == '1':
 				opponent_grid_map.set_cell_item(cell, 4)
+				var is_not_repeat = opponent_grid_map.hit(coord)
+				if is_not_repeat:
+					var afflicted_boat = opp_boat_manager.find_boat()
+					afflicted_boat.hit += 1
+					player_score += 1
 			elif attacked[pos] == '-1':
 				opponent_grid_map.set_cell_item(cell, 5)
+				opponent_grid_map.miss(coord)
 	else:
 		# if it is not this client turns (being attacked)
 		# show clients being attacked
 		# draw 0, X, M. 0 indicating there is a boat, X means hit, M means miss.
 		for pos in range(len(attacked)):
-			cell = player_map.local_to_map(Network.gridToCoord(pos))
+			var coord = Network.gridToCoord(pos)
+			cell = player_map.local_to_map(coord)
 			if attacked[pos] == '1':
 				player_map.set_cell_item(cell, 4)
+				var is_not_repeat = player_map.hit(coord)
+				if is_not_repeat:
+					var afflicted_boat = player_boat_manager.find_boat()
+					afflicted_boat.hit += 1
+					opp_score += 1
 			elif attacked[pos] == '-1':
 				player_map.set_cell_item(cell, 5)
+				player_map.miss(coord)
 
 
 func _on_timer_timeout():
@@ -215,8 +212,11 @@ func _on_timer_timeout():
 
 func end_game(winner: String):
 	#if player wins
-	end_screen.update_label(true)
-	end_screen.player_score.text = str(4 - opp_ships)
-	end_screen.opp_score.text = str(4 - player_ships)
+	if player_score > opp_score:
+		end_screen.update_label(true)
+	else: 
+		end_screen.update_label(false)
+	end_screen.player_score.text = str(opp_score)
+	end_screen.opp_score.text = str(player_score)
 	end_screen.visible = true
 	
