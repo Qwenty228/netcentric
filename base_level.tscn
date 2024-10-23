@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://lhxvech2dovd"]
+[gd_scene load_steps=32 format=3 uid="uid://lhxvech2dovd"]
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://jobsgrb5cnuj" path="res://Socket/clientprototype.tscn" id="2_rivqq"]
 [ext_resource type="PackedScene" uid="uid://brk2p6bvxe20r" path="res://grid_map.tscn" id="3_1ohpt"]
 [ext_resource type="PackedScene" uid="uid://b2y3k1dtgksps" path="res://Boats/boat_manager.tscn" id="4_dxq0f"]
-[ext_resource type="PackedScene" uid="uid://cyaopl06io6hw" path="res://Boats/boat_4_illegal.tscn" id="6_4sbse"]
+[ext_resource type="Theme" uid="uid://dsc1ewgbpb6mi" path="res://ui/big_theme.tres" id="7_4b52y"]
 [ext_resource type="Shader" path="res://MeshLibaries/Shader/water.gdshader" id="8_fgebb"]
 [ext_resource type="FontFile" uid="uid://el25lhmlqokw" path="res://Assets/PT_Serif/PTSerif-Regular.ttf" id="9_evmka"]
 [ext_resource type="PackedScene" uid="uid://b5q3yeneaykla" path="res://ui/end_screen.tscn" id="10_cgviu"]
@@ -77,9 +77,6 @@ outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_h15kj"]
 font_size = 15
-
-[sub_resource type="LabelSettings" id="LabelSettings_alx3a"]
-font_size = 20
 
 [sub_resource type="LabelSettings" id="LabelSettings_hi6pb"]
 font_size = 40
@@ -227,7 +224,6 @@ is_player = true
 
 [node name="BoatManager" parent="PlayerBoard" instance=ExtResource("4_dxq0f")]
 unique_name_in_owner = true
-boat_4_illegal = ExtResource("6_4sbse")
 
 [node name="Sea" type="MeshInstance3D" parent="PlayerBoard"]
 mesh = SubResource("PlaneMesh_rnipn")
@@ -246,11 +242,29 @@ material = SubResource("StandardMaterial3D_mgmue")
 visible = false
 
 [node name="BoatManager" parent="OppBoard" instance=ExtResource("4_dxq0f")]
-boat_4_illegal = ExtResource("6_4sbse")
 
 [node name="RayPickerCamera" parent="." node_paths=PackedStringArray("opp_map") instance=ExtResource("1_o0cxu")]
 transform = Transform3D(-1, -1.50996e-07, -6.60024e-15, 0, -4.37114e-08, 1, -1.50996e-07, 1, 4.37114e-08, 0.44, 28.72, -1.71)
 opp_map = NodePath("../OppBoard/OppMap")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="UI"]
+visible = false
+layout_mode = 0
+offset_left = 12.0
+offset_top = 580.0
+offset_right = 683.0
+offset_bottom = 636.0
+theme = ExtResource("7_4b52y")
+theme_override_font_sizes/font_size = 45
+text = "Waiting for player 2 to connect..."
 
 [node name="MenuScreen" type="Control" parent="."]
 layout_mode = 3
@@ -262,6 +276,7 @@ grow_vertical = 2
 theme = SubResource("Theme_qsq0q")
 
 [node name="TabContainer" type="TabContainer" parent="MenuScreen"]
+visible = false
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 1
 anchors_preset = 8
@@ -362,35 +377,6 @@ offset_right = 230.0
 offset_bottom = 34.0
 text = "Press Esc for menu and controls"
 label_settings = SubResource("LabelSettings_h15kj")
-
-[node name="ModeLabel" type="Label" parent="MenuScreen"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -115.0
-offset_top = -37.0
-offset_right = -16.0
-offset_bottom = -10.0
-grow_horizontal = 0
-grow_vertical = 0
-text = "View mode"
-label_settings = SubResource("LabelSettings_alx3a")
-
-[node name="BoatsLabel" type="Label" parent="MenuScreen"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = -37.0
-offset_right = 186.0
-offset_bottom = 8.0
-grow_vertical = 0
-text = "Boats remaining"
-label_settings = SubResource("LabelSettings_alx3a")
 
 [node name="CurrentPlayerLabel" type="Label" parent="MenuScreen"]
 unique_name_in_owner = true
@@ -535,7 +521,6 @@ one_shot = true
 [connection signal="ship_sunk" from="PlayerBoard/BoatManager" to="PlayerBoard/GridMap" method="_on_ship_sunk"]
 [connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
-[connection signal="attacked" from="RayPickerCamera" to="ClientConnection" method="_on_ray_picker_camera_attacked"]
 [connection signal="pressed" from="MenuScreen/EndScreen/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="MenuScreen/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat1Btn" to="." method="_on_boat_1_btn_pressed"]

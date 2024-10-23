@@ -6,10 +6,8 @@ extends Node3D
 @onready var opponent_grid_map: GridMap = $OppBoard/OppMap
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var ray_picker_camera: Camera3D = $RayPickerCamera
-@onready var mode_label: Label = $MenuScreen/ModeLabel
 @onready var win_label: Label = %WinLabel
 @onready var start_button: Button = %StartButton
-@onready var boats_label: Label = $MenuScreen/BoatsLabel
 @onready var boat_1_label: Label = %Boat1Label
 @onready var boat_4_label: Label = %Boat4Label
 @onready var player_boat_manager = %BoatManager
@@ -22,20 +20,17 @@ extends Node3D
 @onready var round_label = %RoundLabel
 @onready var welcome_label = %WelcomeLabel
 @onready var timer = $Timer
+@onready var ui = $UI
 @export var build_mode := true:
 	set(mode):
 		build_mode = mode
 		ray_picker_camera.build_mode = mode
 		ray_picker_camera.toggle_build()
-		if build_mode:
-			mode_label.text = "Build mode"
 @export var attack_mode := false:
 	set(mode):
 		attack_mode = mode
 		ray_picker_camera.attack_mode = mode
 		ray_picker_camera.toggle_build()
-		if attack_mode:
-			mode_label.text = "Attack mode"
 			
 var client_name 
 var turn # if turn == 1, it is this client turn. if turn is 0 then it other client
@@ -51,7 +46,6 @@ func _ready() -> void:
 	end_screen.visible = false
 	ray_picker_camera.grid_map = player_map
 	build_mode = true
-	boats_label.text = "Boats: 0"
 	current_player_label.text = ""
 	player_score = 0
 	opp_score = 0
@@ -122,6 +116,8 @@ func _on_start_button_pressed() -> void:
 	# after got client id, this client send to server about boat placement and client names
 	Network.send({"header": "init", "body": player_boats_pos, "client": client_name})
 	print("sent boat")
+	ui.get_child(0).visible = true
+	
 
 func start():
 	# indicate that both player has connected and will proceed to the game loop
@@ -145,6 +141,7 @@ func sink_enemy_ship(pos:Vector3i) -> void:
 	opponent_grid_map.set_cell_item(cell,2)
 	
 func update_game_info(client_id, game_round):
+	ui.get_child(0).visible = false
 	# Server sending round number
 	round_label.text = "Round: " + str(game_round)
 	print("Round: " + str(game_round))
@@ -176,11 +173,11 @@ func show_state(attacked: Array):
 			var coord = Network.gridToCoord(pos)
 			cell = opponent_grid_map.local_to_map(coord)
 			if attacked[pos] == '1':
-				opponent_grid_map.set_cell_item(cell, 4)
 				var is_not_repeat = opponent_grid_map.hit(coord)
 				if is_not_repeat:
-					var afflicted_boat = opp_boat_manager.find_boat()
-					afflicted_boat.hit += 1
+					opponent_grid_map.set_cell_item(cell, 4)
+					var afflicted_boat = opp_boat_manager.find_boat(coord)
+					afflicted_boat.hits += 1
 					player_score += 1
 			elif attacked[pos] == '-1':
 				opponent_grid_map.set_cell_item(cell, 5)
@@ -193,11 +190,11 @@ func show_state(attacked: Array):
 			var coord = Network.gridToCoord(pos)
 			cell = player_map.local_to_map(coord)
 			if attacked[pos] == '1':
-				player_map.set_cell_item(cell, 4)
 				var is_not_repeat = player_map.hit(coord)
 				if is_not_repeat:
-					var afflicted_boat = player_boat_manager.find_boat()
-					afflicted_boat.hit += 1
+					player_map.set_cell_item(cell, 4)
+					var afflicted_boat = player_boat_manager.find_boat(coord)
+					afflicted_boat.hits += 1
 					opp_score += 1
 			elif attacked[pos] == '-1':
 				player_map.set_cell_item(cell, 5)

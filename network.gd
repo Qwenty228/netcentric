@@ -109,3 +109,10 @@ func oppCoordToGrid(x:int, z: int):
 	# return (3, 0, 3) - (-4, 0, -4)
 	var p = (3 - x) + 8* (3 - z)
 	return p
+
+func oppGridToCoord(position:int):
+	# int 0 - 63
+	# return (3, 0, 3) - (-4, 0, -4)
+	var x = 3 - int(position % 8)
+	var z = 3 - int(position / 8)
+	return Vector3i(x, 0, z)
