@@ -243,6 +243,7 @@ size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
 [node name="OppMap" parent="OppBoard" instance=ExtResource("3_1ohpt")]
+visible = false
 
 [node name="BoatManager" parent="OppBoard" instance=ExtResource("4_dxq0f")]
 boat_4_illegal = ExtResource("6_4sbse")
@@ -528,13 +529,10 @@ libraries = {
 wait_time = 10.0
 one_shot = true
 
-[connection signal="opp_hit" from="PlayerBoard/GridMap" to="." method="_on_opp_hit"]
-[connection signal="player_hit" from="PlayerBoard/GridMap" to="." method="_on_player_hit"]
 [connection signal="new_boat" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="new_boat_1" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat_1"]
 [connection signal="new_boat_4" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat_4"]
 [connection signal="ship_sunk" from="PlayerBoard/BoatManager" to="PlayerBoard/GridMap" method="_on_ship_sunk"]
-[connection signal="opp_hit" from="OppBoard/OppMap" to="." method="_on_opp_hit"]
 [connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
 [connection signal="attacked" from="RayPickerCamera" to="ClientConnection" method="_on_ray_picker_camera_attacked"]
