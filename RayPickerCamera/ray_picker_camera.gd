@@ -1,5 +1,4 @@
 extends Camera3D
-signal attacked
 
 @export var grid_map: GridMap
 @export var opp_map: GridMap
@@ -28,7 +27,7 @@ func _process(delta: float) -> void:
 			var collision_point = ray_cast_3d.get_collision_point()
 			var cell = grid_map.local_to_map(collision_point) 
 			var tile_position = grid_map.map_to_local(cell)
-				
+
 			#attack enemy
 			if attack_mode:
 				#highlight
@@ -94,6 +93,7 @@ func _process(delta: float) -> void:
 							var boat_rotation = previous_boat.boat_rotation
 							for i in range(previous_boat.units):
 								grid_map.set_cell_item(temp_cell, 2)
+								# save position of cells to each boat
 								previous_boat.tiles_position.append(grid_map.map_to_local(temp_cell))
 								if abs(boat_rotation) == 0: 
 									temp_cell.z += 1
@@ -104,7 +104,9 @@ func _process(delta: float) -> void:
 								elif abs(boat_rotation) == 3*PI/2:
 									temp_cell.x += 1
 							boat_manager.fix_boat(previous_boat)
+							previous_boat.print_info()
 							previous_boat = null
+
 						elif grid_map.get_cell_item(cell) == 2:
 							var boat = boat_manager.find_boat(grid_map.map_to_local(cell))
 							for position in boat.tiles_position:

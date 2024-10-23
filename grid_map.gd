@@ -20,21 +20,18 @@ func attack(attack_position:Vector3i) -> void:
 			opp_hit.emit()
 
 func hit(pos:Vector3) -> bool:
-	var already_hit = false
 	for fx in FX:
 		if fx.global_position == pos:
-			already_hit = true
-	if !already_hit:
-		var ex = explosion.instantiate()
-		var deb = debris.instantiate()
-		add_child(ex)
-		ex.global_position = pos
-		ex.explode()
-		FX.append(ex)
-		add_child(deb)
-		deb.global_position = pos
-		return true	
-	return false
+			return false
+	var ex = explosion.instantiate()
+	var deb = debris.instantiate()
+	add_child(ex)
+	ex.global_position = pos
+	add_child(deb)
+	deb.global_position = pos
+	ex.explode()
+	FX.append(ex)
+	return true
 	
 func miss(pos:Vector3) -> bool:
 	var already_hit = false
