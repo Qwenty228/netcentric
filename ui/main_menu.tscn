@@ -1,12 +1,21 @@
-[gd_scene load_steps=6 format=3 uid="uid://dhjctrsjga335"]
+[gd_scene load_steps=8 format=3 uid="uid://dhjctrsjga335"]
 
 [ext_resource type="Script" path="res://ui/main_menu.gd" id="1_1chu5"]
 [ext_resource type="FontFile" uid="uid://b3ym7847ce73u" path="res://Assets/MateSC-Regular.ttf" id="2_u8ohg"]
 [ext_resource type="Theme" uid="uid://l72xp725usrw" path="res://ui/small_theme.tres" id="3_bbfxc"]
+[ext_resource type="AudioStream" uid="uid://dxkt6vt0prvee" path="res://Assets/SFX/Noble_Calling_128bpm_122s.wav" id="4_46mc4"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ds3rf"]
 font = ExtResource("2_u8ohg")
 font_size = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fxlun"]
+content_margin_left = 10.0
+bg_color = Color(1, 1, 1, 0.470588)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [sub_resource type="LabelSettings" id="LabelSettings_a0de4"]
 font_size = 24
@@ -40,6 +49,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 57.99
+offset_bottom = -40.01
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 12
@@ -51,10 +62,11 @@ theme_override_constants/margin_bottom = 12
 layout_mode = 2
 theme_override_constants/separation = 60
 
-[node name="Seperator" type="Control" parent="MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_bottom = 200
 
-[node name="GameTitle" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="GameTitle" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "Battleship 1650"
@@ -62,35 +74,45 @@ label_settings = SubResource("LabelSettings_ds3rf")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_bbfxc")
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.572549)
+theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 30
-placeholder_text = "Name"
+theme_override_styles/normal = SubResource("StyleBoxFlat_fxlun")
+placeholder_text = "Enter your name"
+alignment = 1
+max_length = 120
+clear_button_enabled = true
+caret_blink = true
 
-[node name="PlayButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(120, 32)
+[node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_bbfxc")
 theme_override_font_sizes/font_size = 24
 text = "Play"
 
-[node name="WarningLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="WarningLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 text = "Please enter your name"
 label_settings = SubResource("LabelSettings_a0de4")
 
-[connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
-[connection signal="text_submitted" from="MarginContainer/HBoxContainer/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
-[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_46mc4")
+autoplay = true
+
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="text_submitted" from="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

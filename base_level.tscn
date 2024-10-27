@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://lhxvech2dovd"]
+[gd_scene load_steps=36 format=3 uid="uid://lhxvech2dovd"]
 
 [ext_resource type="Script" path="res://base_level.gd" id="1_i2ccr"]
 [ext_resource type="PackedScene" uid="uid://dg3rm1coyrnis" path="res://RayPickerCamera/ray_picker_camera.tscn" id="1_o0cxu"]
@@ -6,9 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://jobsgrb5cnuj" path="res://Socket/clientprototype.tscn" id="2_rivqq"]
 [ext_resource type="PackedScene" uid="uid://brk2p6bvxe20r" path="res://grid_map.tscn" id="3_1ohpt"]
 [ext_resource type="PackedScene" uid="uid://b2y3k1dtgksps" path="res://Boats/boat_manager.tscn" id="4_dxq0f"]
+[ext_resource type="PackedScene" uid="uid://uqmoliixdwrr" path="res://Assets/grid.glb" id="6_g2n0n"]
 [ext_resource type="Theme" uid="uid://dsc1ewgbpb6mi" path="res://ui/big_theme.tres" id="7_4b52y"]
 [ext_resource type="Shader" path="res://MeshLibaries/Shader/water.gdshader" id="8_fgebb"]
-[ext_resource type="FontFile" uid="uid://el25lhmlqokw" path="res://Assets/PT_Serif/PTSerif-Regular.ttf" id="9_evmka"]
+[ext_resource type="Theme" uid="uid://l72xp725usrw" path="res://ui/small_theme.tres" id="8_nskxa"]
+[ext_resource type="FontFile" uid="uid://bso6riv3kbamw" path="res://Assets/PT_Serif/PTSerif-Italic.ttf" id="9_bkohv"]
+[ext_resource type="FontFile" uid="uid://b3ym7847ce73u" path="res://Assets/MateSC-Regular.ttf" id="10_03uo0"]
 [ext_resource type="PackedScene" uid="uid://b5q3yeneaykla" path="res://ui/end_screen.tscn" id="10_cgviu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hx2ue"]
@@ -61,28 +64,53 @@ shader_parameter/scroll_speed2 = 0.02
 shader_parameter/normalmap_tex = SubResource("NoiseTexture2D_hm1sm")
 shader_parameter/normalmap_tex2 = SubResource("NoiseTexture2D_ejwqo")
 
-[sub_resource type="Theme" id="Theme_qsq0q"]
-default_font = ExtResource("9_evmka")
-default_font_size = 32
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3wtdt"]
+bg_color = Color(0.345054, 0.345047, 0.313012, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.28, 0.259373, 0.1848, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8w88t"]
+bg_color = Color(0.07, 0.07, 0.07, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_h15kj"]
+font_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x7y1m"]
+bg_color = Color(0.345098, 0.345098, 0.313726, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.278431, 0.258824, 0.184314, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0, 0, 0, 0.239216)
+shadow_size = 10
+shadow_offset = Vector2(0, 10)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gasr8"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.345098, 0.345098, 0.313726, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hnqnw"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.134447, 0.14, 0.1302, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
 
 [sub_resource type="LabelSettings" id="LabelSettings_ltwcd"]
 font_size = 40
 outline_size = 5
 outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_4yaae"]
-font_size = 35
-outline_size = 5
-outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_h15kj"]
-font_size = 15
-
-[sub_resource type="LabelSettings" id="LabelSettings_hi6pb"]
-font_size = 40
-
-[sub_resource type="LabelSettings" id="LabelSettings_kpao8"]
-font_size = 25
 
 [sub_resource type="Animation" id="Animation_apf86"]
 length = 0.001
@@ -215,6 +243,7 @@ shadow_enabled = true
 
 [node name="Ground" type="CSGBox3D" parent="PlayerBoard"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.962034, 0)
+visible = false
 size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
@@ -230,11 +259,14 @@ mesh = SubResource("PlaneMesh_rnipn")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_7fpiu")
 
+[node name="grid" parent="PlayerBoard" instance=ExtResource("6_g2n0n")]
+
 [node name="OppBoard" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 55)
 
 [node name="Ground" type="CSGBox3D" parent="OppBoard"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.962034, 0)
+visible = false
 size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
@@ -242,6 +274,8 @@ material = SubResource("StandardMaterial3D_mgmue")
 visible = false
 
 [node name="BoatManager" parent="OppBoard" instance=ExtResource("4_dxq0f")]
+
+[node name="grid" parent="OppBoard" instance=ExtResource("6_g2n0n")]
 
 [node name="RayPickerCamera" parent="." node_paths=PackedStringArray("opp_map") instance=ExtResource("1_o0cxu")]
 transform = Transform3D(-1, -1.50996e-07, -6.60024e-15, 0, -4.37114e-08, 1, -1.50996e-07, 1, 4.37114e-08, 0.44, 28.72, -1.71)
@@ -255,154 +289,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="UI"]
-visible = false
-layout_mode = 0
-offset_left = 12.0
-offset_top = 580.0
-offset_right = 683.0
-offset_bottom = 636.0
-theme = ExtResource("7_4b52y")
-theme_override_font_sizes/font_size = 45
-text = "Waiting for player 2 to connect..."
-
-[node name="MenuScreen" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = SubResource("Theme_qsq0q")
-
-[node name="TabContainer" type="TabContainer" parent="MenuScreen"]
-visible = false
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -270.0
-offset_top = -288.0
-offset_right = 270.0
-offset_bottom = 288.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 30
-current_tab = 0
-
-[node name="Controls" type="MarginContainer" parent="MenuScreen/TabContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 30
-metadata/_tab_index = 0
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="MenuScreen/TabContainer/Controls"]
-layout_direction = 1
-layout_mode = 2
-
-[node name="Controls" type="Label" parent="MenuScreen/TabContainer/Controls/VBoxContainer2"]
-layout_mode = 2
-text = "Controls"
-label_settings = SubResource("LabelSettings_ltwcd")
-
-[node name="InstructLabel" type="Label" parent="MenuScreen/TabContainer/Controls/VBoxContainer2"]
-layout_mode = 2
-text = "\"1\" - switch to boat 1
-\"4\" - switch to boat 4
-\"r\" - rotate
-Build mode:
-Click to place ship
-Click again to remove
-Attack mode: 
-click to attack"
-label_settings = SubResource("LabelSettings_4yaae")
-
-[node name="Main Menu" type="CenterContainer" parent="MenuScreen/TabContainer"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 1
-
-[node name="Label" type="Label" parent="MenuScreen/TabContainer/Main Menu"]
-layout_mode = 2
-text = "Return to main menu"
-
-[node name="Main Menu" type="Button" parent="MenuScreen/TabContainer/Main Menu"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 64
-text = "Main menu"
-
-[node name="EndScreen" type="CenterContainer" parent="MenuScreen"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ColorRect" type="ColorRect" parent="MenuScreen/EndScreen"]
-custom_minimum_size = Vector2(1100, 1100)
-layout_mode = 2
-color = Color(0, 0, 0, 0.596078)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuScreen/EndScreen"]
-layout_mode = 2
-
-[node name="WinLabel" type="Label" parent="MenuScreen/EndScreen/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "You win!"
-label_settings = SubResource("LabelSettings_ltwcd")
-
-[node name="ReplayButton" type="Button" parent="MenuScreen/EndScreen/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Play again"
-
-[node name="MenuButton" type="Button" parent="MenuScreen/EndScreen/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Main Menu"
-
-[node name="QuitButton" type="Button" parent="MenuScreen/EndScreen/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Quit"
-
-[node name="HelperLabel" type="Label" parent="MenuScreen"]
-layout_mode = 0
-offset_right = 230.0
-offset_bottom = 34.0
-text = "Press Esc for menu and controls"
-label_settings = SubResource("LabelSettings_h15kj")
-
-[node name="CurrentPlayerLabel" type="Label" parent="MenuScreen"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -114.0
-offset_top = 4.0
-offset_right = -8.0
-offset_bottom = 38.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 25
-text = "Your turn"
-
-[node name="RoundLabel" type="Label" parent="MenuScreen"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 1073.0
-offset_top = 38.0
-offset_right = 1147.0
-offset_bottom = 82.0
-theme_override_font_sizes/font_size = 20
-text = "Round 1"
-
-[node name="StartButton" type="Button" parent="MenuScreen"]
+[node name="StartButton" type="Button" parent="UI"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
@@ -411,15 +298,120 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -118.0
-offset_top = -94.0
+offset_top = -67.23
 offset_right = 120.0
-offset_bottom = -32.0
+offset_bottom = -22.23
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 40
+theme = ExtResource("7_4b52y")
+theme_override_font_sizes/font_size = 30
 text = "Start game"
 
-[node name="BuildUIContainer" type="MarginContainer" parent="MenuScreen"]
+[node name="HUD" type="MarginContainer" parent="UI"]
+layout_mode = 0
+offset_right = 283.0
+offset_bottom = 244.0
+
+[node name="Panel" type="Panel" parent="UI/HUD"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3wtdt")
+
+[node name="CenterContainer" type="CenterContainer" parent="UI/HUD"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/HUD/CenterContainer"]
+layout_mode = 2
+
+[node name="WelcomeLabel" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+text = "Welcome, John Darksoul"
+
+[node name="TurnLabel" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+theme_override_font_sizes/font_size = 25
+text = "Waiting for player 2..."
+
+[node name="HSeparator" type="HSeparator" parent="UI/HUD/CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RoundLabel" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+text = "Round 55"
+
+[node name="TimeRemaining" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+text = "Time remaining: 0.00s"
+
+[node name="ScoreBox" type="MarginContainer" parent="UI/HUD/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+
+[node name="CContainer" type="CenterContainer" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox"]
+layout_mode = 2
+
+[node name="VBox" type="HBoxContainer" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8w88t")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+text = "Your ships:"
+
+[node name="PlayerShipsLabel" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+text = "4"
+
+[node name="MarginContainer2" type="MarginContainer" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 2
+
+[node name="VSeparator" type="VSeparator" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/MarginContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox"]
+layout_mode = 2
+
+[node name="OppName" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+text = "Opponent's Ships:"
+
+[node name="OppShipsLabel" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+text = "4"
+
+[node name="HelperLabel" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+theme_override_fonts/font = ExtResource("9_bkohv")
+text = "Press Esc for menu and controls"
+label_settings = SubResource("LabelSettings_h15kj")
+
+[node name="Tabs" type="CenterContainer" parent="UI"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -427,64 +419,74 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 775
-theme_override_constants/margin_top = 60
-theme_override_constants/margin_right = 11
-theme_override_constants/margin_bottom = 69
 
-[node name="ColorRect" type="ColorRect" parent="MenuScreen/BuildUIContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="UI/Tabs"]
 layout_mode = 2
-color = Color(0, 0, 0, 0.368627)
+theme_override_constants/margin_bottom = 50
 
-[node name="MarginContainer" type="MarginContainer" parent="MenuScreen/BuildUIContainer"]
+[node name="TabContainer" type="TabContainer" parent="UI/Tabs/MarginContainer"]
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("10_03uo0")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/panel = SubResource("StyleBoxFlat_x7y1m")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_gasr8")
+theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_hnqnw")
+tab_alignment = 1
+current_tab = 1
+
+[node name="Controls" type="MarginContainer" parent="UI/Tabs/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+tooltip_text = "Hotkeys"
 theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 35
-theme_override_constants/margin_right = 30
+metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuScreen/BuildUIContainer/MarginContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 20.0
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Select boat type"
-label_settings = SubResource("LabelSettings_hi6pb")
-
-[node name="Boat1Btn" type="Button" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Boat 1"
-
-[node name="Boat1Label" type="Label" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Boat 1 remaining: 4"
-label_settings = SubResource("LabelSettings_kpao8")
-
-[node name="Boat4Btn" type="Button" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Boat 4"
-
-[node name="Boat4Label" type="Label" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Boat 4 remaining: 4"
-label_settings = SubResource("LabelSettings_kpao8")
-
-[node name="HSeparator" type="HSeparator" parent="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/Tabs/MarginContainer/TabContainer/Controls"]
+layout_direction = 1
 layout_mode = 2
 
-[node name="WelcomeLabel" type="Label" parent="MenuScreen"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 5.0
-offset_top = 24.0
-offset_right = 135.0
-offset_bottom = 68.0
-text = "Welcome, "
+[node name="Controls" type="Label" parent="UI/Tabs/MarginContainer/TabContainer/Controls/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("7_4b52y")
+text = "Controls"
+label_settings = SubResource("LabelSettings_ltwcd")
+
+[node name="InstructLabel" type="Label" parent="UI/Tabs/MarginContainer/TabContainer/Controls/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+theme_override_font_sizes/font_size = 25
+text = "\"1\" - switch to boat 1
+\"4\" - switch to boat 4
+\"r\" - rotate
+Build mode:
+Click to place ship
+Click again to remove
+Attack mode: 
+click to attack"
+
+[node name="Main Menu" type="CenterContainer" parent="UI/Tabs/MarginContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="HBoxContainer" parent="UI/Tabs/MarginContainer/TabContainer/Main Menu"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Tabs/MarginContainer/TabContainer/Main Menu/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 5
+
+[node name="Main Menu" type="Button" parent="UI/Tabs/MarginContainer/TabContainer/Main Menu/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+text = "Return to main menu"
+
+[node name="Button" type="Button" parent="UI/Tabs/MarginContainer/TabContainer/Main Menu/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("8_nskxa")
+text = "Quit Game"
 
 [node name="EndScreen" parent="." instance=ExtResource("10_cgviu")]
 visible = false
@@ -521,10 +523,7 @@ one_shot = true
 [connection signal="ship_sunk" from="PlayerBoard/BoatManager" to="PlayerBoard/GridMap" method="_on_ship_sunk"]
 [connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
-[connection signal="pressed" from="MenuScreen/EndScreen/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
-[connection signal="pressed" from="MenuScreen/StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat1Btn" to="." method="_on_boat_1_btn_pressed"]
-[connection signal="pressed" from="MenuScreen/BuildUIContainer/MarginContainer/VBoxContainer/Boat4Btn" to="." method="_on_boat_4_btn_pressed"]
+[connection signal="pressed" from="UI/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 
 [editable path="RayPickerCamera"]

@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://ceqstt80hpfw8"]
+
+[ext_resource type="AudioStream" uid="uid://brd6o7hv4sb6b" path="res://Assets/SFX/Music.WAV" id="1_n5ht1"]
+[ext_resource type="Script" path="res://ui/audio_player.gd" id="1_qfuie"]
+[ext_resource type="AudioStream" uid="uid://buuttbi1qbpby" path="res://Assets/SFX/click.wav" id="3_d3nln"]
+
+[node name="AudioPlayer" type="Node"]
+script = ExtResource("1_qfuie")
+click1 = ExtResource("3_d3nln")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_n5ht1")
+
+[node name="ClickPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_d3nln")

@@ -21,6 +21,7 @@ func hit(pos:Vector3) -> bool:
 		add_child(deb)
 		deb.global_position = pos
 		taken_coord.append(pos)
+		AudioPlayer.play_sfx("explode")
 		return true	
 	return false
 	
