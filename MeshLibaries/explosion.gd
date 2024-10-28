@@ -1,12 +1,8 @@
 extends GPUParticles3D
-var has_exploded
+var has_exploded:= false
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
-func _ready() -> void:
-	has_exploded = false
-	print(has_exploded)
-	
 func explode() -> void:
-	if !has_exploded:
-		has_exploded = true
-		animation_player.play("explosion")
+	animation_player.play("explosion")
+	await animation_player.animation_finished
+	queue_free()

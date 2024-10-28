@@ -1,5 +1,5 @@
 extends Control
-@onready var warning_label: Label = $MarginContainer/HBoxContainer/VBoxContainer/WarningLabel
+@onready var warning_label = %WarningLabel
 var is_name_set = false
 
 func _on_line_edit_text_changed(new_text: String) -> void:

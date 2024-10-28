@@ -248,7 +248,6 @@ size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
 [node name="GridMap" parent="PlayerBoard" instance=ExtResource("3_1ohpt")]
-visible = false
 is_player = true
 
 [node name="BoatManager" parent="PlayerBoard" instance=ExtResource("4_dxq0f")]
@@ -271,9 +270,10 @@ size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
 [node name="OppMap" parent="OppBoard" instance=ExtResource("3_1ohpt")]
-visible = false
+unique_name_in_owner = true
 
-[node name="BoatManager" parent="OppBoard" instance=ExtResource("4_dxq0f")]
+[node name="OppBoatManager" parent="OppBoard" instance=ExtResource("4_dxq0f")]
+unique_name_in_owner = true
 
 [node name="grid" parent="OppBoard" instance=ExtResource("6_g2n0n")]
 
@@ -282,6 +282,7 @@ transform = Transform3D(-1, -1.50996e-07, -6.60024e-15, 0, -4.37114e-08, 1, -1.5
 opp_map = NodePath("../OppBoard/OppMap")
 
 [node name="UI" type="Control" parent="."]
+top_level = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -333,7 +334,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("8_nskxa")
 theme_override_font_sizes/font_size = 25
-text = "Waiting for player 2..."
+text = "Place your boats!"
 
 [node name="HSeparator" type="HSeparator" parent="UI/HUD/CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -549,8 +550,8 @@ one_shot = true
 [connection signal="new_boat_1" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat_1"]
 [connection signal="new_boat_4" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat_4"]
 [connection signal="ship_sunk" from="PlayerBoard/BoatManager" to="PlayerBoard/GridMap" method="_on_ship_sunk"]
-[connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
-[connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
+[connection signal="new_boat" from="OppBoard/OppBoatManager" to="." method="_on_boat_manager_new_boat"]
+[connection signal="ship_sunk" from="OppBoard/OppBoatManager" to="." method="_on_ship_sunk"]
 [connection signal="pressed" from="UI/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="toggled" from="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer/HBoxContainer/CheckButton" to="." method="_on_check_button_toggled"]
 [connection signal="toggled" from="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer/HBoxContainer2/SFXcheck" to="." method="_on_sf_xcheck_toggled"]

@@ -18,8 +18,8 @@ curve = SubResource("Curve_lrdae")
 direction = Vector3(0, 1, 0)
 spread = 50.0
 initial_velocity_min = 100.0
-initial_velocity_max = 200.0
-gravity = Vector3(0, -50, 0)
+initial_velocity_max = 150.0
+gravity = Vector3(0, -250, 0)
 scale_curve = SubResource("CurveTexture_auu0q")
 
 [sub_resource type="BoxMesh" id="BoxMesh_pjvad"]

@@ -10,7 +10,7 @@ extends Node3D
 @onready var boat_1_label: Label = %Boat1Label
 @onready var boat_4_label: Label = %Boat4Label
 @onready var player_boat_manager = %BoatManager
-@onready var opp_boat_manager = opp_board.get_child(-1)
+@onready var opp_boat_manager = %OppBoatManager
 @onready var client_connection: Node = $ClientConnection
 @onready var client_UI = client_connection.get_children()
 
@@ -69,8 +69,15 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("menu"):
 		if tabs.visible:
 			tabs.visible = false
+			if build_mode:
+				ray_picker_camera.build_mode = true
 		else:
 			tabs.visible = true
+			if build_mode:
+				ray_picker_camera.build_mode = false
+				ray_picker_camera.toggle_build()
+			
+			
 		
 	if Input.is_action_just_pressed("switch_board"):
 		if is_player_board:
@@ -128,7 +135,6 @@ func _on_start_button_pressed() -> void:
 	# after got client id, this client send to server about boat placement and client names
 	Network.send({"header": "init", "body": player_boats_pos, "client": client_name})
 	print("sent boat")
-	ui.get_child(0).visible = true
 	
 
 func start():
@@ -150,11 +156,11 @@ func sink_enemy_ship(pos:Vector3i) -> void:
 	opponent_grid_map.set_cell_item(cell,2)
 	
 func update_game_info(client_id, game_round):
-	ui.get_child(0).visible = false
 	# Server sending round number
 	round_label.text = "Round: " + str(game_round)
 	# figuring out whose turn is it
 	if (client_id == "A" and game_round % 2 == 1) or (client_id == "B" and game_round % 2 == 0):
+		await(get_tree().create_timer(3).timeout)
 		turn_label.text = "Your turn"
 		switch_to_opp()
 		turn = 1
@@ -188,11 +194,14 @@ func show_state(attacked: Array):
 				if is_not_repeat:
 					opponent_grid_map.set_cell_item(cell, 4)
 					player_score += 1
-	
+					player_boat_manager.fire(coord)
 			elif attacked[pos] == '-1':
-				opponent_grid_map.set_cell_item(cell, 5)
-				opponent_grid_map.miss(coord)
-			opp_boat_manager.fire(coord)
+				var is_not_repeat = opponent_grid_map.miss(coord)
+				if is_not_repeat:
+					opponent_grid_map.set_cell_item(cell, 5)
+					opponent_grid_map.miss(coord)
+					player_boat_manager.fire(coord)
+			
 	else:
 		# if it is not this client turns (being attacked)
 		# show clients being attacked
@@ -202,18 +211,20 @@ func show_state(attacked: Array):
 			cell = player_map.local_to_map(coord)
 			if attacked[pos] == '1':
 				var is_not_repeat = player_map.hit(coord)
-				print(is_not_repeat)
 				if is_not_repeat:
 					player_map.set_cell_item(cell, 4)
 					var afflicted_boat = player_boat_manager.find_boat(coord)
 					afflicted_boat.hits += 1
 					opp_score += 1
-					#wait for animation to be complete
-		
+					opp_boat_manager.fire(coord)
 			elif attacked[pos] == '-1':
-				player_map.set_cell_item(cell, 5)
-				player_map.miss(coord)
-			player_boat_manager.fire(coord)
+				var is_not_repeat = player_map.miss(coord)
+				if is_not_repeat:
+					player_map.set_cell_item(cell, 5)
+					player_map.miss(coord)
+					opp_boat_manager.fire(coord)
+				
+			
 
 
 func _on_timer_timeout():
@@ -226,11 +237,14 @@ func end_game(winner):
 	print(winner)
 	#if player wins
 	if player_score > opp_score:
+		player_score += 1
 		end_screen.update_label(true)
 	else: 
 		end_screen.update_label(false)
+		opp_score += 1
 	end_screen.player_score.text = str(opp_score)
 	end_screen.opp_score.text = str(player_score)
+	ui.get_child(1).visible = false
 	end_screen.visible = true
 	
 

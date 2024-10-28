@@ -27,7 +27,7 @@ func hit(pos:Vector3) -> bool:
 	
 func miss(pos:Vector3) -> bool:
 	if !(pos in taken_coord):
-		var water = explosion.instantiate()
+		var water = water_sprout.instantiate()
 		add_child(water)
 		water.global_position = pos
 		water.explode()

@@ -112,9 +112,14 @@ func hit(boat_position: Vector3) -> void:
 func fire(direction: Vector3) -> void:
 	#get random child
 	var boats = get_children()
-	var rng = RandomNumberGenerator.new()
-	var n = rng.randi_range(0, boats.size()-1)
 	var shot = projectile.instantiate()
-	shot.global_position = boats[n].global_position
 	shot.direction = direction
-	boats[n].add_child(shot)
+	if boats.size() > 0:
+		var rng = RandomNumberGenerator.new()
+		var n = rng.randi_range(0, boats.size()-1)
+		shot.global_position = boats[n].global_position
+		boats[n].add_child(shot)
+	else:
+		shot.global_position.z += 5
+	await(get_tree().create_timer(2).timeout)
+	shot.queue_free()
