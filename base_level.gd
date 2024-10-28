@@ -1,6 +1,5 @@
 extends Node3D
 
-@onready var menu_screen: Control = $MenuScreen
 @onready var opp_board: Node3D = $OppBoard
 @onready var player_map: GridMap = $PlayerBoard/GridMap
 @onready var opponent_grid_map: GridMap = $OppBoard/OppMap
@@ -12,15 +11,21 @@ extends Node3D
 @onready var boat_4_label: Label = %Boat4Label
 @onready var player_boat_manager = %BoatManager
 @onready var opp_boat_manager = opp_board.get_child(-1)
-@onready var build_ui_container: MarginContainer = $MenuScreen/BuildUIContainer
-@onready var current_player_label: Label = %CurrentPlayerLabel
 @onready var client_connection: Node = $ClientConnection
 @onready var client_UI = client_connection.get_children()
-@onready var end_screen: Control = $EndScreen
-@onready var round_label = %RoundLabel
-@onready var welcome_label = %WelcomeLabel
-@onready var timer = $Timer
+
+#everything UI
 @onready var ui = $UI
+@onready var welcome_label: Label = %WelcomeLabel
+@onready var turn_label: Label = %TurnLabel
+@onready var tabs: CenterContainer = $UI/Tabs
+@onready var round_label = %RoundLabel
+@onready var timer = $Timer
+@onready var end_screen: Control = $EndScreen
+@onready var time_remaining: Label = %TimeRemaining
+@onready var player_ships_label: Label = %PlayerShipsLabel
+@onready var opp_ships_label: Label = %OppShipsLabel
+
 @export var build_mode := true:
 	set(mode):
 		build_mode = mode
@@ -33,26 +38,28 @@ extends Node3D
 		ray_picker_camera.toggle_build()
 			
 var client_name 
-var turn # if turn == 1, it is this client turn. if turn is 0 then it other client
+var turn = 2 # if turn == 1, it is this client turn. if turn is 0 then it other client
 var boat # global variable this client boat placement
 var current_player_name
 var is_player_board := true
-var player_score
-var opp_score
+var player_score := 0
+var opp_score := 0
 
 func _ready() -> void:
 	welcome_label.text = "Welcome, " + Network.player_name
-	menu_screen.get_child(0).visible = false
+	round_label.visible = false
 	end_screen.visible = false
 	ray_picker_camera.grid_map = player_map
 	build_mode = true
-	current_player_label.text = ""
 	player_score = 0
 	opp_score = 0
+	AudioPlayer.play_bg()
 
 func _process(_delta: float) -> void:
 	var format_string = "Time remaining: %d"
-	welcome_label.text = format_string % timer.time_left
+	if turn < 2:
+		time_remaining.visible = true
+		time_remaining.text = str(format_string % timer.time_left) + "s"
 	#switch modes 	
 	if client_connection.turn == 1:
 		attack_mode = true
@@ -60,7 +67,10 @@ func _process(_delta: float) -> void:
 		attack_mode = false
 
 	if Input.is_action_just_pressed("menu"):
-		menu_screen.get_child(0).visible = !menu_screen.get_child(0).visible
+		if tabs.visible:
+			tabs.visible = false
+		else:
+			tabs.visible = true
 		
 	if Input.is_action_just_pressed("switch_board"):
 		if is_player_board:
@@ -71,6 +81,9 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("client_ui"):
 		for child in client_UI:
 			child.visible = true
+	
+	player_ships_label.text = str(player_score)
+	opp_ships_label.text = str(opp_score)
 
 func switch_to_opp() -> void:
 	animation_player.play("opp_board")
@@ -88,10 +101,9 @@ func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
 func _on_start_button_pressed() -> void:
-	welcome_label.text = "Time remaining: " + str(timer.time_left)
+	turn_label.text = "Waiting for player 2..."
 	build_mode = false
 	start_button.queue_free()
-	build_ui_container.visible = false
 	var player_boats = player_boat_manager.get_children()
 	var player_boats_pos = []
 	for boat in player_boats:
@@ -129,9 +141,6 @@ func start():
 
 # update values in building UI
 
-func _on_boat_manager_new_boat_4(value: int) -> void:
-	boat_4_label.text = "Boat 4 remaining: " + str(value)
-
 func sink_player_ship(pos:Vector3i) -> void:
 	var cell = player_map.local_to_map(pos) 
 	player_map.set_cell_item(cell, 2)
@@ -144,12 +153,9 @@ func update_game_info(client_id, game_round):
 	ui.get_child(0).visible = false
 	# Server sending round number
 	round_label.text = "Round: " + str(game_round)
-	print("Round: " + str(game_round))
 	# figuring out whose turn is it
 	if (client_id == "A" and game_round % 2 == 1) or (client_id == "B" and game_round % 2 == 0):
-		current_player_name = client_name
-		if game_round > 1:
-			await(get_tree().create_timer(3).timeout)
+		turn_label.text = "Your turn"
 		switch_to_opp()
 		turn = 1
 		attack_mode = true
@@ -162,7 +168,8 @@ func update_game_info(client_id, game_round):
 			switch_to_player()
 		turn = 0
 		attack_mode = false
-	current_player_label.text = current_player_name
+		turn = 0
+		turn_label.text = str(Network.names[Network.opponent_id]) + "'s turn"
 	
 # update state of boards
 func show_state(attacked: Array):
@@ -185,7 +192,7 @@ func show_state(attacked: Array):
 			elif attacked[pos] == '-1':
 				opponent_grid_map.set_cell_item(cell, 5)
 				opponent_grid_map.miss(coord)
-			
+			opp_boat_manager.fire(coord)
 	else:
 		# if it is not this client turns (being attacked)
 		# show clients being attacked
@@ -206,8 +213,7 @@ func show_state(attacked: Array):
 			elif attacked[pos] == '-1':
 				player_map.set_cell_item(cell, 5)
 				player_map.miss(coord)
-			
-			
+			player_boat_manager.fire(coord)
 
 
 func _on_timer_timeout():

@@ -4,10 +4,11 @@
 [ext_resource type="PackedScene" uid="uid://dflkloj1wnlcc" path="res://Assets/galleon_illegal.glb" id="2_56aa2"]
 
 [node name="BoatFour" type="Node3D" groups=["boat"]]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 script = ExtResource("1_q84sx")
 legal = false
 
 [node name="galleon_illegal" parent="." instance=ExtResource("2_56aa2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 6.2379)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 5.37125)
 
 [editable path="galleon_illegal"]

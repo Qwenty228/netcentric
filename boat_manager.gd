@@ -10,6 +10,7 @@ signal new_boat_4(value)
 @export var boat_4_illegal: PackedScene
 @export var max_b1 = 4
 @export var max_b4 = 4
+@export var projectile: PackedScene
 
 @onready var current_boat_type:PackedScene = boat_4:
 	set(boat_type):
@@ -107,3 +108,13 @@ func hit(boat_position: Vector3) -> void:
 	if boat.hit.all():
 		boat.queue_free()
 		boats = -1
+		
+func fire(direction: Vector3) -> void:
+	#get random child
+	var boats = get_children()
+	var rng = RandomNumberGenerator.new()
+	var n = rng.randi_range(0, boats.size()-1)
+	var shot = projectile.instantiate()
+	shot.global_position = boats[n].global_position
+	shot.direction = direction
+	boats[n].add_child(shot)

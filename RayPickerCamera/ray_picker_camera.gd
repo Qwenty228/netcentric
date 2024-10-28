@@ -16,7 +16,7 @@ var previous_highlight: Node3D
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	#switch boat manager
-	boat_manager = grid_map.get_parent().get_child(-2)
+	boat_manager = grid_map.get_parent().get_child(2)
 	var mouse_position: Vector2 = get_viewport().get_mouse_position()
 	ray_cast_3d.target_position = project_local_ray_normal(mouse_position) * 500
 	ray_cast_3d.force_raycast_update()
@@ -104,9 +104,9 @@ func _process(_delta: float) -> void:
 								elif abs(boat_rotation) == 3*PI/2:
 									temp_cell.x += 1
 							boat_manager.fix_boat(previous_boat)
-							previous_boat.print_info()
+							# previous_boat.print_info()
 							previous_boat = null
-
+							AudioPlayer.play_sfx("click")
 						elif grid_map.get_cell_item(cell) == 2:
 							var boat = boat_manager.find_boat(grid_map.map_to_local(cell))
 							for position in boat.tiles_position:
