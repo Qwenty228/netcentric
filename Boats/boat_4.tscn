@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://dekylbw61q2f4"]
+[gd_scene load_steps=9 format=3 uid="uid://dekylbw61q2f4"]
 
 [ext_resource type="Script" path="res://Boats/boat_4.gd" id="1_ssf2t"]
 [ext_resource type="PackedScene" uid="uid://cdsovkbiv3xc7" path="res://Assets/galleon.glb" id="2_5y5iw"]
+[ext_resource type="PackedScene" uid="uid://8ya7awjc3m11" path="res://Scenes/projectile.tscn" id="2_kqn08"]
 
 [sub_resource type="GDScript" id="GDScript_4ofea"]
 script/source = "extends CSGBox3D
@@ -42,6 +43,7 @@ _data = {
 
 [node name="BoatFour" type="Node3D" groups=["boat"]]
 script = ExtResource("1_ssf2t")
+projectile = ExtResource("2_kqn08")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." groups=["boat"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)

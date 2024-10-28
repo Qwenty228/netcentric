@@ -187,10 +187,10 @@ func show_state(attacked: Array):
 					var afflicted_boat = opp_boat_manager.find_boat(coord)
 					afflicted_boat.hits += 1
 					player_score += 1
-				
 			elif attacked[pos] == '-1':
 				opponent_grid_map.set_cell_item(cell, 5)
 				opponent_grid_map.miss(coord)
+			opp_boat_manager.fire(coord)
 	else:
 		# if it is not this client turns (being attacked)
 		# show clients being attacked
@@ -208,6 +208,7 @@ func show_state(attacked: Array):
 			elif attacked[pos] == '-1':
 				player_map.set_cell_item(cell, 5)
 				player_map.miss(coord)
+			player_boat_manager.fire(coord)
 
 
 func _on_timer_timeout():
