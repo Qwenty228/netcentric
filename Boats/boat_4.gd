@@ -11,7 +11,7 @@ func _ready() -> void:
 	if animation_player != null:
 		animation_player.play("idle")
 		
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if hits == 4:
 		animation_player.play("sink")
 	

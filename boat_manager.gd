@@ -34,7 +34,7 @@ var boats:= 0:
 		else:
 			ship_sunk.emit()
 
-func _process(delta:float) -> void:
+func _process(_delta:float) -> void:
 	if Input.is_action_just_pressed("boat1"):
 		current_boat_type = boat_1
 		
@@ -52,7 +52,7 @@ func set_boat_4() -> void:
 
 func build_boat(boat_position: Vector3, is_legal) -> Node3D:
 	if current_boat_type != null:
-		if is_available(current_boat_type):
+		if is_available():
 			var new_boat
 			if is_legal:
 				new_boat = current_boat_type.instantiate()
@@ -67,7 +67,7 @@ func build_boat(boat_position: Vector3, is_legal) -> Node3D:
 			return new_boat
 	return null
 
-func is_available(type: PackedScene) -> bool:
+func is_available() -> bool:
 	if current_boat_type == boat_4:
 		return max_b4 != 0
 	if current_boat_type == boat_1:

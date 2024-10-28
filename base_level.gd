@@ -50,7 +50,7 @@ func _ready() -> void:
 	player_score = 0
 	opp_score = 0
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var format_string = "Time remaining: %d"
 	welcome_label.text = format_string % timer.time_left
 	#switch modes 	
@@ -75,13 +75,13 @@ func _process(delta: float) -> void:
 func switch_to_opp() -> void:
 	animation_player.play("opp_board")
 	ray_picker_camera.toggle_build()
-	is_player_board = !is_player_board
+	is_player_board = false
 	ray_picker_camera.grid_map = opponent_grid_map
 
 func switch_to_player() -> void:
 	animation_player.play("player_board")
 	ray_picker_camera.toggle_build()
-	is_player_board = !is_player_board
+	is_player_board = true
 	ray_picker_camera.grid_map = player_map
 
 func _on_quit_button_pressed() -> void:
@@ -148,16 +148,20 @@ func update_game_info(client_id, game_round):
 	# figuring out whose turn is it
 	if (client_id == "A" and game_round % 2 == 1) or (client_id == "B" and game_round % 2 == 0):
 		current_player_name = client_name
+		if game_round > 1:
+			await(get_tree().create_timer(3).timeout)
 		switch_to_opp()
-		attack_mode = true
 		turn = 1
+		attack_mode = true
 		timer.start()
 	else:
 		timer.stop()
 		current_player_name = Network.names[Network.opponent_id]
-		switch_to_player()
-		attack_mode = false
+		if !is_player_board:
+			await(get_tree().create_timer(3).timeout)
+			switch_to_player()
 		turn = 0
+		attack_mode = false
 	current_player_label.text = current_player_name
 	
 # update state of boards
@@ -176,12 +180,12 @@ func show_state(attacked: Array):
 				var is_not_repeat = opponent_grid_map.hit(coord)
 				if is_not_repeat:
 					opponent_grid_map.set_cell_item(cell, 4)
-					var afflicted_boat = opp_boat_manager.find_boat(coord)
-					afflicted_boat.hits += 1
 					player_score += 1
+	
 			elif attacked[pos] == '-1':
 				opponent_grid_map.set_cell_item(cell, 5)
 				opponent_grid_map.miss(coord)
+			
 	else:
 		# if it is not this client turns (being attacked)
 		# show clients being attacked
@@ -191,14 +195,19 @@ func show_state(attacked: Array):
 			cell = player_map.local_to_map(coord)
 			if attacked[pos] == '1':
 				var is_not_repeat = player_map.hit(coord)
+				print(is_not_repeat)
 				if is_not_repeat:
 					player_map.set_cell_item(cell, 4)
 					var afflicted_boat = player_boat_manager.find_boat(coord)
 					afflicted_boat.hits += 1
 					opp_score += 1
+					#wait for animation to be complete
+		
 			elif attacked[pos] == '-1':
 				player_map.set_cell_item(cell, 5)
 				player_map.miss(coord)
+			
+			
 
 
 func _on_timer_timeout():
@@ -207,7 +216,8 @@ func _on_timer_timeout():
 		Network.send({"header":"game", "body": ['-1']})
 	
 
-func end_game(winner: String):
+func end_game(winner):
+	print(winner)
 	#if player wins
 	if player_score > opp_score:
 		end_screen.update_label(true)

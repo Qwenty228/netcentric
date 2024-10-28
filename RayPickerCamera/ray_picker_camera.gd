@@ -14,7 +14,7 @@ var previous_pos: Vector3
 var previous_highlight: Node3D
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	#switch boat manager
 	boat_manager = grid_map.get_parent().get_child(-2)
 	var mouse_position: Vector2 = get_viewport().get_mouse_position()

@@ -10,7 +10,6 @@ var FX = []
 
 func attack(attack_position:Vector3i) -> void:
 	print("Attack!")
-	var pos = local_to_map(attack_position)
 	if get_cell_item(attack_position) == 2:
 		#set to attacked but not hit!
 		set_cell_item(attack_position, 3)

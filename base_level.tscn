@@ -219,7 +219,6 @@ size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
 [node name="GridMap" parent="PlayerBoard" instance=ExtResource("3_1ohpt")]
-visible = false
 is_player = true
 
 [node name="BoatManager" parent="PlayerBoard" instance=ExtResource("4_dxq0f")]
@@ -511,7 +510,7 @@ libraries = {
 }
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 10.0
+wait_time = 100.0
 one_shot = true
 
 [connection signal="opp_hit" from="PlayerBoard/GridMap" to="." method="_on_opp_hit"]
