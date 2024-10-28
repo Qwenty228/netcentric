@@ -194,13 +194,13 @@ func show_state(attacked: Array):
 				if is_not_repeat:
 					opponent_grid_map.set_cell_item(cell, 4)
 					player_score += 1
-					player_boat_manager.fire(coord)
+					#player_boat_manager.fire(coord)
 			elif attacked[pos] == '-1':
 				var is_not_repeat = opponent_grid_map.miss(coord)
 				if is_not_repeat:
 					opponent_grid_map.set_cell_item(cell, 5)
 					opponent_grid_map.miss(coord)
-					player_boat_manager.fire(coord)
+					#player_boat_manager.fire(coord)
 			
 	else:
 		# if it is not this client turns (being attacked)
@@ -216,13 +216,13 @@ func show_state(attacked: Array):
 					var afflicted_boat = player_boat_manager.find_boat(coord)
 					afflicted_boat.hits += 1
 					opp_score += 1
-					opp_boat_manager.fire(coord)
+					#opp_boat_manager.fire(coord)
 			elif attacked[pos] == '-1':
 				var is_not_repeat = player_map.miss(coord)
 				if is_not_repeat:
 					player_map.set_cell_item(cell, 5)
 					player_map.miss(coord)
-					opp_boat_manager.fire(coord)
+					#opp_boat_manager.fire(coord)
 				
 			
 
