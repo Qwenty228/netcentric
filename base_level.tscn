@@ -248,6 +248,7 @@ size = Vector3(32, 2, 32)
 material = SubResource("StandardMaterial3D_mgmue")
 
 [node name="GridMap" parent="PlayerBoard" instance=ExtResource("3_1ohpt")]
+visible = false
 is_player = true
 
 [node name="BoatManager" parent="PlayerBoard" instance=ExtResource("4_dxq0f")]
@@ -465,9 +466,37 @@ Click again to remove
 Attack mode: 
 click to attack"
 
-[node name="Main Menu" type="CenterContainer" parent="UI/Tabs/MarginContainer/TabContainer"]
+[node name="Sound" type="CenterContainer" parent="UI/Tabs/MarginContainer/TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Tabs/MarginContainer/TabContainer/Sound"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Turn music on/off:"
+
+[node name="CheckButton" type="CheckButton" parent="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Toggle SFX:"
+
+[node name="SFXcheck" type="CheckButton" parent="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Main Menu" type="CenterContainer" parent="UI/Tabs/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
 
 [node name="VBoxContainer" type="HBoxContainer" parent="UI/Tabs/MarginContainer/TabContainer/Main Menu"]
 layout_mode = 2
@@ -482,7 +511,7 @@ layout_mode = 2
 theme = ExtResource("8_nskxa")
 text = "Return to main menu"
 
-[node name="Button" type="Button" parent="UI/Tabs/MarginContainer/TabContainer/Main Menu/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="UI/Tabs/MarginContainer/TabContainer/Main Menu/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("8_nskxa")
 text = "Quit Game"
@@ -523,6 +552,10 @@ one_shot = true
 [connection signal="new_boat" from="OppBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="ship_sunk" from="OppBoard/BoatManager" to="." method="_on_ship_sunk"]
 [connection signal="pressed" from="UI/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="toggled" from="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer/HBoxContainer/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer/HBoxContainer2/SFXcheck" to="." method="_on_sf_xcheck_toggled"]
+[connection signal="pressed" from="UI/Tabs/MarginContainer/TabContainer/Main Menu/VBoxContainer/MarginContainer/Main Menu" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="UI/Tabs/MarginContainer/TabContainer/Main Menu/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 
 [editable path="RayPickerCamera"]

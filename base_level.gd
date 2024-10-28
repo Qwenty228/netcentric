@@ -233,3 +233,18 @@ func end_game(winner):
 	end_screen.opp_score.text = str(player_score)
 	end_screen.visible = true
 	
+
+
+func _on_main_menu_pressed():
+	get_tree().change_scene_to_file("res://main_menu_bg.tscn")
+
+
+func _on_check_button_toggled(toggled_on):
+	if toggled_on:
+		AudioPlayer.stop_bg()
+	else:
+		AudioPlayer.play_bg()
+
+
+func _on_sf_xcheck_toggled(toggled_on):
+	AudioPlayer.sfx_on = toggled_on
