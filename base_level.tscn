@@ -435,10 +435,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_x7y1m")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_gasr8")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_hnqnw")
 tab_alignment = 1
-current_tab = 1
+current_tab = 0
 
 [node name="Controls" type="MarginContainer" parent="UI/Tabs/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 tooltip_text = "Hotkeys"
 theme_override_constants/margin_left = 30
@@ -458,16 +457,13 @@ label_settings = SubResource("LabelSettings_ltwcd")
 layout_mode = 2
 theme = ExtResource("8_nskxa")
 theme_override_font_sizes/font_size = 25
-text = "\"1\" - switch to boat 1
-\"4\" - switch to boat 4
-\"r\" - rotate
-Build mode:
-Click to place ship
-Click again to remove
-Attack mode: 
-click to attack"
+text = "Placing boats:
+Click on the grid to place a boat.
+Press keyboard \"r\" to rotate before 
+placing."
 
 [node name="Sound" type="CenterContainer" parent="UI/Tabs/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
