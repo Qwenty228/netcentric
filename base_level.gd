@@ -50,6 +50,7 @@ func _ready() -> void:
 	build_mode = true
 	player_score = 0
 	opp_score = 0
+	opponent_grid_map.opp = true
 	AudioPlayer.play_bg()
 
 func _process(_delta: float) -> void:

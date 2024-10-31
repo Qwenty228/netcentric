@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://blg0gthhrdps3"]
+
+[sub_resource type="Gradient" id="Gradient_cwcwe"]
+offsets = PackedFloat32Array(0, 0.863836, 1)
+colors = PackedColorArray(1, 0, 0, 1, 0.764701, 0.34116, 0.158035, 1, 0.88, 0.88, 0.00879999, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6g3o8"]
+gradient = SubResource("Gradient_cwcwe")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_78h6x"]
+lifetime_randomness = 1.0
+emission_shape = 3
+emission_box_extents = Vector3(0.3, 0.3, 0.3)
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.5
+initial_velocity_max = 3.0
+gravity = Vector3(0, 0, 0)
+color = Color(0.8, 0.626667, 0, 1)
+color_ramp = SubResource("GradientTexture1D_6g3o8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkxdi"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 1, 0.611765)
+
+[sub_resource type="SphereMesh" id="SphereMesh_lbjwb"]
+material = SubResource("StandardMaterial3D_fkxdi")
+radius = 0.1
+height = 0.2
+
+[node name="Node3D" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+amount = 69
+process_material = SubResource("ParticleProcessMaterial_78h6x")
+draw_pass_1 = SubResource("SphereMesh_lbjwb")
