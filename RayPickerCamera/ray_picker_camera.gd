@@ -34,9 +34,8 @@ func _process(_delta: float) -> void:
 				cell = opp_map.local_to_map(collision_point)  
 				if opp_map.get_cell_item(cell) == 0: #if current cell isn't highlighted
 					opp_map.set_cell_item(cell, 1)
-					#print(cell)
-				if cell!= previous_cell:
-					if opp_map.get_cell_item(cell) != 3 and opp_map.get_cell_item(cell) != 4 and opp_map.get_cell_item(cell) != 5:
+				if cell != previous_cell:
+					if opp_map.get_cell_item(cell) == 1:
 						if previous_cell != Vector3i.FORWARD:
 							opp_map.set_cell_item(previous_cell, 0)
 				previous_cell = cell
