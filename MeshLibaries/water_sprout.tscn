@@ -8,22 +8,22 @@ emission = Color(1, 0.733333, 0, 1)
 emission_energy_multiplier = 3.0
 
 [sub_resource type="Curve" id="Curve_lrdae"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0255941), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_auu0q"]
 curve = SubResource("Curve_lrdae")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_w8lvq"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vern2"]
 direction = Vector3(0, 1, 0)
 spread = 50.0
-initial_velocity_min = 100.0
-initial_velocity_max = 150.0
-gravity = Vector3(0, -250, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, -50, 0)
 scale_curve = SubResource("CurveTexture_auu0q")
 
 [sub_resource type="BoxMesh" id="BoxMesh_pjvad"]
-size = Vector3(7, 7, 7)
+size = Vector3(0.7, 0.7, 0.7)
 
 [sub_resource type="Animation" id="Animation_rra7j"]
 length = 0.001
@@ -66,7 +66,7 @@ material_override = SubResource("StandardMaterial3D_8ua2l")
 amount = 100
 lifetime = 2.0
 explosiveness = 1.0
-process_material = SubResource("ParticleProcessMaterial_w8lvq")
+process_material = SubResource("ParticleProcessMaterial_vern2")
 draw_pass_1 = SubResource("BoxMesh_pjvad")
 script = ExtResource("1_wqcqr")
 

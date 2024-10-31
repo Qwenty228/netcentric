@@ -1,5 +1,5 @@
 extends Node3D
-
+signal opp_miss
 @onready var opp_board: Node3D = $OppBoard
 @onready var player_map: GridMap = $PlayerBoard/GridMap
 @onready var opponent_grid_map: GridMap = $OppBoard/OppMap
@@ -197,6 +197,7 @@ func show_state(attacked: Array):
 				if is_not_repeat:
 					opponent_grid_map.set_cell_item(cell, 5)
 					opponent_grid_map.miss(coord)
+					opp_miss.emit()
 					#player_boat_manager.fire(coord)
 			
 	else:
@@ -225,7 +226,6 @@ func show_state(attacked: Array):
 
 
 func _on_timer_timeout():
-	#to be changed
 	if turn:
 		Network.send({"header":"game", "body": ['-1']})
 	

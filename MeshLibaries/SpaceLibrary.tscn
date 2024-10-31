@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bpxo7grmoyxhi"]
+[gd_scene load_steps=16 format=3 uid="uid://bpxo7grmoyxhi"]
 
 [ext_resource type="PackedScene" uid="uid://cjfxvxew80vgy" path="res://Assets/sunk_wreck.glb" id="1_fbsbm"]
 
@@ -40,6 +40,14 @@ data = PackedVector3Array(-2, 0.05, 2, 2, 0.05, 2, -2, -0.05, 2, 2, 0.05, 2, 2, 
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_r61qs"]
 data = PackedVector3Array(-2, 2, 2, 2, 2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, -2, 2, 2, 2, -2, -2, 2, -2, 2, -2, -2, -2, 2, -2, -2, -2, -2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, 2, 2, 2, -2, 2, -2, -2, 2, -2, 2, -2, 2, -2, -2, 2, 2, -2, -2, -2, -2, 2, 2, -2, -2, 2, -2, -2, -2, 2, 2, 2, -2, 2, 2, 2, 2, -2, -2, 2, 2, -2, 2, -2, 2, 2, -2, -2, -2, 2, 2, -2, 2, -2, -2, -2, 2, -2, 2, 2, -2, -2, -2, -2, -2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gk7to"]
+transparency = 1
+albedo_color = Color(0.65, 0.65, 0.65, 0.666667)
+
+[sub_resource type="BoxMesh" id="BoxMesh_upm00"]
+material = SubResource("StandardMaterial3D_gk7to")
+size = Vector3(4, 0.1, 4)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_l6b57"]
 data = PackedVector3Array(-2, 2, 2, 2, 2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, -2, 2, 2, 2, -2, -2, 2, -2, 2, -2, -2, -2, 2, -2, -2, -2, -2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, 2, 2, 2, -2, 2, -2, -2, 2, -2, 2, -2, 2, -2, -2, 2, 2, -2, -2, -2, -2, 2, 2, -2, -2, 2, -2, -2, -2, 2, 2, 2, -2, 2, 2, 2, 2, -2, -2, 2, 2, -2, 2, -2, 2, 2, -2, -2, -2, 2, 2, -2, 2, -2, -2, -2, 2, -2, 2, 2, -2, -2, -2, -2, -2)
@@ -95,9 +103,7 @@ transform = Transform3D(0.826285, 0, -0.563252, 0, 1, 0, 0.563252, 0, 0.826285, 
 shape = SubResource("ConcavePolygonShape3D_r61qs")
 
 [node name="MissBase" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-visible = false
-mesh = SubResource("BoxMesh_q4n61")
+mesh = SubResource("BoxMesh_upm00")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="MissBase"]
 

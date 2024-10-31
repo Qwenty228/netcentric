@@ -36,14 +36,13 @@ func _process(_delta: float) -> void:
 					opp_map.set_cell_item(cell, 1)
 					#print(cell)
 				if cell!= previous_cell:
-					if opp_map.get_cell_item(cell) != 3 and opp_map.get_cell_item(cell) != 4:
-						if previous_cell != null:
+					if opp_map.get_cell_item(cell) != 3 and opp_map.get_cell_item(cell) != 4 and opp_map.get_cell_item(cell) != 5:
+						if previous_cell != Vector3i.FORWARD:
 							opp_map.set_cell_item(previous_cell, 0)
 				previous_cell = cell
 				if Input.is_action_just_pressed("click"):
 					opp_map.set_cell_item(cell, 3)
 					attack_mode = false
-					opp_map.attack(cell)
 					var attacked_cell = Network.oppCoordToGrid(cell.x, cell.z)
 					#print(attacked_cell)
 					await(get_tree().create_timer(1).timeout)
@@ -166,3 +165,7 @@ func toggle_build() -> void:
 			if previous_boat!= null:
 				previous_boat.queue_free()
 				grid_map.set_cell_item(previous_cell, 0)
+				
+func opp_miss():
+	opp_map.set_cell_item(previous_cell, 5)
+	previous_cell = Vector3i.FORWARD

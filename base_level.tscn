@@ -543,6 +543,7 @@ libraries = {
 wait_time = 10.0
 one_shot = true
 
+[connection signal="opp_miss" from="." to="RayPickerCamera" method="opp_miss"]
 [connection signal="new_boat" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat"]
 [connection signal="new_boat_1" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat_1"]
 [connection signal="new_boat_4" from="PlayerBoard/BoatManager" to="." method="_on_boat_manager_new_boat_4"]
