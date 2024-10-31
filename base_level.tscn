@@ -375,7 +375,7 @@ layout_mode = 2
 [node name="Label2" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("8_nskxa")
-text = "Your ships:"
+text = "Your hits:"
 
 [node name="PlayerShipsLabel" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/VBoxContainer"]
 unique_name_in_owner = true
@@ -397,7 +397,7 @@ layout_mode = 2
 [node name="OppName" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/VBoxContainer2"]
 layout_mode = 2
 theme = ExtResource("8_nskxa")
-text = "Opponent's Ships:"
+text = "Opponent's hits:"
 
 [node name="OppShipsLabel" type="Label" parent="UI/HUD/CenterContainer/VBoxContainer/ScoreBox/CContainer/VBox/VBoxContainer2"]
 unique_name_in_owner = true
