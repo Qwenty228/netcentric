@@ -1,8 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://cgrtbn4rmq83a"]
+[gd_scene load_steps=17 format=3 uid="uid://cgrtbn4rmq83a"]
 
 [ext_resource type="Script" path="res://Scenes/main_menu_bg.gd" id="1_5knol"]
 [ext_resource type="PackedScene" uid="uid://dhjctrsjga335" path="res://ui/main_menu.tscn" id="1_68ms5"]
 [ext_resource type="Shader" path="res://MeshLibaries/Shader/water.gdshader" id="2_qshcw"]
+[ext_resource type="PackedScene" uid="uid://cdsovkbiv3xc7" path="res://Assets/galleon.glb" id="4_1mu33"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8h1g0"]
 sky_top_color = Color(0.1705, 0.228625, 0.31, 1)
@@ -100,10 +101,70 @@ tracks/3/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("galleon3:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-921.161, 0, -331.885)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("galleon:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(287.252, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("galleon2:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(73.536, 0, 173.647)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("WorldEnvironment:environment:background_energy_multiplier")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("WorldEnvironment:environment:sky")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("Sky_jy2cx")]
+}
 
 [sub_resource type="Animation" id="Animation_melik"]
 resource_name = "camera"
-length = 6.0
+length = 20.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -152,6 +213,66 @@ tracks/3/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("galleon3:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 20),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-921.161, 0, -331.885), Vector3(-500, 0, -331.885)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("galleon:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(-0.0333333, 2.9, 19.9333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(250, 0, 0), Vector3(287.252, 0, 0), Vector3(400, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("galleon2:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(-0.0333333, 19.5667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(100, 0, 173.647), Vector3(10, 0, 173.647)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("WorldEnvironment:environment:background_energy_multiplier")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 11.4667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 2.5]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("WorldEnvironment:environment:sky")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("Sky_jy2cx")]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lijvu"]
 _data = {
@@ -185,13 +306,49 @@ color = Color(0, 0, 0, 1)
 [node name="MainMenu" parent="." instance=ExtResource("1_68ms5")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.698398, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("PlaneMesh_kqtmd")
+surface_material_override/0 = SubResource("ShaderMaterial_7kqdg")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.40406, 0, 0, 0, 1, 0, 0, 0, 1, 2076.37, 0, 0)
+mesh = SubResource("PlaneMesh_kqtmd")
+surface_material_override/0 = SubResource("ShaderMaterial_7kqdg")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.40406, 0, 0, 0, 1, 0, 0, 0, 1, -2071.7, 0, 0)
+mesh = SubResource("PlaneMesh_kqtmd")
+surface_material_override/0 = SubResource("ShaderMaterial_7kqdg")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(5.98393, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -972.887)
+mesh = SubResource("PlaneMesh_kqtmd")
+surface_material_override/0 = SubResource("ShaderMaterial_7kqdg")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(6.0855, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1939.02)
 mesh = SubResource("PlaneMesh_kqtmd")
 surface_material_override/0 = SubResource("ShaderMaterial_7kqdg")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 32.73, 515.788)
+transform = Transform3D(0.997615, 0, 0, 0, 0.86396, -0.498808, 0, 0.498808, 0.86396, 0, 32.73, 515.788)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_lijvu")
 }
+
+[node name="galleon" parent="." instance=ExtResource("4_1mu33")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 287.252, 0, 0)
+
+[node name="galleon2" parent="." instance=ExtResource("4_1mu33")]
+transform = Transform3D(-10, 0, -1.50996e-06, 0, 10, 0, 1.50996e-06, 0, -10, 73.536, 0, 173.647)
+
+[node name="galleon3" parent="." instance=ExtResource("4_1mu33")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -921.161, 0, -331.885)
+
+[node name="galleon4" parent="." instance=ExtResource("4_1mu33")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 638.953, 0, -662.46)
+
+[node name="galleon5" parent="." instance=ExtResource("4_1mu33")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 1014.14, 0, -717.1)
