@@ -5,14 +5,14 @@ var animation_player = null
 @export var boat_rotation: float
 @export var legal := true
 @export var projectile: PackedScene
+
 var tiles_position: Array[Vector3]
 var hits:= 0
 
 func _ready() -> void:
 	if has_node("AnimationPlayer"):
 		animation_player = %AnimationPlayer
-	else:
-		print("not found")
+
 	if animation_player != null:
 		animation_player.play("idle")
 		

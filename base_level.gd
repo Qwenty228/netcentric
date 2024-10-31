@@ -91,16 +91,23 @@ func _process(_delta: float) -> void:
 	opp_ships_label.text = str(opp_score)
 
 func switch_to_opp() -> void:
+	for smoke in player_map.smokes.values():
+		smoke.visible = false
+
 	animation_player.play("opp_board")
 	ray_picker_camera.toggle_build()
 	is_player_board = false
 	ray_picker_camera.grid_map = opponent_grid_map
+	
 
 func switch_to_player() -> void:
 	animation_player.play("player_board")
 	ray_picker_camera.toggle_build()
 	is_player_board = true
 	ray_picker_camera.grid_map = player_map
+	
+
+
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
@@ -214,6 +221,12 @@ func show_state(attacked: Array):
 					player_map.set_cell_item(cell, 4)
 					var afflicted_boat = player_boat_manager.find_boat(coord)
 					afflicted_boat.hits += 1
+					if afflicted_boat.units == afflicted_boat.hits:
+						for sunk in afflicted_boat.tiles_position:
+							if player_map.smokes.has(sunk):
+								var sm = player_map.smokes[sunk]
+								player_map.smokes.erase(sunk)
+								sm.queue_free()
 					opp_score += 1
 					#opp_boat_manager.fire(coord)
 			elif attacked[pos] == '-1':
@@ -223,8 +236,7 @@ func show_state(attacked: Array):
 					player_map.miss(coord)
 					#opp_boat_manager.fire(coord)
 				
-			
-
+		
 
 func _on_timer_timeout():
 	if turn:
@@ -260,3 +272,9 @@ func _on_check_button_toggled(toggled_on):
 
 func _on_sf_xcheck_toggled(toggled_on):
 	AudioPlayer.sfx_on = toggled_on
+
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "player_board":
+		for smoke in player_map.smokes.values():
+			smoke.visible = true

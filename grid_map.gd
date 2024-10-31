@@ -8,7 +8,7 @@ extends GridMap
 @export var opp = false
 
 var taken_coord = []
-
+var smokes = {}
 
 func attack(attack_position:Vector3i) -> void:
 	var pos = local_to_map(attack_position)
@@ -30,8 +30,10 @@ func hit(pos:Vector3) -> bool:
 		if not opp:
 			var smoke = burn.instantiate()
 			add_child(smoke)
-			smoke.global_position = Vector3(pos.x, pos.y + 5, pos.z)
-		
+			smoke.global_position = Vector3(pos.x, pos.y + 4, pos.z)
+			smokes[pos] = smoke
+			
+			
 		taken_coord.append(pos)
 		AudioPlayer.play_sfx("explode")
 		return true	

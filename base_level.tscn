@@ -555,6 +555,7 @@ one_shot = true
 [connection signal="toggled" from="UI/Tabs/MarginContainer/TabContainer/Sound/VBoxContainer/HBoxContainer2/SFXcheck" to="." method="_on_sf_xcheck_toggled"]
 [connection signal="pressed" from="UI/Tabs/MarginContainer/TabContainer/Main Menu/VBoxContainer/MarginContainer/Main Menu" to="." method="_on_main_menu_pressed"]
 [connection signal="pressed" from="UI/Tabs/MarginContainer/TabContainer/Main Menu/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 
 [editable path="RayPickerCamera"]
