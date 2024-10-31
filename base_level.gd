@@ -3,12 +3,9 @@ extends Node3D
 @onready var opp_board: Node3D = $OppBoard
 @onready var player_map: GridMap = $PlayerBoard/GridMap
 @onready var opponent_grid_map: GridMap = $OppBoard/OppMap
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var animation_player: AnimationPlayer = %AnimationPlayer
 @onready var ray_picker_camera: Camera3D = $RayPickerCamera
-@onready var win_label: Label = %WinLabel
 @onready var start_button: Button = %StartButton
-@onready var boat_1_label: Label = %Boat1Label
-@onready var boat_4_label: Label = %Boat4Label
 @onready var player_boat_manager = %BoatManager
 @onready var opp_boat_manager = %OppBoatManager
 @onready var client_connection: Node = $ClientConnection
