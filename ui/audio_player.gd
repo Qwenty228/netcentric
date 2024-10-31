@@ -4,6 +4,7 @@ extends Node
 var explode = preload("res://Assets/SFX/explode.wav")
 var click = preload("res://Assets/SFX/click.wav")
 var blast = preload("res://Assets/SFX/pewpew.wav")
+var water = preload("res://Assets/SFX/water_impact.wav")
 
 @export var click1:AudioStream
 var sfx_on:= true
@@ -23,6 +24,8 @@ func play_sfx(sfx_name: String) -> void:
 			stream = click
 		elif sfx_name == "blast":
 			stream = blast
+		elif sfx_name == "water":
+			stream = water
 		else:
 			print("Not found!")
 			return

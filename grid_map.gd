@@ -32,5 +32,6 @@ func miss(pos:Vector3) -> bool:
 		water.global_position = pos
 		water.explode()
 		taken_coord.append(pos)
+		AudioPlayer.play_sfx("water")
 		return true
 	return false
