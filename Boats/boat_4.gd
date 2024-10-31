@@ -1,5 +1,5 @@
 extends Node3D
-@onready var animation_player = %AnimationPlayer
+var animation_player = null
 
 @export var units: int = 4
 @export var boat_rotation: float
@@ -9,11 +9,15 @@ var tiles_position: Array[Vector3]
 var hits:= 0
 
 func _ready() -> void:
+	if has_node("AnimationPlayer"):
+		animation_player = %AnimationPlayer
+	else:
+		print("not found")
 	if animation_player != null:
 		animation_player.play("idle")
 		
 func _process(_delta: float) -> void:
-	if hits == 4:
+	if hits == 4 and animation_player != null:
 		animation_player.play("sink")
 	
 func print_info() -> void:
