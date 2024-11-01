@@ -284,6 +284,9 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "player_board":
 		for smoke in player_map.smokes.values():
 			smoke.visible = true
+	if anim_name == "opp_board":
+		ray_picker_camera.anim_done = true
+	
 
 
 func _on_restart_pressed() -> void:

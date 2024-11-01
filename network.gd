@@ -81,6 +81,7 @@ func _process(_delta: float) -> void:
 				# after our attack or enemy attack update 
 				Network.send({"header": "game", "body": "round"})
 		elif reply["header"] == "game_over":
+			print("client: " + name + str(reply))
 			game_over.emit(reply['body'])
 		elif reply["header"] == "restart":
 			game_restart.emit()

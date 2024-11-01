@@ -13,7 +13,7 @@ var previous_boat: Node3D
 var previous_pos: Vector3
 var previous_highlight: Node3D
 
-	
+var anim_done = false # transition animation variable, true when animation is done and grid map is fixed
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -31,7 +31,7 @@ func _process(_delta: float) -> void:
 			var tile_position = grid_map.map_to_local(cell)
 
 			#attack enemy
-			if attack_mode:
+			if attack_mode and anim_done:
 				#highlight
 				cell = opp_map.local_to_map(collision_point)  
 				if opp_map.get_cell_item(cell) == 0: #if current cell isn't highlighted
@@ -48,6 +48,7 @@ func _process(_delta: float) -> void:
 					var attacked_cell = Network.oppCoordToGrid(cell.x, cell.z)
 					#print(opp_map.get_cell_item(cell))
 					Network.send({"header":"game", "body": [str(attacked_cell)]})
+					anim_done = false
 					if idiot_tile:
 						opp_map.set_cell_item(cell, 5)
 			# place ships
