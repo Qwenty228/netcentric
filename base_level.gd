@@ -142,7 +142,7 @@ func _on_start_button_pressed() -> void:
 	print("Client ID set:", Network.client_id)
 	
 	# after got client id, this client send to server about boat placement and client names
-	Network.send({"header": "init", "body": player_boats_pos, "client": client_name})
+	Network.send({"header": "init", "body": player_boats_pos, "author": client_name})
 	print("sent boat")
 	
 
@@ -249,13 +249,15 @@ func _on_timer_timeout():
 
 func end_game(winner):
 	#print("client: " + client_name + " winner " + str(winner))
-	if player_score < 16 and opp_score < 16: # opponent connection loss
+	if player_score < 15 and opp_score < 15: # opponent connection loss
 		end_screen.update_label("Opponent forfeit!")
 	elif player_score > opp_score: 
 		end_screen.update_label("You win!")
+		player_score += 1
 	elif player_score < opp_score: 
 		end_screen.update_label("You lost!")
-	else: 
+		opp_score += 1
+	else:  # should be impossible
 		end_screen.update_label("You tie!")
 	end_screen.player_score.text = str(player_score)
 	end_screen.opp_score.text = str(opp_score)
@@ -290,7 +292,7 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 
 
 func _on_restart_pressed() -> void:
-	Network.send({"header": "restart", "body": "restart", "client": client_name})
+	Network.send({"header": "restart", "body": "restart", "author": client_name})
 	
 func restart() -> void:
 	get_tree().reload_current_scene()

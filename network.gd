@@ -56,7 +56,7 @@ func _process(_delta: float) -> void:
 		if reply["header"] == "connection":
 			print(reply)
 			if client_id == null:
-				client_id = reply["client"]
+				client_id = reply["author"]
 				if client_id == "A":
 					opponent_id = "B"
 				else:

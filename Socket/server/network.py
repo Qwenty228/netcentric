@@ -19,7 +19,7 @@ class Network:
         self.addr = self.server, self.port = get_addr()
         print(f"Connecting to {self.addr}")
         data = self.connect(connection_message)
-        self.client_id = data["client"]
+        self.client_id = data["author"]
         self.ready = data['body']
 
     def connect(self, connection_message: dict):

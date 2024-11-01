@@ -105,7 +105,7 @@ class ClientHandler(Thread):
                     client.conn.sendall(json.dumps({
                         "header": "connection",
                         "body": len(ClientHandler.all_clients) == 2,  # True if both clients are connected
-                        "client": self.client_id
+                        "author": self.client_id
                     }).encode("utf-8"))
                 except OSError as e:
                     print(e)
@@ -131,7 +131,7 @@ class ClientHandler(Thread):
         """
         # Parse and store the ship configuration
         self.ships = [int(ship) for ship in data["body"]]  # Convert ship positions to integers
-        self.name = data['client']  # Set the client name
+        self.name = data["author"]  # Set the client name
         
         ready_ship = 0
         for client in ClientHandler.all_clients:
