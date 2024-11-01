@@ -4,6 +4,7 @@ signal update_game(player, round)
 signal game_start
 signal process_attack(array)
 signal game_over(winner)
+signal game_restart
 
 func read_env():
 	var path = "res://Socket/server/.env"
@@ -21,8 +22,9 @@ func read_env():
 					"PORT":
 						port = int(value)
 		file.close()
-		
-var host = "127.0.0.1"
+
+
+var host = "172.20.10.5"
 var port = 10000
 var game_round = 0
 var client = StreamPeerTCP.new()
@@ -37,8 +39,12 @@ var names: Dictionary = {}
 func ready():
 	read_env() # if env file exists, replace host and port.
 	print("Connecting to %s:%d" % [host, port])
-	if client.connect_to_host(host, port) != OK:
-		print("error connecting to host.")
+	if client.get_status() == client.STATUS_NONE:
+		if client.connect_to_host(host, port) != OK:
+			print("error connecting to host.")
+	else:
+		print("restart game")
+			
 	connection_open = true
 
 func _process(_delta: float) -> void:
@@ -48,6 +54,7 @@ func _process(_delta: float) -> void:
 	if not reply.is_empty():
 		#print(reply)
 		if reply["header"] == "connection":
+			print(reply)
 			if client_id == null:
 				client_id = reply["client"]
 				if client_id == "A":
@@ -75,7 +82,10 @@ func _process(_delta: float) -> void:
 				Network.send({"header": "game", "body": "round"})
 		elif reply["header"] == "game_over":
 			game_over.emit(reply['body'])
-	
+		elif reply["header"] == "restart":
+			game_restart.emit()
+			print("receive restart signal")
+			print(reply)
 	
 func fetch() -> Dictionary:
 	if client.get_status() != client.STATUS_NONE:

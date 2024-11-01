@@ -41,6 +41,7 @@ var current_player_name
 var is_player_board := true
 var player_score := 0
 var opp_score := 0
+var started = false
 
 func _ready() -> void:
 	welcome_label.text = "Welcome, " + Network.player_name
@@ -52,6 +53,12 @@ func _ready() -> void:
 	opp_score = 0
 	opponent_grid_map.opp = true
 	AudioPlayer.play_bg()
+	
+	Network.update_game.connect(update_game_info)
+	Network.game_start.connect(start)
+	Network.process_attack.connect(show_state)
+	Network.game_over.connect(end_game)
+	Network.game_restart.connect(restart)
 
 func _process(_delta: float) -> void:
 	var format_string = "Time remaining: %d"
@@ -124,10 +131,7 @@ func _on_start_button_pressed() -> void:
 	client_name = Network.player_name
 	# establish connection
 	Network.ready()
-	Network.update_game.connect(update_game_info)
-	Network.game_start.connect(start)
-	Network.process_attack.connect(show_state)
-	Network.game_over.connect(end_game)
+	
 	print("connection establised")
 	
 	# waiting for server to response with client id
@@ -143,6 +147,9 @@ func _on_start_button_pressed() -> void:
 	
 
 func start():
+	if started:
+		return
+	started = true
 	# indicate that both player has connected and will proceed to the game loop
 	print("start")
 	await get_tree().create_timer(1).timeout
@@ -263,6 +270,7 @@ func _on_main_menu_pressed():
 	get_tree().change_scene_to_file("res://main_menu_bg.tscn")
 
 
+
 func _on_check_button_toggled(toggled_on):
 	if toggled_on:
 		AudioPlayer.stop_bg()
@@ -278,3 +286,10 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "player_board":
 		for smoke in player_map.smokes.values():
 			smoke.visible = true
+
+
+func _on_restart_pressed() -> void:
+	Network.send({"header": "restart", "body": "restart", "client": client_name})
+	
+func restart() -> void:
+	get_tree().reload_current_scene()
