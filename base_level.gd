@@ -251,7 +251,7 @@ func _on_timer_timeout():
 	
 
 func end_game(winner):
-	print(winner)
+	print("client: " + client_name + " winner " + str(winner))
 	#if player wins
 	if player_score > opp_score:
 		player_score += 1

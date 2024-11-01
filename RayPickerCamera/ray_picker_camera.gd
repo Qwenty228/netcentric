@@ -13,6 +13,8 @@ var previous_boat: Node3D
 var previous_pos: Vector3
 var previous_highlight: Node3D
 
+	
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	#switch boat manager
@@ -35,10 +37,10 @@ func _process(_delta: float) -> void:
 				if opp_map.get_cell_item(cell) == 0: #if current cell isn't highlighted
 					opp_map.set_cell_item(cell, 1)
 				if cell != previous_cell:
-					if opp_map.get_cell_item(cell) == 1:
-						if previous_cell != Vector3i.FORWARD:
-							opp_map.set_cell_item(previous_cell, 0)
-				previous_cell = cell
+					if opp_map.get_cell_item(previous_cell) == 1:
+						opp_map.set_cell_item(previous_cell, 0)
+					previous_cell = cell
+					
 				if Input.is_action_just_pressed("click"):
 					opp_map.set_cell_item(cell, 3)
 					attack_mode = false
@@ -154,7 +156,7 @@ func _process(_delta: float) -> void:
 							previous_boat.queue_free()
 							previous_boat = boat_manager.build_boat(tile_position, false)
 						grid_map.set_cell_item(cell, 1)
-						
+	
 	else:
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 

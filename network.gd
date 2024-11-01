@@ -24,7 +24,7 @@ func read_env():
 		file.close()
 
 
-var host = "172.20.10.5"
+var host = "127.0.0.1"
 var port = 10000
 var game_round = 0
 var client = StreamPeerTCP.new()
@@ -54,7 +54,7 @@ func _process(_delta: float) -> void:
 	if not reply.is_empty():
 		#print(reply)
 		if reply["header"] == "connection":
-			print(reply)
+			#print(reply)
 			if client_id == null:
 				client_id = reply["client"]
 				if client_id == "A":
@@ -84,8 +84,8 @@ func _process(_delta: float) -> void:
 			game_over.emit(reply['body'])
 		elif reply["header"] == "restart":
 			game_restart.emit()
-			print("receive restart signal")
-			print(reply)
+			#print("receive restart signal")
+			#print(reply)
 	
 func fetch() -> Dictionary:
 	if client.get_status() != client.STATUS_NONE:
