@@ -1,5 +1,6 @@
 from pydantic import BaseModel, conlist, field_validator
 
+
 class ShipConfigurationModel(BaseModel):
     state: conlist(int, min_length=16, max_length=16)
 

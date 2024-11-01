@@ -1,6 +1,7 @@
 from pydantic import BaseModel, conint, model_validator
 from typing import List
 
+
 class AttackParamsModel(BaseModel):
     player_name: str
     position: conint(ge=0, le=63)
@@ -15,5 +16,5 @@ class AttackParamsModel(BaseModel):
 
         if player_name not in valid_player_names:
             raise ValueError(f'Player name {player_name} is not in the list of valid player names.')
-        
+
         return model_instance

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, conlist, field_validator
 
+
 class GameRenderingModel(BaseModel):
     screen: conlist(int, min_length=64, max_length=64) = [0] * 64
 
