@@ -151,9 +151,7 @@ func start():
 		return
 	started = true
 	# indicate that both player has connected and will proceed to the game loop
-	print("start")
-	await get_tree().create_timer(1).timeout
-	print("process finished")
+	print("Initialize phase executed successfully, round starting")
 	# telling server that this client is ready to play
 	Network.send({"header": "game", "body": "round"})
 
@@ -172,7 +170,7 @@ func update_game_info(client_id, game_round):
 	round_label.text = "Round: " + str(game_round)
 	# figuring out whose turn is it
 	if (client_id == "A" and game_round % 2 == 1) or (client_id == "B" and game_round % 2 == 0):
-		await(get_tree().create_timer(3).timeout)
+		await(get_tree().create_timer(1.5).timeout)
 		turn_label.text = "Your turn"
 		switch_to_opp()
 		turn = 1
@@ -182,7 +180,7 @@ func update_game_info(client_id, game_round):
 		timer.stop()
 		current_player_name = Network.names[Network.opponent_id]
 		if !is_player_board:
-			await(get_tree().create_timer(3).timeout)
+			await(get_tree().create_timer(1.5).timeout)
 			switch_to_player()
 		turn = 0
 		attack_mode = false
@@ -248,19 +246,19 @@ func show_state(attacked: Array):
 func _on_timer_timeout():
 	if turn:
 		Network.send({"header":"game", "body": ['-1']})
-	
 
 func end_game(winner):
-	print("client: " + client_name + " winner " + str(winner))
-	#if player wins
-	if player_score > opp_score:
-		player_score += 1
-		end_screen.update_label(true)
+	#print("client: " + client_name + " winner " + str(winner))
+	if player_score < 16 and opp_score < 16: # opponent connection loss
+		end_screen.update_label("Opponent forfeit!")
+	elif player_score > opp_score: 
+		end_screen.update_label("You win!")
+	elif player_score < opp_score: 
+		end_screen.update_label("You lost!")
 	else: 
-		end_screen.update_label(false)
-		opp_score += 1
-	end_screen.player_score.text = str(opp_score)
-	end_screen.opp_score.text = str(player_score)
+		end_screen.update_label("You tie!")
+	end_screen.player_score.text = str(player_score)
+	end_screen.opp_score.text = str(opp_score)
 	ui.get_child(1).visible = false
 	end_screen.visible = true
 	

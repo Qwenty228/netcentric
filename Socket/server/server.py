@@ -101,7 +101,6 @@ class ClientHandler(Thread):
                             # Parse attack position from the client
                         target_pos = int(data["body"][0]) # Convert the string input from the client to an integer
                        
-       
                         reply = ClientHandler.battle_ship_handler.process_attack(self.name, target_pos)
                         # Check if the game is over
                         winner = ClientHandler.battle_ship_handler.check_winner()
@@ -138,6 +137,14 @@ class ClientHandler(Thread):
 
 
         print(f"Connection with {self.name} closed")
+        for client in ClientHandler.all_clients:
+            if client != self:
+                game_over_message = {
+                                "header": "game_over",
+                                "body": client.name
+                            }
+                client.conn.sendall(json.dumps(game_over_message).encode("utf-8"))
+                break
         self.conn.close()
         ClientHandler.all_clients.remove(self)
 

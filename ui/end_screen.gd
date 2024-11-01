@@ -5,12 +5,9 @@ extends Control
 @onready var opp_name_label: Label = %OppNameLabel
 @onready var opp_score: Label = %OppScore
 
-func update_label(player_win) -> void:
+func update_label(label_text: String) -> void:
 	opp_name_label.text = Network.names[Network.opponent_id] + "'s score:"
-	if player_win:
-		label.text = "You win!"
-	else:
-		label.text = "You lost!"
+	label.text = label_text
 
 func _on_menu_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://ui/main_menu.tscn")

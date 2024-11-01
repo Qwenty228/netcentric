@@ -42,13 +42,14 @@ func _process(_delta: float) -> void:
 					previous_cell = cell
 					
 				if Input.is_action_just_pressed("click"):
+					var idiot_tile = opp_map.get_cell_item(cell) == 5
 					opp_map.set_cell_item(cell, 3)
 					attack_mode = false
 					var attacked_cell = Network.oppCoordToGrid(cell.x, cell.z)
-					#print(attacked_cell)
-					await(get_tree().create_timer(1).timeout)
+					#print(opp_map.get_cell_item(cell))
 					Network.send({"header":"game", "body": [str(attacked_cell)]})
-			
+					if idiot_tile:
+						opp_map.set_cell_item(cell, 5)
 			# place ships
 			elif build_mode:
 				#boat rotation

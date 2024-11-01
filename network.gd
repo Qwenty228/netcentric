@@ -54,7 +54,7 @@ func _process(_delta: float) -> void:
 	if not reply.is_empty():
 		#print(reply)
 		if reply["header"] == "connection":
-			#print(reply)
+			print(reply)
 			if client_id == null:
 				client_id = reply["client"]
 				if client_id == "A":
@@ -63,7 +63,7 @@ func _process(_delta: float) -> void:
 					opponent_id = "A"
 				
 			if reply["body"] == true:
-				print("both players connected")
+				#print("both players connected")
 				# once both players join, game can start
 				game_start.emit()
 		elif reply["header"] == "game":
