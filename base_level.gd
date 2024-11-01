@@ -259,6 +259,12 @@ func end_game(winner):
 		opp_score += 1
 	else:  # should be impossible
 		end_screen.update_label("You tie!")
+	if winner == client_name:
+		Network.client_id = "A"
+		Network.opponent_id = "B"
+	else:
+		Network.opponent_id = "A"
+		Network.client_id = "B"
 	end_screen.player_score.text = str(player_score)
 	end_screen.opp_score.text = str(opp_score)
 	ui.get_child(1).visible = false
@@ -268,7 +274,7 @@ func end_game(winner):
 
 func _on_main_menu_pressed():
 	get_tree().change_scene_to_file("res://main_menu_bg.tscn")
-
+	Network.reset()
 
 
 func _on_check_button_toggled(toggled_on):

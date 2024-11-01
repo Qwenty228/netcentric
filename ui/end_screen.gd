@@ -13,4 +13,5 @@ func _on_menu_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://ui/main_menu.tscn")
 
 func _on_play_button_pressed() -> void:
-	get_tree().reload_current_scene()
+	Network.send({"header": "restart", "body": "restart", "author": Network.player_name})
+	

@@ -52,9 +52,8 @@ func _process(_delta: float) -> void:
 		return
 	var reply = fetch()
 	if not reply.is_empty():
-		#print(reply)
+		print(player_name + " " + str(reply))
 		if reply["header"] == "connection":
-			print(reply)
 			if client_id == null:
 				client_id = reply["author"]
 				if client_id == "A":
@@ -93,6 +92,7 @@ func fetch() -> Dictionary:
 		if client.get_available_bytes() > 0:
 			client.poll()
 			var result_string = client.get_utf8_string(client.get_available_bytes()).strip_edges()
+			print(result_string)
 			var result = JSON.parse_string(result_string)
 			if result != null:
 				return result
@@ -127,3 +127,9 @@ func oppGridToCoord(position:int):
 	var x = 3 - int(position % 8)
 	var z = 3 - int(position / 8)
 	return Vector3i(x, 0, z)
+
+
+func reset():
+	if client.get_status() == client.STATUS_CONNECTED:
+		client.disconnect_from_host()
+	get_tree().reload_current_scene()
