@@ -53,7 +53,6 @@ func _ready() -> void:
 	opp_score = 0
 	opponent_grid_map.opp = true
 	AudioPlayer.play_bg()
-	
 	Network.update_game.connect(update_game_info)
 	Network.game_start.connect(start)
 	Network.process_attack.connect(show_state)
@@ -208,7 +207,7 @@ func show_state(attacked: Array):
 			elif attacked[pos] == '-1':
 				var is_not_repeat = opponent_grid_map.miss(coord)
 				if is_not_repeat:
-					opponent_grid_map.set_cell_item(cell, 5)
+					opponent_grid_map.set_cell_item(cell, -1)
 					opponent_grid_map.miss(coord)
 					opp_miss.emit()
 					#player_boat_manager.fire(coord)
@@ -237,7 +236,7 @@ func show_state(attacked: Array):
 			elif attacked[pos] == '-1':
 				var is_not_repeat = player_map.miss(coord)
 				if is_not_repeat:
-					player_map.set_cell_item(cell, 5)
+					player_map.set_cell_item(cell, -1)
 					player_map.miss(coord)
 					#opp_boat_manager.fire(coord)
 				

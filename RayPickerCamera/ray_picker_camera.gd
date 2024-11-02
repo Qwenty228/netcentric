@@ -34,15 +34,15 @@ func _process(_delta: float) -> void:
 			if attack_mode and anim_done:
 				#highlight
 				cell = opp_map.local_to_map(collision_point)  
-				if opp_map.get_cell_item(cell) == 0: #if current cell isn't highlighted
-					opp_map.set_cell_item(cell, 1)
+				if opp_map.get_cell_item(cell) == 5: #if current cell isn't highlighted
+					opp_map.set_cell_item(cell, 6) 
 				if cell != previous_cell:
-					if opp_map.get_cell_item(previous_cell) == 1:
-						opp_map.set_cell_item(previous_cell, 0)
+					if opp_map.get_cell_item(previous_cell) == 6:
+						opp_map.set_cell_item(previous_cell, 5)
 					previous_cell = cell
 					
 				if Input.is_action_just_pressed("click"):
-					var idiot_tile = opp_map.get_cell_item(cell) == 5
+					var idiot_tile = opp_map.get_cell_item(cell) == -1
 					opp_map.set_cell_item(cell, 3)
 					attack_mode = false
 					var attacked_cell = Network.oppCoordToGrid(cell.x, cell.z)
@@ -50,7 +50,7 @@ func _process(_delta: float) -> void:
 					Network.send({"header":"game", "body": [str(attacked_cell)]})
 					anim_done = false
 					if idiot_tile:
-						opp_map.set_cell_item(cell, 5)
+						opp_map.set_cell_item(cell, -1)
 			# place ships
 			elif build_mode:
 				#boat rotation
@@ -170,5 +170,4 @@ func toggle_build() -> void:
 				grid_map.set_cell_item(previous_cell, 0)
 				
 func opp_miss():
-	opp_map.set_cell_item(previous_cell, 5)
-	previous_cell = Vector3i.FORWARD
+	opp_map.set_cell_item(previous_cell, -1)
