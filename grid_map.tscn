@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://brk2p6bvxe20r"]
+[gd_scene load_steps=8 format=3 uid="uid://brk2p6bvxe20r"]
 
 [ext_resource type="MeshLibrary" uid="uid://cgtlk5k5gfwsv" path="res://MeshLibaries/SpaceLibrary.tres" id="1_y1gkg"]
 [ext_resource type="Script" path="res://grid_map.gd" id="2_b43ok"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bjpl1nf3oy4cb" path="res://MeshLibaries/water_sprout.tscn" id="4_dp506"]
 [ext_resource type="PackedScene" uid="uid://cjfxvxew80vgy" path="res://Assets/sunk_wreck.glb" id="5_r75va"]
 [ext_resource type="PackedScene" uid="uid://blg0gthhrdps3" path="res://Scenes/burn.tscn" id="6_h53eu"]
+[ext_resource type="PackedScene" uid="uid://crjyegj1ijama" path="res://Scenes/shadow.tscn" id="7_l27c6"]
 
 [node name="GridMap" type="GridMap"]
 mesh_library = ExtResource("1_y1gkg")
@@ -19,4 +20,5 @@ explosion = ExtResource("3_hknxl")
 water_sprout = ExtResource("4_dp506")
 debris = ExtResource("5_r75va")
 burn = ExtResource("6_h53eu")
+water_shadow = ExtResource("7_l27c6")
 metadata/_editor_floor_ = Vector3(0, -2, 0)

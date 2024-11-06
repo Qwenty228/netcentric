@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://crjyegj1ijama"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0km40"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 0.647059)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+radius = 0.3
+height = 0.001
+material = SubResource("StandardMaterial3D_0km40")

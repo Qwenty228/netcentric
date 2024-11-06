@@ -5,6 +5,7 @@ extends GridMap
 @export var water_sprout: PackedScene
 @export var debris: PackedScene
 @export var burn:PackedScene
+@export var water_shadow: PackedScene
 @export var opp = false
 
 var taken_coord = []
@@ -47,5 +48,10 @@ func miss(pos:Vector3) -> bool:
 		water.explode()
 		taken_coord.append(pos)
 		AudioPlayer.play_sfx("water")
+		if not opp:
+			var sh = water_shadow.instantiate()
+			add_child(sh)
+			sh.global_position = Vector3(pos.x, pos.y + 1, pos.z)
+		
 		return true
 	return false

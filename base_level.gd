@@ -134,12 +134,13 @@ func _on_start_button_pressed() -> void:
 	print("connection establised")
 	
 	# waiting for server to response with client id
-	await(get_tree().create_timer(0.5).timeout)  # Wait 0.5 seconds
-	while Network.client_id == null:
-		print("Waiting for client ID...")
-		await(get_tree().create_timer(0.5).timeout)  # Wait another 0.5 seconds before checking again
-	print("Client ID set:", Network.client_id)
-	
+	#await(get_tree().create_timer(0.5).timeout)  # Wait 0.5 seconds
+	#while Network.client_id == null:
+		#print("Waiting for client ID...")
+		#await(get_tree().create_timer(0.5).timeout)  # Wait another 0.5 seconds before checking again
+	#print("Client ID set:", Network.client_id)
+	print("Preparing Sending Boat")
+	await(get_tree().create_timer(0.5).timeout)
 	# after got client id, this client send to server about boat placement and client names
 	Network.send({"header": "init", "body": player_boats_pos, "author": client_name})
 	print("sent boat")
@@ -152,7 +153,7 @@ func start():
 	# indicate that both player has connected and will proceed to the game loop
 	print("Initialize phase executed successfully, round starting")
 	# telling server that this client is ready to play
-	Network.send({"header": "game", "body": "round"})
+	Network.send({"header": "round"})
 
 # update values in building UI
 
@@ -198,16 +199,15 @@ func show_state(attacked: Array):
 		for pos in range(len(attacked)):
 			var coord = Network.gridToCoord(pos)
 			cell = opponent_grid_map.local_to_map(coord)
-			if attacked[pos] == '1':
+			if attacked[pos] == 1:
 				var is_not_repeat = opponent_grid_map.hit(coord)
 				if is_not_repeat:
 					opponent_grid_map.set_cell_item(cell, 4)
 					player_score += 1
 					#player_boat_manager.fire(coord)
-			elif attacked[pos] == '-1':
+			elif attacked[pos] == -1:
 				var is_not_repeat = opponent_grid_map.miss(coord)
 				if is_not_repeat:
-					opponent_grid_map.set_cell_item(cell, -1)
 					opponent_grid_map.miss(coord)
 					opp_miss.emit()
 					#player_boat_manager.fire(coord)
@@ -219,7 +219,7 @@ func show_state(attacked: Array):
 		for pos in range(len(attacked)):
 			var coord = Network.gridToCoord(pos)
 			cell = player_map.local_to_map(coord)
-			if attacked[pos] == '1':
+			if attacked[pos] == 1:
 				var is_not_repeat = player_map.hit(coord)
 				if is_not_repeat:
 					player_map.set_cell_item(cell, 4)
@@ -233,10 +233,9 @@ func show_state(attacked: Array):
 								sm.queue_free()
 					opp_score += 1
 					#opp_boat_manager.fire(coord)
-			elif attacked[pos] == '-1':
+			elif attacked[pos] == -1:
 				var is_not_repeat = player_map.miss(coord)
 				if is_not_repeat:
-					player_map.set_cell_item(cell, -1)
 					player_map.miss(coord)
 					#opp_boat_manager.fire(coord)
 				
@@ -244,26 +243,22 @@ func show_state(attacked: Array):
 
 func _on_timer_timeout():
 	if turn:
-		Network.send({"header":"game", "body": ['-1']})
+		Network.send({"header":"game", "body": ["-1"], "author":Network.player_name})
 
 func end_game(winner):
 	#print("client: " + client_name + " winner " + str(winner))
+	timer.stop()
 	if player_score < 15 and opp_score < 15: # opponent connection loss
 		end_screen.update_label("Opponent forfeit!")
 	elif player_score > opp_score: 
 		end_screen.update_label("You win!")
-		player_score += 1
+		player_score = min(player_score + 1, 16)
 	elif player_score < opp_score: 
 		end_screen.update_label("You lost!")
-		opp_score += 1
-	else:  # should be impossible
+		opp_score = min(opp_score + 1, 16)
+	else: 
 		end_screen.update_label("You tie!")
-	if winner == client_name:
-		Network.client_id = "A"
-		Network.opponent_id = "B"
-	else:
-		Network.opponent_id = "A"
-		Network.client_id = "B"
+		
 	end_screen.player_score.text = str(player_score)
 	end_screen.opp_score.text = str(opp_score)
 	ui.get_child(1).visible = false
@@ -297,7 +292,7 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 
 
 func _on_restart_pressed() -> void:
-	Network.send({"header": "restart", "body": "restart", "author": client_name})
+	Network.send({"header": "reset"})
 	
 func restart() -> void:
 	get_tree().reload_current_scene()

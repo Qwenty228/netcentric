@@ -6,26 +6,9 @@ signal process_attack(array)
 signal game_over(winner)
 signal game_restart
 
-func read_env():
-	var path = "res://Socket/server/.env"
-	if  FileAccess.file_exists(path):
-		var file = FileAccess.open(path, FileAccess.READ)
-		while not file.eof_reached():
-			var line = file.get_line().strip_edges()
-			if line.find('=') != -1:
-				var parts = line.split('=')
-				var key = parts[0].strip_edges()
-				var value = parts[1].strip_edges()
-				match key:
-					"IP":
-						host = value
-					"PORT":
-						port = int(value)
-		file.close()
 
-
-var host = "127.0.0.1"
-var port = 10000
+var host = "127.0.0.1" # "184.82.126.20" # "172.20.10.5"
+var port = 1001
 var game_round = 0
 var client = StreamPeerTCP.new()
 var client_id = null
@@ -37,70 +20,81 @@ var connection_open = false
 var names: Dictionary = {}
 
 func ready():
-	read_env() # if env file exists, replace host and port.
 	print("Connecting to %s:%d" % [host, port])
 	if client.get_status() == client.STATUS_NONE:
 		if client.connect_to_host(host, port) != OK:
 			print("error connecting to host.")
 	else:
 		print("restart game")
-			
+	print("Connection successful")
 	connection_open = true
 
 func _process(_delta: float) -> void:
 	if !connection_open:
 		return
 	var reply = fetch()
+	
 	if not reply.is_empty():
-		print(player_name + " " + str(reply))
-		if reply["header"] == "connection":
-			if client_id == null:
-				client_id = reply["author"]
-				if client_id == "A":
-					opponent_id = "B"
-				else:
-					opponent_id = "A"
-				
-			if reply["body"] == true:
-				#print("both players connected")
-				# once both players join, game can start
-				game_start.emit()
-		elif reply["header"] == "game":
-			if typeof(reply["body"]) == 3: # is keyword does not work for some reason, data type is not int but float?
-				game_round = int(reply["body"])
-				names = reply["names"]
-				update_game.emit(client_id, game_round)
+		print(player_name + " receive " + str(reply))
+		if reply["header"] == "init":
+			#print(reply)	
+			var order = reply["body"]
+			client_id = order[player_name]
+			if client_id == "A":
+				opponent_id = "B"
 			else:
-				var radar = "radar"
-				if (client_id == "A" and game_round % 2 == 1) or (client_id == "B" and game_round % 2 == 0):
-					radar += client_id
-				else:
-					radar += opponent_id
-				process_attack.emit(reply["body"][radar])
-				# after our attack or enemy attack update 
-				Network.send({"header": "game", "body": "round"})
+				opponent_id = "A"
+			
+			game_start.emit()
+			
+		elif reply["header"] == "round":
+			#if typeof(reply["body"]) == 3: # is keyword does not work for some reason, data type is not int but float?
+			game_round = int(reply["body"])
+			names = reply["names"]
+			update_game.emit(client_id, game_round)
+		elif reply["header"] == "game":
+			process_attack.emit(reply["body"])
+			# after our attack or enemy attack update 
+			Network.send({"header": "round"})
+				
 		elif reply["header"] == "game_over":
-			print("client: " + name + str(reply))
+			#print("client: " + name + str(reply))
 			game_over.emit(reply['body'])
-		elif reply["header"] == "restart":
+			
+		elif reply["header"] == "reset":
 			game_restart.emit()
+			reset()
 			#print("receive restart signal")
 			#print(reply)
+			
+
+func parse_concatenated_json(data: String) -> String:
+	if "}{" not in data:
+		return data
 	
+	# Split the data into separate potential JSON parts by looking for '}{'
+	var json_parts := data.split("}{")
+	
+	# Try parsing the last JSON part, as it's the one we need
+	return "{" + json_parts[-1]
+
+
 func fetch() -> Dictionary:
 	if client.get_status() != client.STATUS_NONE:
 		if client.get_available_bytes() > 0:
 			client.poll()
 			var result_string = client.get_utf8_string(client.get_available_bytes()).strip_edges()
-			print(result_string)
-			var result = JSON.parse_string(result_string)
+			#print(player_name + " receive " + str(result_string))
+			var result = JSON.parse_string(parse_concatenated_json(result_string))
 			if result != null:
 				return result
 	return {}
 	
 func send(data):
+	#print(client.get_status())
 	if client.get_status() == client.STATUS_CONNECTED:
 		client.put_utf8_string(JSON.stringify(data))
+		print(player_name + " send " + str(data))
 		
 #!!!!!!!
 func gridToCoord(position: int) -> Vector3i:
@@ -128,8 +122,7 @@ func oppGridToCoord(position:int):
 	var z = 3 - int(position / 8)
 	return Vector3i(x, 0, z)
 
-
 func reset():
 	if client.get_status() == client.STATUS_CONNECTED:
 		client.disconnect_from_host()
-	get_tree().reload_current_scene()
+	#get_tree().reload_current_scene()

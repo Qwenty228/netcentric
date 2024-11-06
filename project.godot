@@ -13,7 +13,8 @@ config_version=5
 config/name="Netcentric"
 run/main_scene="res://main_menu_bg.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://icon.svg"
+boot_splash/image="res://Assets/splash_screen.png"
+config/icon="res://Assets/icon.svg"
 
 [autoload]
 

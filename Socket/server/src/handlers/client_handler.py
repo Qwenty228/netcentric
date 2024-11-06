@@ -25,7 +25,7 @@ class ClientHandler(Thread):
     game_round = 1
     game_started = False
     battle_ship_handler: BattleShipHandler = None
-    winner = None
+
     def __init__(self, conn: socket.socket, client_id: str) -> None:
         """
         Initializes a ClientHandler instance.
@@ -64,7 +64,6 @@ class ClientHandler(Thread):
 
                 if data["header"] == "init":
                     self.handle_initialization(data)
-                    continue
 
                 elif data["header"] == "game":
                     reply = self.handle_game(data)
@@ -92,9 +91,9 @@ class ClientHandler(Thread):
         print(f"Connection with {self.name} closed")
         self.conn.close()
         
-        if len(ClientHandler.all_clients) != 0 and self not in ClientHandler.all_clients:
-            self.broadcast_game_over(ClientHandler.all_clients[0].name)
+        if len(ClientHandler.all_clients) != 0:
             ClientHandler.all_clients.remove(self)
+            self.broadcast_game_over(ClientHandler.all_clients[0].name)
 
     def notify_clients_connection(self):
         """
@@ -106,7 +105,7 @@ class ClientHandler(Thread):
                     client.conn.sendall(json.dumps({
                         "header": "connection",
                         "body": len(ClientHandler.all_clients) == 2,  # True if both clients are connected
-                        "author": self.client_id
+                        "client": self.client_id
                     }).encode("utf-8"))
                 except OSError as e:
                     print(e)
@@ -132,7 +131,7 @@ class ClientHandler(Thread):
         """
         # Parse and store the ship configuration
         self.ships = [int(ship) for ship in data["body"]]  # Convert ship positions to integers
-        self.name = data["author"]  # Set the client name
+        self.name = data['client']  # Set the client name
         
         ready_ship = 0
         for client in ClientHandler.all_clients:
@@ -179,9 +178,6 @@ class ClientHandler(Thread):
                 "A": ClientHandler.all_clients[0].name,
                 "B": ClientHandler.all_clients[1].name
             }
-            if ClientHandler.winner == names["B"]:
-                names["A"], names["B"] = names["B"], names["A"] 
-         
             return {"header": "game", "body": r, "names": names}
 
         target_pos = int(data["body"][0])  # Convert target position to an integer
@@ -190,8 +186,8 @@ class ClientHandler(Thread):
         # Check if the game is over
         winner = ClientHandler.battle_ship_handler.check_winner()
         if winner is not None:
-            ClientHandler.winner = winner
             self.broadcast_game_over(winner)
+            self.end_game()
             return
 
         else:
@@ -226,7 +222,21 @@ class ClientHandler(Thread):
             if client.conn != self.conn:  # Avoid sending to self
                 client.conn.sendall(json.dumps(reply).encode("utf-8"))
 
-    
+    @staticmethod
+    def end_game():
+        """
+        Ends the game by closing all client connections and resetting the game state.
+        """
+        print("Game over. Closing connections...")
+        # for client in ClientHandler.all_clients:
+        #     try:
+        #         client.conn.close() # Close each client's connection     
+        #     except Exception as e:
+        #         print(f"Error closing connection: {e}")
+
+        ClientHandler.all_clients.clear()  # Clear the list of connected clients
+        ClientHandler.game_started = False  # Reset game state
+
     # Add a new method to handle game state reset
     @staticmethod
     def reset_game_state():
