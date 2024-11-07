@@ -155,7 +155,7 @@ func start():
 	print("Initialize phase executed successfully, round starting")
 	# telling server that this client is ready to play
 	Network.send({"header": "round", "author": Network.player_name})
-
+	round_label.visible = true
 # update values in building UI
 
 func sink_player_ship(pos:Vector3i) -> void:
@@ -185,7 +185,6 @@ func update_game_info(client_id, game_round):
 			switch_to_player()
 		turn = 0
 		attack_mode = false
-		turn = 0
 		turn_label.text = str(Network.names[Network.opponent_id]) + "'s turn"
 	
 # update state of boards
