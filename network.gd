@@ -7,7 +7,7 @@ signal game_over(winner)
 signal game_restart
 
 
-var host = "127.0.0.1" # "184.82.126.20" # "172.20.10.5"
+var host = "184.82.126.20"  #"184.82.126.20" # "172.20.10.5"
 var port = 1001
 var game_round = 0
 var client = StreamPeerTCP.new()
@@ -35,7 +35,7 @@ func _process(_delta: float) -> void:
 	var reply = fetch()
 	
 	if not reply.is_empty():
-		print(player_name + " receive " + str(reply))
+		#print(player_name + " receive " + str(reply))
 		if reply["header"] == "init":
 			#print(reply)	
 			var order = reply["body"]
@@ -55,7 +55,7 @@ func _process(_delta: float) -> void:
 		elif reply["header"] == "game":
 			process_attack.emit(reply["body"])
 			# after our attack or enemy attack update 
-			Network.send({"header": "round"})
+			Network.send({"header": "round", "author": player_name})
 				
 		elif reply["header"] == "game_over":
 			#print("client: " + name + str(reply))
@@ -84,7 +84,7 @@ func fetch() -> Dictionary:
 		if client.get_available_bytes() > 0:
 			client.poll()
 			var result_string = client.get_utf8_string(client.get_available_bytes()).strip_edges()
-			#print(player_name + " receive " + str(result_string))
+			print(player_name + " receive " + str(result_string))
 			var result = JSON.parse_string(parse_concatenated_json(result_string))
 			if result != null:
 				return result

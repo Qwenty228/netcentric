@@ -54,18 +54,18 @@ func set_boat_4() -> void:
 func build_boat(boat_position: Vector3, is_legal) -> Node3D:
 	if current_boat_type != null:
 		if is_available():
-			var new_boat
+			var new_boat_ins
 			if is_legal:
-				new_boat = current_boat_type.instantiate()
+				new_boat_ins = current_boat_type.instantiate()
 			else:
 				if current_boat_type == boat_4:
-					new_boat = boat_4_illegal.instantiate()
-			add_child(new_boat)
-			new_boat.set_global_position(boat_position)
-			new_boat.global_rotation.y = rotation_angle
-			current_boat = new_boat
-			new_boat.boat_rotation = rotation_angle
-			return new_boat
+					new_boat_ins = boat_4_illegal.instantiate()
+			add_child(new_boat_ins)
+			new_boat_ins.set_global_position(boat_position)
+			new_boat_ins.global_rotation.y = rotation_angle
+			current_boat = new_boat_ins
+			new_boat_ins.boat_rotation = rotation_angle
+			return new_boat_ins
 	return null
 
 func is_available() -> bool:
@@ -111,14 +111,14 @@ func hit(boat_position: Vector3) -> void:
 		
 func fire(direction: Vector3) -> void:
 	#get random child
-	var boats = get_children()
+	var all_boats = get_children()
 	var shot = projectile.instantiate()
 	shot.direction = direction
-	if boats.size() > 0:
+	if all_boats.size() > 0:
 		var rng = RandomNumberGenerator.new()
-		var n = rng.randi_range(0, boats.size()-1)
-		shot.global_position = boats[n].global_position
-		boats[n].add_child(shot)
+		var n = rng.randi_range(0, all_boats.size()-1)
+		shot.global_position = all_boats[n].global_position
+		all_boats[n].add_child(shot)
 	else:
 		shot.global_position.z += 5
 	await(get_tree().create_timer(2).timeout)

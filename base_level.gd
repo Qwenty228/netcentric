@@ -53,6 +53,7 @@ func _ready() -> void:
 	opp_score = 0
 	opponent_grid_map.opp = true
 	AudioPlayer.play_bg()
+	
 	Network.update_game.connect(update_game_info)
 	Network.game_start.connect(start)
 	Network.process_attack.connect(show_state)
@@ -124,8 +125,8 @@ func _on_start_button_pressed() -> void:
 	start_button.queue_free()
 	var player_boats = player_boat_manager.get_children()
 	var player_boats_pos = []
-	for boat in player_boats:
-		for tile in boat.tiles_position:
+	for p_boat in player_boats:
+		for tile in p_boat.tiles_position:
 			player_boats_pos.append(str(Network.coordToGrid(tile.x,tile.z)))
 	client_name = Network.player_name
 	# establish connection
@@ -153,7 +154,7 @@ func start():
 	# indicate that both player has connected and will proceed to the game loop
 	print("Initialize phase executed successfully, round starting")
 	# telling server that this client is ready to play
-	Network.send({"header": "round"})
+	Network.send({"header": "round", "author": Network.player_name})
 
 # update values in building UI
 
@@ -245,7 +246,7 @@ func _on_timer_timeout():
 	if turn:
 		Network.send({"header":"game", "body": ["-1"], "author":Network.player_name})
 
-func end_game(winner):
+func end_game(_winner):
 	#print("client: " + client_name + " winner " + str(winner))
 	timer.stop()
 	if player_score < 15 and opp_score < 15: # opponent connection loss

@@ -34,8 +34,8 @@ func _process(_delta: float) -> void:
 			if attack_mode and anim_done:
 				#highlight
 				cell = opp_map.local_to_map(collision_point)  
-				if opp_map.get_cell_item(cell) == 0: #if current cell isn't highlighted
-					opp_map.set_cell_item(cell, 1)
+				if opp_map.get_cell_item(cell) == 5: #if current cell isn't highlighted
+					opp_map.set_cell_item(cell, 6)
 				if cell != previous_cell:
 					if opp_map.get_cell_item(previous_cell) == 6:
 						opp_map.set_cell_item(previous_cell, 5)
@@ -112,8 +112,8 @@ func _process(_delta: float) -> void:
 							AudioPlayer.play_sfx("click")
 						elif grid_map.get_cell_item(cell) == 2:
 							var boat = boat_manager.find_boat(grid_map.map_to_local(cell))
-							for position in boat.tiles_position:
-								grid_map.set_cell_item(grid_map.local_to_map(position), 0)
+							for b_position in boat.tiles_position:
+								grid_map.set_cell_item(grid_map.local_to_map(b_position), 0)
 							if boat != null:
 								boat.queue_free()
 					

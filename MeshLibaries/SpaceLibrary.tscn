@@ -41,41 +41,23 @@ data = PackedVector3Array(-2, 0.05, 2, 2, 0.05, 2, -2, -0.05, 2, 2, 0.05, 2, 2, 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_r61qs"]
 data = PackedVector3Array(-2, 2, 2, 2, 2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, -2, 2, 2, 2, -2, -2, 2, -2, 2, -2, -2, -2, 2, -2, -2, -2, -2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, 2, 2, 2, -2, 2, -2, -2, 2, -2, 2, -2, 2, -2, -2, 2, 2, -2, -2, -2, -2, 2, 2, -2, -2, 2, -2, -2, -2, 2, 2, 2, -2, 2, 2, 2, 2, -2, -2, 2, 2, -2, 2, -2, 2, 2, -2, -2, -2, 2, 2, -2, 2, -2, -2, -2, 2, -2, 2, 2, -2, -2, -2, -2, -2)
 
-<<<<<<< Updated upstream
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pdwgb"]
-transparency = 1
-albedo_color = Color(0.83, 0.83, 0.83, 0.666667)
-
-[sub_resource type="BoxMesh" id="BoxMesh_upm00"]
-material = SubResource("StandardMaterial3D_pdwgb")
-=======
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kv034"]
 transparency = 1
 albedo_color = Color(0.77, 0.77, 0.77, 0.615686)
 
 [sub_resource type="BoxMesh" id="BoxMesh_yikd5"]
 material = SubResource("StandardMaterial3D_kv034")
->>>>>>> Stashed changes
 size = Vector3(4, 4, 4)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_l6b57"]
 data = PackedVector3Array(-2, 2, 2, 2, 2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, -2, 2, 2, 2, -2, -2, 2, -2, 2, -2, -2, -2, 2, -2, -2, -2, -2, 2, -2, -2, 2, 2, 2, 2, 2, -2, 2, -2, 2, 2, 2, -2, 2, -2, -2, 2, -2, 2, -2, 2, -2, -2, 2, 2, -2, -2, -2, -2, 2, 2, -2, -2, 2, -2, -2, -2, 2, 2, 2, -2, 2, 2, 2, 2, -2, -2, 2, 2, -2, 2, -2, 2, 2, -2, -2, -2, 2, 2, -2, 2, -2, -2, -2, 2, -2, 2, 2, -2, -2, -2, -2, -2)
 
-<<<<<<< Updated upstream
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_as62f"]
-transparency = 1
-albedo_color = Color(0.83, 0, 0, 0.666667)
-
-[sub_resource type="BoxMesh" id="BoxMesh_tynxo"]
-material = SubResource("StandardMaterial3D_as62f")
-=======
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vhpu8"]
 transparency = 1
 albedo_color = Color(0.84, 0.1848, 0.1848, 0.615686)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4qtpl"]
 material = SubResource("StandardMaterial3D_vhpu8")
->>>>>>> Stashed changes
 size = Vector3(4, 4, 4)
 
 [node name="SpaceLibrary" type="Node3D"]
@@ -130,31 +112,17 @@ shape = SubResource("ConcavePolygonShape3D_r61qs")
 
 [node name="FogBase" type="MeshInstance3D" parent="."]
 visible = false
-<<<<<<< Updated upstream
-mesh = SubResource("BoxMesh_upm00")
-=======
 mesh = SubResource("BoxMesh_yikd5")
->>>>>>> Stashed changes
 
 [node name="StaticBody3D" type="StaticBody3D" parent="FogBase"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FogBase/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_l6b57")
 
-<<<<<<< Updated upstream
-[node name="FogSelect" type="MeshInstance3D" parent="."]
-visible = false
-mesh = SubResource("BoxMesh_tynxo")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="FogSelect"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="FogSelect/StaticBody3D"]
-=======
 [node name="FogHighlightBase" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_4qtpl")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="FogHighlightBase"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FogHighlightBase/StaticBody3D"]
->>>>>>> Stashed changes
 shape = SubResource("ConcavePolygonShape3D_l6b57")
