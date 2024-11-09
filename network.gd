@@ -7,7 +7,7 @@ signal game_over(winner)
 signal game_restart
 
 
-var host = "netcentric.ase.cx" # "184.82.126.20"  #"184.82.126.20" # "172.20.10.5"
+var host = "netcentric.ase.cx"
 var port = 1001
 var game_round = 0
 var client = StreamPeerTCP.new()
